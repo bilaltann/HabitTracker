@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{39865EB6-9A6B-4E7C-8B09-DAADADDDD70F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{28F15603-FFD9-4CA0-AAAC-F2CA53F922F8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabitTracker.Domain", "HabitTracker.Domain\HabitTracker.Domain.csproj", "{616B8FB3-9EAA-4A14-985E-172706D8D77B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabitTracker.Application", "HabitTracker.Application\HabitTracker.Application.csproj", "{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{844E63C3-1A36-44F9-9E37-8372895B49C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{0D6DE6B4-1B69-4D6B-9B3A-067B8713EE20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabitTracker.Infrastructure", "HabitTracker.Infrastructure\HabitTracker.Infrastructure.csproj", "{A81195B8-6C87-4675-A977-132B09941B87}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabitTracker.API", "HabitTracker.API\HabitTracker.API.csproj", "{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Habit-Tracker Frontend", "Habit-Tracker Frontend\", "{CE0AAAA7-4864-441F-A591-978CB3BFD760}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_53703"
+		Debug.AspNetCompiler.PhysicalPath = "Habit-Tracker Frontend\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53703\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_53703"
+		Release.AspNetCompiler.PhysicalPath = "Habit-Tracker Frontend\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53703\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "53703"
+		SlnRelativePath = "Habit-Tracker Frontend\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{616B8FB3-9EAA-4A14-985E-172706D8D77B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{616B8FB3-9EAA-4A14-985E-172706D8D77B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{616B8FB3-9EAA-4A14-985E-172706D8D77B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{616B8FB3-9EAA-4A14-985E-172706D8D77B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A81195B8-6C87-4675-A977-132B09941B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A81195B8-6C87-4675-A977-132B09941B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A81195B8-6C87-4675-A977-132B09941B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A81195B8-6C87-4675-A977-132B09941B87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE0AAAA7-4864-441F-A591-978CB3BFD760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0AAAA7-4864-441F-A591-978CB3BFD760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE0AAAA7-4864-441F-A591-978CB3BFD760}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0AAAA7-4864-441F-A591-978CB3BFD760}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{28F15603-FFD9-4CA0-AAAC-F2CA53F922F8} = {39865EB6-9A6B-4E7C-8B09-DAADADDDD70F}
+		{616B8FB3-9EAA-4A14-985E-172706D8D77B} = {28F15603-FFD9-4CA0-AAAC-F2CA53F922F8}
+		{B396167A-5CBE-4BE3-84BA-A1ED39B772DD} = {28F15603-FFD9-4CA0-AAAC-F2CA53F922F8}
+		{844E63C3-1A36-44F9-9E37-8372895B49C0} = {39865EB6-9A6B-4E7C-8B09-DAADADDDD70F}
+		{0D6DE6B4-1B69-4D6B-9B3A-067B8713EE20} = {39865EB6-9A6B-4E7C-8B09-DAADADDDD70F}
+		{A81195B8-6C87-4675-A977-132B09941B87} = {844E63C3-1A36-44F9-9E37-8372895B49C0}
+		{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635} = {0D6DE6B4-1B69-4D6B-9B3A-067B8713EE20}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {447C400D-638F-4071-85D4-58B2DF13F710}
+	EndGlobalSection
+EndGlobal

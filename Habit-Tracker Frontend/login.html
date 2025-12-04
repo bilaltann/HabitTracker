@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HabitQuest - Giriş Yap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* --- MODERN CSS TASARIMI --- */
+        :root {
+            --primary-color: #4F46E5;
+            --primary-hover: #4338ca;
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --text-light: #666;
+            --shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* --- TOAST BİLDİRİM CSS --- */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toast {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-left: 6px solid;
+            border-radius: 8px;
+            padding: 16px 20px;
+            min-width: 300px;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+            .toast.success {
+                border-color: #10B981;
+            }
+
+                .toast.success .toast-icon {
+                    color: #10B981;
+                }
+
+            .toast.error {
+                border-color: #EF4444;
+            }
+
+                .toast.error .toast-icon {
+                    color: #EF4444;
+                }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast-message {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .toast-close {
+            font-size: 18px;
+            color: #aaa;
+            transition: 0.2s;
+        }
+
+        .toast:hover .toast-close {
+            color: #333;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOutRight {
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* --- KART TASARIMI --- */
+        .background-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            animation: float 10s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: #ff00cc;
+            top: -50px;
+            left: -50px;
+            opacity: 0.4;
+        }
+
+        .shape-2 {
+            width: 400px;
+            height: 400px;
+            background: #33ccff;
+            bottom: -100px;
+            right: -50px;
+            opacity: 0.4;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .login-card {
+            display: flex;
+            background: var(--glass-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            min-height: 550px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .visual-side {
+            flex: 1;
+            background: #f0f4ff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .visual-side {
+                display: flex;
+            }
+        }
+
+        .visual-side img {
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+            transition: transform 0.3s;
+        }
+
+            .visual-side img:hover {
+                transform: scale(1.05);
+            }
+
+        .visual-side h3 {
+            color: var(--primary-color);
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .visual-side p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .form-side {
+            flex: 1.2;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+
+            .back-link:hover {
+                color: var(--primary-color);
+            }
+
+        .header h2 {
+            font-size: 30px;
+            color: var(--text-color);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: var(--text-light);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+            .input-group input {
+                width: 100%;
+                padding: 15px 15px 15px 45px;
+                border: 2px solid #e0e0e0;
+                border-radius: 12px;
+                font-size: 15px;
+                outline: none;
+                transition: all 0.3s;
+                background: #fff;
+            }
+
+                .input-group input:focus {
+                    border-color: var(--primary-color);
+                    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+                }
+
+            .input-group .material-icons {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+                pointer-events: none;
+            }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+            .forgot-password:hover {
+                text-decoration: underline;
+            }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+
+            .btn-primary:hover {
+                background: var(--primary-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+            }
+
+        .btn-google {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            color: #555;
+            cursor: pointer;
+            margin-bottom: 25px;
+            transition: background 0.2s;
+        }
+
+            .btn-google:hover {
+                background: #f9f9f9;
+            }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #aaa;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+            .separator::before, .separator::after {
+                content: '';
+                flex: 1;
+                border-bottom: 1px solid #eee;
+            }
+
+            .separator::before {
+                margin-right: 10px;
+            }
+
+            .separator::after {
+                margin-left: 10px;
+            }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+            .footer-text a {
+                color: var(--primary-color);
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .footer-text a:hover {
+                    text-decoration: underline;
+                }
+
+        @media (max-width: 480px) {
+            .login-card {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .form-side {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+
+    <div class="login-card">
+        <div class="visual-side">
+            <img src="image/habit-tracker.png" alt="Habit Quest Login">
+            <h3>Tekrar Hoş Geldin!</h3>
+            <p>Kaldığın yerden devam et ve<br>hedeflerine bir adım daha yaklaş.</p>
+        </div>
+
+        <div class="form-side">
+            <a href="index.html" class="back-link">
+                <span class="material-icons">arrow_back</span> Anasayfa
+            </a>
+
+            <div class="header">
+                <h2>Giriş Yap</h2>
+                <p>Hesabınıza erişmek için bilgilerinizi girin.</p>
+            </div>
+
+            <button class="btn-google">
+                <img src="image/google-icon.svg" alt="G" style="width: 20px;">
+                Google ile Devam Et
+            </button>
+
+            <div class="separator">veya e-posta ile giriş</div>
+
+            <form id="login-auth-form">
+                <div class="input-group">
+                    <span class="material-icons">mail_outline</span>
+                    <input type="email" id="auth-email" placeholder="E-posta Adresi" required value="proje@okau.edu.tr">
+                </div>
+
+                <div class="input-group">
+                    <span class="material-icons">lock_outline</span>
+                    <input type="password" id="auth-password" placeholder="Şifreniz" required value="123456">
+                    <span class="material-icons toggle-password">visibility_off</span>
+                </div>
+
+                <a href="forgot_password.html" class="forgot-password">Şifremi Unuttum</a>
+
+                <button type="submit" class="primary-btn btn-primary">Oturum Aç</button>
+            </form>
+
+            <div class="footer-text">
+                Hesabın yok mu? <a href="register.html">Hemen Kayıt Ol</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    // --- TOAST BİLDİRİM FONKSİYONU (Aynı Kalıyor) ---
+    function showToast(message, type = 'success') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        const iconName = type === 'success' ? 'check_circle' : 'error';
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+                <div class="toast-content">
+                    <span class="material-icons toast-icon">${iconName}</span>
+                    <span class="toast-message">${message}</span>
+                </div>
+                <span class="material-icons toast-close" onclick="this.parentElement.remove()">close</span>
+            `;
+
+        toast.onclick = function () { removeToast(toast); };
+        container.appendChild(toast);
+        setTimeout(() => { removeToast(toast); }, 4000);
+    }
+
+    function removeToast(toast) {
+        toast.style.animation = 'fadeOutRight 0.4s forwards';
+        toast.addEventListener('animationend', () => { toast.remove(); });
+    }
+
+    // Şifre Göster/Gizle
+    document.querySelector('.toggle-password').addEventListener('click', function () {
+        const input = this.previousElementSibling;
+        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+        input.setAttribute('type', type);
+        this.textContent = type === 'password' ? 'visibility_off' : 'visibility';
+    });
+
+    // --- LOGIN API ENTEGRASYONU (GÜVENLİK GÜNCELLEMESİ) ---
+    document.getElementById('login-auth-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const btn = document.querySelector('.btn-primary');
+        const originalText = btn.textContent;
+        btn.textContent = "Kontrol Ediliyor...";
+        btn.disabled = true;
+        btn.style.opacity = "0.7";
+
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+
+        const apiUrl = "https://localhost:7223/api/Auth/login";
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: email, password: password })
+            });
+
+            if (response.ok) {
+                // BAŞARILI DURUM
+                const data = await response.json();
+                localStorage.setItem('jwtToken', data.token);
+
+                const habitQuestState = JSON.parse(localStorage.getItem('habitQuestState')) || { user: {} };
+                habitQuestState.user.isLoggedIn = true;
+                habitQuestState.user.email = email;
+                habitQuestState.user.username = email.split('@')[0];
+                localStorage.setItem('habitQuestState', JSON.stringify(habitQuestState));
+
+                showToast("🎉 Giriş Başarılı! Yönlendiriliyorsunuz...", "success");
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+
+            } else {
+                // HATA DURUMU (GÜVENLİ MESAJLAR)
+                // Backend'den gelen "response.text()" mesajını OKUMUYORUZ.
+                // Onun yerine Status Code'a göre biz mesaj uyduruyoruz.
+
+                let safeErrorMessage = "Giriş işlemi başarısız.";
+
+                if (response.status === 400) {
+                    // Bad Request: Genellikle eksik veri veya validasyon hatası
+                    safeErrorMessage = "Lütfen bilgilerinizi kontrol ediniz.";
+                }
+                else if (response.status === 401) {
+                    // Unauthorized: Şifre veya e-posta yanlış
+                    safeErrorMessage = "E-posta adresi veya şifre hatalı.";
+                }
+                else if (response.status === 404) {
+                    // Not Found: Kullanıcı yok
+                    safeErrorMessage = "Böyle bir hesap bulunamadı.";
+                }
+                else if (response.status >= 500) {
+                    // Server Error: Veritabanı hatası vs. (Asla detayı gösterme)
+                    safeErrorMessage = "Giriş Başarısız";
+                }
+
+                showToast(safeErrorMessage, "error");
+            }
+
+        } catch (error) {
+            // Ağ Hatası (Sunucu kapalıysa vs.)
+            console.error("Hata:", error); // Console'a yazabiliriz (developer görsün)
+            showToast("Sunucuya erişilemiyor. İnternet bağlantınızı kontrol edin.", "error");
+        } finally {
+            if (!window.location.href.includes('index.html')) {
+                btn.textContent = originalText;
+                btn.disabled = false;
+                btn.style.opacity = "1";
+            }
+        }
+    });
+</script>
