@@ -1,0 +1,413 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CE0AAAA7-4864-441F-A591-978CB3BFD760}|C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\Habit-Tracker Frontend|c:\\users\\ozbrk\\source\\repos\\habittracker\\habit-tracker frontend\\login.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CE0AAAA7-4864-441F-A591-978CB3BFD760}|C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\Habit-Tracker Frontend|solutionrelative:habit-tracker frontend\\login.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.api\\habittracker.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|solutionrelative:habittracker.api\\habittracker.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|solutionrelative:habittracker.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.infrastructure\\migrations\\20251204113521_db_changed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|solutionrelative:habittracker.infrastructure\\migrations\\20251204113521_db_changed.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.infrastructure\\migrations\\20251130191039_habit_isactive_added.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|solutionrelative:habittracker.infrastructure\\migrations\\20251130191039_habit_isactive_added.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|solutionrelative:habittracker.domain\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.domain\\entities\\badge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|solutionrelative:habittracker.domain\\entities\\badge.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.infrastructure\\contexts\\habittrackerdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|solutionrelative:habittracker.infrastructure\\contexts\\habittrackerdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.infrastructure\\repositories\\repository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A81195B8-6C87-4675-A977-132B09941B87}|HabitTracker.Infrastructure\\HabitTracker.Infrastructure.csproj|solutionrelative:habittracker.infrastructure\\repositories\\repository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\serviceregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.api\\controllers\\habitcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|solutionrelative:habittracker.api\\controllers\\habitcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2DBA2A6E-6156-4EF2-AF1D-A227CEA8F635}|HabitTracker.API\\HabitTracker.API.csproj|solutionrelative:habittracker.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\interfaces\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\interfaces\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\dtos\\habitdtos\\createhabitdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\dtos\\habitdtos\\createhabitdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\interfaces\\ihabitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\interfaces\\ihabitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\services\\habitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\services\\habitservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.application\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B396167A-5CBE-4BE3-84BA-A1ED39B772DD}|HabitTracker.Application\\HabitTracker.Application.csproj|solutionrelative:habittracker.application\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.domain\\entities\\habit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|solutionrelative:habittracker.domain\\entities\\habit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|c:\\users\\ozbrk\\source\\repos\\habittracker\\habittracker.domain\\common\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{616B8FB3-9EAA-4A14-985E-172706D8D77B}|HabitTracker.Domain\\HabitTracker.Domain.csproj|solutionrelative:habittracker.domain\\common\\baseentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 256,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "login.html",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\Habit-Tracker Frontend\\login.html",
+              "RelativeDocumentMoniker": "Habit-Tracker Frontend\\login.html",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\Habit-Tracker Frontend\\login.html",
+              "RelativeToolTip": "Habit-Tracker Frontend\\login.html",
+              "ViewState": "AgIAAKUBAAAAAAAAAAAcwKkBAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-12-04T13:21:29.091Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{c9c0ae26-aa77-11d2-b3f0-0000f87570ee}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b015bca8-f686-4aaf-a093-5d028dbdb089}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:7:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:6:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:9:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:15:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:21:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HabitTracker.API.csproj",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\Source\\Repos\\HabitTracker\\HabitTracker.API\\HabitTracker.API.csproj",
+              "RelativeDocumentMoniker": "HabitTracker.API\\HabitTracker.API.csproj",
+              "ToolTip": "C:\\Users\\ozbrk\\Source\\Repos\\HabitTracker\\HabitTracker.API\\HabitTracker.API.csproj",
+              "RelativeToolTip": "HabitTracker.API\\HabitTracker.API.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-04T13:38:14.958Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "20251204113521_db_changed.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Migrations\\20251204113521_db_changed.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Infrastructure\\Migrations\\20251204113521_db_changed.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Migrations\\20251204113521_db_changed.cs",
+              "RelativeToolTip": "HabitTracker.Infrastructure\\Migrations\\20251204113521_db_changed.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.415Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "20251130191039_habit_isactive_added.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Migrations\\20251130191039_habit_isactive_added.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Infrastructure\\Migrations\\20251130191039_habit_isactive_added.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Migrations\\20251130191039_habit_isactive_added.cs",
+              "RelativeToolTip": "HabitTracker.Infrastructure\\Migrations\\20251130191039_habit_isactive_added.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAC0AAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.453Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Domain\\Entities\\User.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Entities\\User.cs",
+              "RelativeToolTip": "HabitTracker.Domain\\Entities\\User.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.455Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Badge.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Entities\\Badge.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Domain\\Entities\\Badge.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Entities\\Badge.cs",
+              "RelativeToolTip": "HabitTracker.Domain\\Entities\\Badge.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.458Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.API\\appsettings.json",
+              "RelativeDocumentMoniker": "HabitTracker.API\\appsettings.json",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.API\\appsettings.json",
+              "RelativeToolTip": "HabitTracker.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-04T13:13:34.461Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "HabitTrackerDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Contexts\\HabitTrackerDbContext.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Infrastructure\\Contexts\\HabitTrackerDbContext.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Contexts\\HabitTrackerDbContext.cs",
+              "RelativeToolTip": "HabitTracker.Infrastructure\\Contexts\\HabitTrackerDbContext.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAxwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.464Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Repository.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Repositories\\Repository.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Infrastructure\\Repositories\\Repository.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Infrastructure\\Repositories\\Repository.cs",
+              "RelativeToolTip": "HabitTracker.Infrastructure\\Repositories\\Repository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.464Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ServiceRegistration.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\ServiceRegistration.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\ServiceRegistration.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\ServiceRegistration.cs",
+              "RelativeToolTip": "HabitTracker.Application\\ServiceRegistration.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.472Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "HabitController.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.API\\Controllers\\HabitController.cs",
+              "RelativeDocumentMoniker": "HabitTracker.API\\Controllers\\HabitController.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.API\\Controllers\\HabitController.cs",
+              "RelativeToolTip": "HabitTracker.API\\Controllers\\HabitController.cs",
+              "ViewState": "AQIAABsAAAAAAAAAAAAAwDgAAAA4AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.474Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "HabitTracker.API\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "HabitTracker.API\\Controllers\\AuthController.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABIAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.476Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Interfaces\\IRepository.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\Interfaces\\IRepository.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Interfaces\\IRepository.cs",
+              "RelativeToolTip": "HabitTracker.Application\\Interfaces\\IRepository.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAoAAAAoAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.476Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CreateHabitDto.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\DTOs\\HabitDTOs\\CreateHabitDto.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\DTOs\\HabitDTOs\\CreateHabitDto.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\DTOs\\HabitDTOs\\CreateHabitDto.cs",
+              "RelativeToolTip": "HabitTracker.Application\\DTOs\\HabitDTOs\\CreateHabitDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.476Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IHabitService.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Interfaces\\IHabitService.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\Interfaces\\IHabitService.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Interfaces\\IHabitService.cs",
+              "RelativeToolTip": "HabitTracker.Application\\Interfaces\\IHabitService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.484Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "HabitService.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Services\\HabitService.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\Services\\HabitService.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Services\\HabitService.cs",
+              "RelativeToolTip": "HabitTracker.Application\\Services\\HabitService.cs",
+              "ViewState": "AQIAADsAAAAAAAAAAAAgwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.485Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Services\\AuthService.cs",
+              "RelativeToolTip": "HabitTracker.Application\\Services\\AuthService.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.485Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Application\\Interfaces\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Application\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "HabitTracker.Application\\Interfaces\\IAuthService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.494Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Habit.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Entities\\Habit.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Domain\\Entities\\Habit.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Entities\\Habit.cs",
+              "RelativeToolTip": "HabitTracker.Domain\\Entities\\Habit.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.496Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "BaseEntity.cs",
+              "DocumentMoniker": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Common\\BaseEntity.cs",
+              "RelativeDocumentMoniker": "HabitTracker.Domain\\Common\\BaseEntity.cs",
+              "ToolTip": "C:\\Users\\ozbrk\\source\\repos\\HabitTracker\\HabitTracker.Domain\\Common\\BaseEntity.cs",
+              "RelativeToolTip": "HabitTracker.Domain\\Common\\BaseEntity.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T13:13:34.498Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
