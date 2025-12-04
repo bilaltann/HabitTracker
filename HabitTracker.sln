@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HabitTracker.API", "HabitTr
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Habit-Tracker Frontend", "Habit-Tracker Frontend\", "{CE0AAAA7-4864-441F-A591-978CB3BFD760}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_53703"
 		Debug.AspNetCompiler.PhysicalPath = "Habit-Tracker Frontend\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_53703\"
