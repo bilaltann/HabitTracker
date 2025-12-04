@@ -1,0 +1,14 @@
+# Visual Studio geçici dosyaları
+.vs/
+*.user
+*.suo
+*.userosscache
+*.slnhistory
+*.docstates
+
+# Derleme dosyaları (Gereksiz)
+bin/
+obj/
+
+# GÜVENLİK İÇİN (Şifrenizi korumak için)
+appsettings.json

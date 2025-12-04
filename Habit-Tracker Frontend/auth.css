@@ -1,0 +1,230 @@
+:root {
+    --primary-color: #1976D2;     /* Mavi */
+    --secondary-color: #4CAF50;   /* Yeşil (Success) */
+    --text-color: #333;
+    --white-color: #FFFFFF;
+    --background-auth: #F4F6F9;  /* GÖRSELİN DIŞ ARKA PLAN RENGİ */
+    --visual-bg: var(--white-color); /* GÖRSELİN İÇ ARKA PLANI BEYAZ */
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08); /* Yumuşak gölge */
+}
+
+/* Genel Stil */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.auth-body {
+    background-color: var(--background-auth);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 50px; 
+}
+
+/* Ana Sayfaya Dön Butonu Stili */
+.back-to-home {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.home-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--background-auth); 
+    padding: 8px 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
+
+.home-link:hover { background-color: #e0e0e0; }
+
+.home-link .material-icons { margin-right: 5px; font-size: 20px; }
+
+/* Ana Kapsayıcı */
+.auth-container {
+    display: flex;
+    max-width: 1200px;
+    width: 90%;
+    min-height: 650px; 
+    background-color: var(--white-color); 
+    border-radius: 18px; 
+    box-shadow: var(--shadow-soft); 
+    overflow: hidden;
+}
+
+/* Sol Bölüm: Görsel */
+.auth-visual {
+    flex: 1.5; 
+    background-color: var(--visual-bg); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    overflow: hidden; 
+    position: relative;
+    height: auto; 
+    min-width: 450px;
+}
+
+.illustration {
+    width: 100%;       
+    height: 100%;      
+    object-fit: contain; 
+    object-position: center; 
+}
+
+/* Sağ Bölüm: Form */
+.auth-form-container {
+    flex: 1; 
+    padding: 60px 30px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-title {
+    color: var(--text-color);
+    margin-bottom: 30px;
+    font-size: 28px;
+    text-align: center;
+}
+
+/* Form Elemanları */
+.auth-form input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0; 
+    border-radius: 8px; 
+    font-size: 16px;
+    transition: border-color 0.2s;
+}
+.auth-form input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+/* YENİ: Şifre Giriş Alanı ve İkonu (Göz İkonu için) */
+.password-input-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+.password-input-container input {
+    margin-bottom: 0; 
+}
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+    color: #999;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* YENİ: Şifre Gereksinimi İpucu */
+.password-hint {
+    font-size: 11px;
+    color: #888;
+    margin-top: 5px; 
+    margin-bottom: 15px;
+    padding-left: 2px;
+}
+
+/* YENİ: Şartlar Kabulü Alanı */
+.terms-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    color: #666;
+}
+
+.terms-checkbox input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+    margin-bottom: 0;
+}
+
+/* Google Butonu */
+.google-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: var(--white-color);
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Ayırıcı */
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #b0b0b0; 
+    margin: 15px 0;
+}
+
+/* Oturum Aç Linki Stili */
+.login-link-container {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+}
+
+.login-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Aksiyon Butonları */
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.primary-btn {
+    width: 100%; 
+    flex: 1;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 12px;
+    border: none;
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(25, 118, 210, 0.4); 
+    font-weight: bold;
+}
+
+.secondary-btn {
+    flex: 1;
+    background-color: #f0f0f0; 
+    color: var(--text-color);
+    padding: 12px;
+    border-radius: 8px; 
+    font-weight: 500;
+}
+
+.primary-btn:hover { background-color: #1565C0; }
+.secondary-btn:hover { background-color: #e0e0e0; }

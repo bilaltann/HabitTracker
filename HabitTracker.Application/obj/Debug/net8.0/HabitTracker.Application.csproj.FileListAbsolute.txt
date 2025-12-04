@@ -1,0 +1,15 @@
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\bin\Debug\net8.0\HabitTracker.Application.deps.json
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\bin\Debug\net8.0\HabitTracker.Application.dll
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\bin\Debug\net8.0\HabitTracker.Application.pdb
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\bin\Debug\net8.0\HabitTracker.Domain.dll
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\bin\Debug\net8.0\HabitTracker.Domain.pdb
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.csproj.AssemblyReference.cache
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.AssemblyInfoInputs.cache
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.AssemblyInfo.cs
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.csproj.CoreCompileInputs.cache
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.dll
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\refint\HabitTracker.Application.dll
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.pdb
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\ref\HabitTracker.Application.dll
+C:\Users\bilal\source\repos\HabitTracker\HabitTracker.Application\obj\Debug\net8.0\HabitTracker.Application.csproj.CopyComplete
