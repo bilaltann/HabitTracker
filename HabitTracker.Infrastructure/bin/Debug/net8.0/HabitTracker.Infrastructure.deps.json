@@ -909,7 +909,7 @@
         },
         "runtime": {
           "HabitTracker.Application.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -917,7 +917,7 @@
       "HabitTracker.Domain/1.0.0": {
         "runtime": {
           "HabitTracker.Domain.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
