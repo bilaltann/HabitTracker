@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "gpFORw6weROaWbh0IlXiPaXg+JNm+NrfM1sMf9hBMqM=",
+  "Source": "HabitTracker.API",
+  "BasePath": "_content/HabitTracker.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

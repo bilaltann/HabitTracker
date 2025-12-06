@@ -241,39 +241,70 @@
             </section>
 
             <section id="page-settings" class="hidden">
-                <div class="glass-panel">
-                    <div class="card-header">
-                        <h2><span class="material-icons">settings</span> Hesap Ayarları</h2>
-                    </div>
 
-                    <div style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; margin-bottom: 15px; color: var(--primary-color);">🔒 Şifre Güncelleme</h3>
-                        <form id="update-password-form">
-                            <div class="input-group" style="margin-bottom: 15px;">
-                                <input type="password" id="setting-password-old" placeholder="Mevcut Şifre" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                <div class="header-section" style="text-align: center; margin-bottom: 30px; color: white;">
+                    <h1 style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">Ayarlar</h1>
+                    <p style="opacity: 0.9;">Hesap tercihlerinizi kişiselleştirin</p>
+                </div>
+
+                <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
+
+                    <div class="card" style="background-color: #fff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <span class="material-icons" style="color: var(--primary-color);">email</span>
+                            <h3>E-posta Güncelle</h3>
+                        </div>
+
+                        <form id="settings-email-form">
+                            <div class="input-group">
+                                <label style="font-weight: 500;">Yeni E-posta</label>
+                                <input type="email" id="settings-email-input" placeholder="yeni e-mail adresinizi giriniz" required
+                                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
                             </div>
-                            <div class="input-group" style="margin-bottom: 15px;">
-                                <input type="password" id="setting-password-new" placeholder="Yeni Şifre (Min 8 Karakter)" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-                            </div>
-                            <button type="submit" class="btn-primary">Şifreyi Değiştir</button>
+                            <button type="submit" id="settings-email-btn" class="btn-primary"
+                                    style="width: 100%; margin-top: 15px; padding: 12px;">
+                                Güncelle
+                            </button>
                         </form>
                     </div>
 
-                    <div style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 18px; margin-bottom: 15px; color: var(--primary-color);">📧 E-posta Güncelleme</h3>
-                        <form id="update-email-form">
-                            <div class="input-group" style="margin-bottom: 15px;">
-                                <input type="email" id="setting-email-new" placeholder="Yeni E-posta Adresi" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                    <div class="card" style="background-color: #fff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                            <span class="material-icons" style="color: var(--primary-color);">lock</span>
+                            <h3>Parola Değiştir</h3>
+                        </div>
+
+                        <form id="settings-password-form">
+                            <div class="input-group">
+                                <label style="font-weight: 500;">Mevcut Parola</label>
+                                <input type="password" id="current-password" placeholder="eski parolanızı giriniz" required
+                                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
                             </div>
-                            <button type="submit" class="btn-primary">E-postayı Değiştir</button>
+                            <div class="input-group" style="margin-top: 10px;">
+                                <label style="font-weight: 500;">Yeni Parola</label>
+                                <input type="password" id="new-password" placeholder="yeni parolanızı giriniz" required
+                                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
+                            </div>
+                            <button type="submit" id="settings-password-btn" class="btn-primary"
+                                    style="width: 100%; margin-top: 15px; padding: 12px;">
+                                Şifreyi Değiştir
+                            </button>
                         </form>
                     </div>
 
-                    <div style="margin-top: 20px;">
-                        <h3 style="font-size: 18px; margin-bottom: 10px; color: #EF4444;">🚨 Tehlikeli Bölge</h3>
-                        <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Tüm verilerinizi (alışkanlıklar, puanlar) kalıcı olarak siler.</p>
-                        <button id="clear-data-btn" style="background-color: #EF4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">Tüm Verileri Sıfırla</button>
+                    <div class="card" style="background-color: #fff; border: 1px solid #ffcccc; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <span class="material-icons" style="color: #dc3545;">warning</span>
+                            <h3 style="color: #dc3545;">Tehlikeli Bölge</h3>
+                        </div>
+                        <p style="font-size: 13px; margin-bottom: 15px; color: #555;">Hesabınızı ve tüm verilerinizi kalıcı olarak silmek istiyor musunuz?</p>
+
+                        <button type="button" id="delete-account-btn"
+                                style="background-color: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: background 0.3s;">
+                            Hesabımı Kalıcı Olarak Sil
+                        </button>
                     </div>
+
                 </div>
             </section>
 
