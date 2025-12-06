@@ -1,14 +1,34 @@
-# Visual Studio geçici dosyaları
+# --- Visual Studio Özel Klasörleri ---
 .vs/
 *.user
-*.suo
 *.userosscache
 *.slnhistory
+*.suo
 *.docstates
 
-# Derleme dosyaları (Gereksiz)
-bin/
-obj/
+# --- Derleme (Build) Çıktıları ---
+[Bb]in/
+[Oo]bj/
 
-# GÜVENLİK İÇİN (Şifrenizi korumak için)
-appsettings.json
+# --- Test Sonuçları ---
+TestResults/
+
+# --- NuGet Paketleri (Eğer global cache kullanmıyorsan) ---
+*.nupkg
+packages/
+!packages/build/
+
+# --- GÜVENLİK ve AYARLAR ---
+# Ana ayar dosyası kalsın, geliştirme ortamı şifrelerini gizle:
+appsettings.Development.json
+appsettings.Production.json
+# Eğer kendi özel local dosyan varsa onu da ekle:
+appsettings.Local.json
+*.local.json
+
+# --- İşletim Sistemi Gereksizleri ---
+Thumbs.db
+.DS_Store
+
+# --- Log Dosyaları ---
+*.log
