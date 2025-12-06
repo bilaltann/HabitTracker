@@ -217,3 +217,4 @@ body {
 @keyframes fadeOutRight {
     to { transform: translateX(100%); opacity: 0; }
 }
+
