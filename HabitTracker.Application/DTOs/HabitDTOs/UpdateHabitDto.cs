@@ -13,5 +13,8 @@ namespace HabitTracker.Application.DTOs.HabitDTOs
         public string Category { get; set; }
         public int FrequencyId { get; set; }
         public bool IsActive { get; set; } // Alışkanlığı askıya alma/açma
+
+        public DateTime ExpirationDate { get; set; }
+
     }
 }

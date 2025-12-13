@@ -105,6 +105,14 @@ namespace HabitTracker.Application.Services
             await _userRepository.UpdateAsync(user);
         }
 
+
+    
+
+
+
+
+
+
         // --- YARDIMCI METOTLAR ---
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -131,10 +139,16 @@ namespace HabitTracker.Application.Services
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
+    {
+        // 1. ID'yi ekle
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        
+        // 2. Email'i ekle (SENİN KODUNDA BU EKSİKTİ)
+        new Claim(ClaimTypes.Email, user.Email ?? ""), 
+
+        // 3. İsmi ekle (Burada sorun yok, doğru yapmışsın)
+        new Claim(ClaimTypes.Name, user.Name ?? "")
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

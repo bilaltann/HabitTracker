@@ -7,12 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.14.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" />
+    <PackageReference Include="MimeKit" Version="4.14.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HabitTracker.Domain\HabitTracker.Domain.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 </Project>

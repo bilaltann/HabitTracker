@@ -35,7 +35,7 @@
             padding: 20px;
         }
 
-        /* --- TOAST BİLDİRİM CSS (EKLENDİ) --- */
+        /* --- TOAST BİLDİRİM CSS --- */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -396,9 +396,6 @@
         </div>
 
         <div class="form-side">
-            <a href="index.html" class="back-link">
-                <span class="material-icons">arrow_back</span> Anasayfa
-            </a>
 
             <div class="header">
                 <h2>Hesap Oluştur</h2>
@@ -413,6 +410,13 @@
             <div class="separator">veya e-posta ile kayıt ol</div>
 
             <form id="register-auth-form">
+
+                <!-- YENİ EKLENEN KISIM: İSİM ALANI -->
+                <div class="input-group">
+                    <span class="material-icons">person_outline</span>
+                    <input type="text" id="auth-name" placeholder="Ad Soyad" required>
+                </div>
+
                 <div class="input-group">
                     <span class="material-icons">mail_outline</span>
                     <input type="email" id="auth-email" placeholder="E-posta Adresi" required>
@@ -457,12 +461,12 @@
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.innerHTML = `
-                    <div class="toast-content">
-                        <span class="material-icons toast-icon">${iconName}</span>
-                        <span class="toast-message">${message}</span>
-                    </div>
-                    <span class="material-icons toast-close" onclick="this.parentElement.remove()">close</span>
-                `;
+                        <div class="toast-content">
+                            <span class="material-icons toast-icon">${iconName}</span>
+                            <span class="toast-message">${message}</span>
+                        </div>
+                        <span class="material-icons toast-close" onclick="this.parentElement.remove()">close</span>
+                    `;
 
             toast.onclick = function () { removeToast(toast); };
             container.appendChild(toast);
@@ -494,11 +498,13 @@
             btn.disabled = true;
             btn.style.opacity = "0.7";
 
+            // YENİ: İsim alanını alıyoruz
+            const name = document.getElementById('auth-name').value;
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
             const repeatPassword = document.getElementById('auth-repeat-password').value;
 
-            // Validasyonlar (Alert yerine Toast kullanıldı)
+            // Validasyonlar
             if (password !== repeatPassword) {
                 showToast("Hata: Şifreler eşleşmiyor.", "error");
                 resetBtn(); return;
@@ -509,34 +515,35 @@
             }
 
             const apiUrl = "https://localhost:7223/api/Auth/register";
+            let response; // Response değişkenini dışarıda tanımladık
 
             try {
-                const response = await fetch(apiUrl, {
+                response = await fetch(apiUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         email: email,
                         password: password,
-                        name: email.split('@')[0]
+                        name: name // ARTIK GİRİLEN İSMİ GÖNDERİYORUZ
                     })
                 });
 
                 if (response.ok) {
                     showToast("🎉 Kayıt Başarılı! Giriş sayfasına yönlendiriliyorsunuz.", "success");
-                    // Mesajın okunması için 2 saniye bekle
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 2000);
                 } else {
-                    showToast("Kayıt Başarısız: ","error");
+                    const errorData = await response.json();
+                    showToast("Kayıt Başarısız: " + (errorData.message || "Bilinmeyen hata"), "error");
                 }
 
             } catch (error) {
                 console.error(error);
                 showToast("Sunucuya bağlanılamadı. API'nin açık olduğundan emin ol.", "error");
             } finally {
-                // Sadece hata durumunda butonu resetle (başarılıysa yönlenecek)
-                if (!response?.ok) resetBtn();
+                // Sadece hata durumunda butonu resetle
+                if (!response || !response.ok) resetBtn();
             }
 
             function resetBtn() {

@@ -17,5 +17,8 @@ namespace HabitTracker.Application.DTOs.HabitDTOs
         // Hesaplanan alan (Veritabanında yok, Loglardan hesaplanacak)
         public bool IsCompletedToday { get; set; }
         public int CurrentStreak { get; set; } // Zincir
+
+        public DateTime ExpirationDate { get; set; }
+
     }
 }

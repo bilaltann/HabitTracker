@@ -17,5 +17,6 @@ namespace HabitTracker.Domain.Entities
         public User User { get; set; }
         public ICollection<HabitLog> Logs { get; set; }
         public bool IsActive { get; set; } = true;
+        public DateTime ExpirationDate { get; set; }
     }
 }

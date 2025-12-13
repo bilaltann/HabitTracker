@@ -1,4 +1,7 @@
 ﻿using HabitTracker.Application.Interfaces;
+using HabitTracker.Application.Interfaces.Repositories;
+using HabitTracker.Application.Services;
+using HabitTracker.Domain.Entities;
 using HabitTracker.Infrastructure.Contexts;
 using HabitTracker.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +26,13 @@ namespace HabitTracker.Infrastructure
 
             // Repository kayıtları...
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IHabitRepository, HabitRepository>();
+            services.AddScoped<IHabitLogRepository, HabitLogRepository>();
+            services.AddScoped<IBadgeRepository, BadgeRepository>();
+            services.AddScoped<IRepository<UserBadge>, Repository<UserBadge>>();
+
         }
     }
 }

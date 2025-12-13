@@ -50,6 +50,38 @@ namespace HabitTracker.Infrastructure.Migrations
                     b.ToTable("Badges");
                 });
 
+            modelBuilder.Entity("HabitTracker.Domain.Entities.Friendship", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AddresseeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RequesterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddresseeId");
+
+                    b.HasIndex("RequesterId");
+
+                    b.ToTable("Friendships");
+                });
+
             modelBuilder.Entity("HabitTracker.Domain.Entities.Habit", b =>
                 {
                     b.Property<int>("Id")
@@ -63,6 +95,9 @@ namespace HabitTracker.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Frequency")
@@ -182,6 +217,25 @@ namespace HabitTracker.Infrastructure.Migrations
                     b.ToTable("UserBadges");
                 });
 
+            modelBuilder.Entity("HabitTracker.Domain.Entities.Friendship", b =>
+                {
+                    b.HasOne("HabitTracker.Domain.Entities.User", "Addressee")
+                        .WithMany("ReceivedFriendRequests")
+                        .HasForeignKey("AddresseeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("HabitTracker.Domain.Entities.User", "Requester")
+                        .WithMany("SentFriendRequests")
+                        .HasForeignKey("RequesterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Addressee");
+
+                    b.Navigation("Requester");
+                });
+
             modelBuilder.Entity("HabitTracker.Domain.Entities.Habit", b =>
                 {
                     b.HasOne("HabitTracker.Domain.Entities.User", "User")
@@ -242,6 +296,10 @@ namespace HabitTracker.Infrastructure.Migrations
                     b.Navigation("HabitLogs");
 
                     b.Navigation("Habits");
+
+                    b.Navigation("ReceivedFriendRequests");
+
+                    b.Navigation("SentFriendRequests");
 
                     b.Navigation("UserBadges");
                 });

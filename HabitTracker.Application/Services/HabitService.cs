@@ -1,5 +1,6 @@
 ﻿using HabitTracker.Application.DTOs.HabitDTOs;
 using HabitTracker.Application.Interfaces;
+using HabitTracker.Application.Interfaces.Repositories;
 using HabitTracker.Domain.Entities;
 using HabitTracker.Domain.Enums;
 using System;
@@ -12,47 +13,57 @@ namespace HabitTracker.Application.Services
 {
     public class HabitService : IHabitService
     {
-        private readonly IRepository<Habit> _habitRepository;
-        private readonly IRepository<HabitLog> _logRepository; // Log işlemleri için bunu da çağırmalısın
-
-        public HabitService(IRepository<Habit> habitRepository, IRepository<HabitLog> logRepository)
+        private readonly IHabitRepository _habitRepository;
+        private readonly IHabitLogRepository _logRepository; // Log işlemleri için bunu da çağırmalısın
+        private readonly IUserRepository _userRepository;
+        private readonly IBadgeService _badgeService;
+        public HabitService(IHabitRepository habitRepository, IHabitLogRepository logRepository, IUserRepository userRepository, IBadgeService badgeService)
         {
             _habitRepository = habitRepository;
             _logRepository = logRepository;
+            _userRepository = userRepository;
+            _badgeService = badgeService;
         }
 
         public async Task<IEnumerable<HabitDto>> GetAllHabitsByUserIdAsync(int userId)
         {
-            
-                // 1. Tüm alışkanlıkları çek
-                // Not: Generic Repository'de "Include" (Join) yoksa Logları ayrıca çekmen gerekebilir.
-                // Şimdilik basit mantıkla gidelim:
-                var allHabits = await _habitRepository.GetAllAsync();
-                var userHabits = allHabits.Where(h => h.UserId == userId).ToList(); 
+            // sadece o kullanıcıya ait aktif alışkanlıkları çek
+            var userHabits = await _habitRepository.GetHabitsByUserIdAsync(userId);
 
-                // 2. Bugünün loglarını çek (Performans için Active olanlar)
-                var allLogs = await _logRepository.GetAllAsync();
-                var today = DateTime.Today;
+            // 2. ADIM: Sadece bugüne ait logları çek (Tüm logları çekmek yerine) (HIZLI)
+            var today = DateTime.Today;
+            var todaysLogs = await _logRepository.GetLogsByUserIdAndDateAsync(userId, today);
 
-                // 3. Mapping (Entity -> DTO)
-                var habitDtos = userHabits.Select(h => new HabitDto
-                {
-                    Id = h.Id,
-                    Name = h.Name,
-                    Category = h.Category,
-                    Frequency = h.Frequency.ToString(),
-                    IsActive = h.IsActive,
+            // 3. Mapping
+            var habitDtos = userHabits.Select(h => new HabitDto
+            {
+                Id = h.Id,
+                Name = h.Name,
+                Category = h.Category,
+                Frequency = h.Frequency.ToString(),
+                IsActive = h.IsActive,
+                ExpirationDate = h.ExpirationDate,
+                // Bellekteki küçük listeden kontrol et
+                IsCompletedToday = todaysLogs.Any(l => l.HabitId == h.Id)
+            }).ToList();
 
-                    // Hesaplanan Alan: Bugün bu alışkanlık için log var mı?
-                    IsCompletedToday = allLogs.Any(l => l.HabitId == h.Id && l.CompletedDate.Date == today)
-                }).ToList();
+            return habitDtos;
 
-                return habitDtos;
-            
         }
 
         public  async Task<HabitDto> CreateHabitAsync(CreateHabitDto createDto)
         {
+            DateTime expirationDate;
+            if ((Frequency)createDto.FrequencyId == Frequency.Weekly)
+            {
+                // Haftalık ise 7 gün ekle
+                expirationDate = DateTime.Now.AddDays(7);
+            }
+            else
+            {
+                // Günlük ise (veya varsayılan) 1 gün ekle
+                expirationDate = DateTime.Now.AddDays(1);
+            }
             var habit = new Habit
             {
                 Name = createDto.Name,
@@ -60,7 +71,9 @@ namespace HabitTracker.Application.Services
                 Frequency = (Frequency)createDto.FrequencyId,
                 UserId = createDto.UserId,
                 IsActive = true,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                ExpirationDate = expirationDate
+
             };
 
             var newHabit = await _habitRepository.CreateAsync(habit);
@@ -83,11 +96,7 @@ namespace HabitTracker.Application.Services
                 throw new Exception("Silinecek alışkanlık bulunamadı.");
             }
 
-            // 2. Soft Delete uygula (Tamamen silmek yerine pasife çekiyoruz)
-            habit.IsActive = false;
-
-            // 3. Güncellemeyi kaydet
-            await _habitRepository.UpdateAsync(habit);
+            await _habitRepository.DeleteAsync(habit.Id);
         }
 
         
@@ -122,18 +131,32 @@ namespace HabitTracker.Application.Services
 
         public async Task ToggleHabitCompletionAsync(int habitId, DateTime date)
         {
-            // 1. Bu tarihte log var mı kontrol et
-            var allLogs = await _logRepository.GetAllAsync();
-            var existingLog = allLogs.FirstOrDefault(l => l.HabitId == habitId && l.CompletedDate.Date == date.Date);
+            // önce alışkanlığı ve kullanıcıyı bulmamız lazım
+            var habit = await _habitRepository.GetByIdAsync(habitId);
+            if (habit == null) throw new Exception("Alışkanlık bulunamadı");
 
-            if (existingLog != null)
+            var user = await _userRepository.GetByIdAsync(habit.UserId);
+            if (user == null) throw new Exception("kullanıcı bulunamadı");
+
+            
+            var existingLog =await _logRepository.GetLogByDateAsync(habitId,date);
+            if(existingLog != null)
             {
-                // VARSA SİL (İşaretlemeyi kaldır)
+                // --- DURUM: GERİ ALMA (UNCHECK) ---
+                // 1. Logu sil
                 await _logRepository.DeleteAsync(existingLog.Id);
+
+                // 2. Puanı 1 azalt (0'ın altına düşmesin diye kontrol)
+                if (user.CurrentPoints > 0)
+                {
+                    user.CurrentPoints--;
+                }
             }
+
             else
             {
-                // YOKSA EKLE (Tamamlandı işaretle)
+                // --- DURUM: TAMAMLAMA (CHECK) ---
+                // 1. Logu ekle
                 var newLog = new HabitLog
                 {
                     HabitId = habitId,
@@ -141,6 +164,23 @@ namespace HabitTracker.Application.Services
                     CreatedDate = DateTime.Now
                 };
                 await _logRepository.CreateAsync(newLog);
+
+                // 2. Puanı 1 arttır
+                user.CurrentPoints++;
+            }
+            // C. SEVİYE HESAPLAMA (ORTAK MANTIK)
+            // Kural: Her 10 puanda 1 level.
+            // Örnek: 0-9 Puan -> Level 1
+            //       10-19 Puan -> Level 2
+            //       55 Puan -> Level 6 ((55 / 10) + 1)
+
+            user.Level = (user.CurrentPoints / 10) + 1;
+
+            // D. Kullanıcıyı Güncelle (Puan ve Level değişti)
+            await _userRepository.UpdateAsync(user);
+            if (existingLog == null) // Yani yeni log eklendiyse (Tamamlandıysa)
+            {
+                await _badgeService.CheckAndAwardBadgesAsync(user.Id);
             }
         }
 
@@ -158,9 +198,26 @@ namespace HabitTracker.Application.Services
             // 3. Yeni değerleri mevcut nesneye aktar
             habit.Name = updateDto.Name;
             habit.Category = updateDto.Category;
-            habit.Frequency = (Frequency)updateDto.FrequencyId; // Int'ten Enum'a çeviriyoruz
             habit.IsActive = updateDto.IsActive; // Askıya alma veya aktif etme durumu
 
+            DateTime expirationDate;
+
+            if (habit.Frequency != (Frequency)updateDto.FrequencyId)
+            {
+                habit.Frequency = (Frequency)updateDto.FrequencyId; // Int'ten Enum'a çeviriyoruz
+
+                if (habit.Frequency == Frequency.Weekly)
+                {
+                    // Haftalığa çevirdi ise 6 gün ekle
+                    habit.ExpirationDate = DateTime.Now.AddDays(6);
+                }
+                else
+                {
+                    // günlüğe çevirdi ise 6 gün çıkar
+                    habit.ExpirationDate = DateTime.Now.AddDays(-6);
+                }
+            }
+                
             // 4. Değişiklikleri veritabanına kaydet
             await _habitRepository.UpdateAsync(habit);
         }

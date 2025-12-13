@@ -21,5 +21,10 @@ namespace HabitTracker.Domain.Entities
         public ICollection<Habit> Habits { get; set; }
         public ICollection<UserBadge> UserBadges { get; set; } // Çoka-çok ilişki
         public ICollection<HabitLog> HabitLogs { get; set; }
+        // Gönderdiği istekler
+        public ICollection<Friendship> SentFriendRequests { get; set; }
+
+        // Aldığı istekler
+        public ICollection<Friendship> ReceivedFriendRequests { get; set; }
     }
 }
