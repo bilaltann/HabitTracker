@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dosyadan Rozet Ekle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        /* Dosya Yükleme Alanı */
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+            button:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+
+        .preview-box {
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+            .preview-box img {
+                max-width: 100px;
+                max-height: 100px;
+                border-radius: 8px;
+            }
+
+        #status-msg {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-panel">
+        <h2 style="text-align:center; color:#6366f1; margin-bottom: 20px;">
+            <span class="material-icons" style="vertical-align: middle;">upload_file</span> Rozet Yükle
+        </h2>
+
+        <form id="upload-form">
+            <div class="input-group">
+                <label>Rozet Adı</label>
+                <input type="text" id="badge-name" placeholder="Örn: Erken Kalkan" required>
+            </div>
+
+            <div class="input-group">
+                <label>Açıklama</label>
+                <textarea id="badge-desc" rows="3" placeholder="Rozetin kazanılma şartı..." required></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Resim Seç (PNG, JPG)</label>
+                <input type="file" id="badge-file" accept="image/*" required onchange="previewFile()">
+            </div>
+
+            <!-- Seçilen resmi gösterme -->
+            <div class="preview-box" id="preview-box">
+                <p style="margin:0 0 5px 0; font-size:12px; color:#999;">Önizleme</p>
+                <img id="img-preview" src="">
+            </div>
+
+            <button type="submit" id="submit-btn">Yükle ve Kaydet</button>
+            <p id="status-msg"></p>
+        </form>
+    </div>
+
+    <script>
+        // API Adresi (Port numaranın doğru olduğundan emin ol)
+        const API_URL = "https://localhost:7223/api/Badge";
+
+        // Dosya seçilince önizleme yap
+        function previewFile() {
+            const previewBox = document.getElementById('preview-box');
+            const previewImg = document.getElementById('img-preview');
+            const file = document.getElementById('badge-file').files[0];
+            const reader = new FileReader();
+
+            reader.onloadend = function () {
+                previewImg.src = reader.result;
+                previewBox.style.display = "block";
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                previewImg.src = "";
+                previewBox.style.display = "none";
+            }
+        }
+
+        // Form Gönderme
+        document.getElementById("upload-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const btn = document.getElementById("submit-btn");
+            const msg = document.getElementById("status-msg");
+            const token = localStorage.getItem("jwtToken");
+
+            // Token kontrolü
+            if (!token) {
+                msg.style.color = "red";
+                msg.textContent = "Hata: Giriş yapmamışsınız! Önce login olun.";
+                return;
+            }
+
+            // Butonu kilitle
+            btn.disabled = true;
+            btn.textContent = "Yükleniyor...";
+            msg.textContent = "";
+
+            // FormData Hazırla
+            const formData = new FormData();
+            formData.append("Name", document.getElementById("badge-name").value);
+            formData.append("Description", document.getElementById("badge-desc").value);
+
+            // Dosyayı ekle (Backend'deki 'ImageFile' ismiyle aynı olmalı)
+            const fileInput = document.getElementById("badge-file");
+            formData.append("ImageFile", fileInput.files[0]);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                        // DİKKAT: 'Content-Type': 'application/json' BURAYA YAZILMAZ!
+                        // FormData kullanıldığı için tarayıcı boundary'i kendi ayarlar.
+                    },
+                    body: formData
+                });
+
+                // Önce cevabı düz metin olarak al (Hata analizi için)
+                const responseText = await response.text();
+
+                if (response.ok) {
+                    // Başarılıysa JSON parse edilebilir mi bak (Opsiyonel, işlem başarılı demek yeterli)
+                    msg.style.color = "green";
+                    msg.textContent = "✅ Rozet ve resim başarıyla yüklendi!";
+
+                    // Formu temizle
+                    document.getElementById("upload-form").reset();
+                    document.getElementById('preview-box').style.display = "none";
+                } else {
+                    // Hata durumunda gelen mesajı göster
+                    console.error("Sunucu Hatası:", responseText);
+
+                    // Eğer JSON dönerse başlığını al, değilse düz metni göster
+                    let errorMsg = responseText;
+                    try {
+                        const errJson = JSON.parse(responseText);
+                        errorMsg = errJson.title || errJson.message || responseText;
+                    } catch (e) { /* JSON değilse olduğu gibi kalsın */ }
+
+                    msg.style.color = "red";
+                    msg.textContent = "Hata: " + errorMsg;
+                }
+
+            } catch (error) {
+                console.error(error);
+                msg.style.color = "red";
+                msg.textContent = "Sunucuya bağlanılamadı.";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Yükle ve Kaydet";
+            }
+        });
+    </script>
+
+</body>
+</html>

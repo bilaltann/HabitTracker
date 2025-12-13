@@ -48,23 +48,30 @@ namespace HabitTracker.API.Controllers
                 return Ok(result);
             }
 
-            // 3. GÜNCELLEME
-            [HttpPut]
-            public async Task<IActionResult> Update([FromBody] UpdateHabitDto request)
+        // 3. GÜNCELLEME
+        // URL Artık: https://localhost:7223/api/Habit/15
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateHabitDto request)
+        {
+            // Güvenlik Kontrolü: URL'deki ID ile Body'deki ID eşleşiyor mu?
+            if (id != request.Id)
             {
-                try
-                {
-                    await _habitService.UpdateHabitAsync(request);
-                    return Ok(new { message = "Alışkanlık güncellendi." });
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return BadRequest("URL'deki ID ile gönderilen verideki ID uyuşmuyor.");
             }
 
-            // 4. SİLME
-            [HttpDelete("{id}")]
+            try
+            {
+                await _habitService.UpdateHabitAsync(request);
+                return Ok(new { message = "Alışkanlık güncellendi." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // 4. SİLME
+        [HttpDelete("{id}")]
             public async Task<IActionResult> Delete(int id)
             {
                 try
@@ -80,7 +87,7 @@ namespace HabitTracker.API.Controllers
 
             // 5. İŞARETLEME (Tamamlandı / Geri Al)
             [HttpPost("toggle")]
-            public async Task<IActionResult> ToggleCompletion([FromBody] ToggleHabitRequest request)
+            public async Task<IActionResult> ToggleCompletion([FromBody] ToggleHabitRequestDTO request)
             {
                 try
                 {
@@ -94,11 +101,6 @@ namespace HabitTracker.API.Controllers
             }
      }
 
-        // Bu endpoint için küçük bir DTO (Başka yerde kullanmayacaksan burada durabilir)
-     public class ToggleHabitRequest
-     {
-        public int HabitId { get; set; }
-        public DateTime Date { get; set; }
-     }
+    
 }
 

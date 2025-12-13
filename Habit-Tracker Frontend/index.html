@@ -6,82 +6,13 @@
     <title>HabitQuest - Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" />
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/tr.js"></script> 
     <link rel="stylesheet" href="style.css">
 
-    <style>
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            background-color: rgba(255,255,255,0.5);
-            border-radius: 10px;
-            margin-top: 10px;
-            height: 20px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-            border-radius: 10px;
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.3s;
-        }
-
-            .modal-overlay.active {
-                opacity: 1;
-                pointer-events: all;
-            }
-
-        .modal-content {
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-            transform: translateY(-20px);
-            transition: 0.3s;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-        }
-
-        .close-modal {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            cursor: pointer;
-            color: #666;
-        }
-
-        /* Grid Layouts for Sections */
-        .level-tabs-container, .badge-grid-tabs {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .chart-section {
-            min-height: 300px;
-            padding: 20px;
-        }
-    </style>
 </head>
 <body>
 
@@ -91,11 +22,15 @@
     <header class="glass-header">
         <div class="header-content">
             <div class="logo-container">
-                <img src="image/logo.png" alt="HabitQuest Logo" class="header-logo">
+                <img src="image/logo.png" alt="HabitQuest Logo" class="header-logo" onerror="this.style.display='none'">
                 <h1 class="logo">HabitQuest</h1>
             </div>
+
             <div class="user-info">
                 <span id="user-display">Hoş Geldiniz!</span>
+                <button onclick="openFriendModal()" class="btn-friend-header">
+                    <span class="material-icons">person_add</span> Arkadaş Ekle
+                </button>
                 <button id="logout-btn" class="btn-logout">
                     <span class="material-icons">logout</span> Çıkış
                 </button>
@@ -104,21 +39,21 @@
     </header>
 
     <div class="main-layout container">
-
         <aside class="sidebar glass-panel">
             <nav>
                 <ul>
                     <li class="nav-item active" data-page="home">
                         <span class="material-icons">dashboard</span> Anasayfa
                     </li>
-                    <li class="nav-item" data-page="levels">
-                        <span class="material-icons">trending_up</span> Seviyeler
+                    <li class="nav-item" data-page="requests">
+                        <span class="material-icons">notifications_active</span> İstekler
                     </li>
+                    <li class="nav-item" data-page="friends">
+                        <span class="material-icons">people</span> Arkadaşlar
+                    </li>
+                   
                     <li class="nav-item" data-page="badges">
                         <span class="material-icons">emoji_events</span> Rozetler
-                    </li>
-                    <li class="nav-item" data-page="stats">
-                        <span class="material-icons">bar_chart</span> Grafikler
                     </li>
                     <li class="nav-item" data-page="calendar">
                         <span class="material-icons">calendar_today</span> Takvim
@@ -131,39 +66,29 @@
         </aside>
 
         <main class="content-area">
-
+            <!-- ANASAYFA -->
             <section id="page-home">
                 <div class="stats-grid">
                     <div class="stat-card glass-panel">
                         <div class="stat-icon purple"><span class="material-icons">stars</span></div>
-                        <div class="stat-info">
-                            <h3>Toplam Puan</h3>
-                            <span id="user-points" class="stat-value">0</span>
-                        </div>
+                        <div class="stat-info"><h3>Toplam Puan</h3><span id="user-points" class="stat-value">0</span></div>
                     </div>
                     <div class="stat-card glass-panel">
                         <div class="stat-icon blue"><span class="material-icons">verified</span></div>
                         <div class="stat-info" style="width: 100%;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <h3>Seviye</h3>
-                                <span id="user-level-name" class="stat-value" style="font-size: 18px;">Başlangıç</span>
+                                <h3>Seviye</h3><span id="user-level-name" class="stat-value" style="font-size: 18px;">Başlangıç</span>
                             </div>
-                            <div class="progress-container">
-                                <div id="level-progress-bar" class="progress-bar"></div>
-                            </div>
-                            <small id="progress-text" style="color: #666; font-size: 12px;">Sonraki seviyeye: %0</small>
+                            <div class="progress-container"><div id="level-progress-bar" class="progress-bar"></div></div>
+                            <small id="progress-text" style="color: #666; font-size: 12px;">İlerleme Durumu: %0</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-card glass-panel">
-                    <div class="card-header">
-                        <h2><span class="material-icons">add_circle</span> Yeni Alışkanlık</h2>
-                    </div>
+                    <div class="card-header"><h2><span class="material-icons">add_circle</span> Yeni Alışkanlık</h2></div>
                     <form id="add-habit-form" class="habit-form-grid">
-                        <div class="input-group">
-                            <input type="text" id="habit-name" placeholder="Örn: Her gün 20 sayfa kitap oku" required>
-                        </div>
+                        <div class="input-group"><input type="text" id="habit-name" placeholder="Örn: Her gün 20 sayfa kitap oku" required></div>
                         <div class="input-group">
                             <select id="habit-category">
                                 <option value="Kişisel Gelişim">Kişisel Gelişim</option>
@@ -174,156 +99,74 @@
                             </select>
                         </div>
                         <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="frequency" value="0" checked>
-                                <span>Günlük</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="frequency" value="1">
-                                <span>Haftalık</span>
-                            </label>
+                            <label class="radio-label"><input type="radio" name="frequency" value="0" checked><span>Günlük</span></label>
+                            <label class="radio-label"><input type="radio" name="frequency" value="1"><span>Haftalık</span></label>
                         </div>
                         <button type="submit" class="btn-primary">Ekle</button>
                     </form>
                 </div>
 
                 <div class="list-card glass-panel">
-                    <div class="card-header">
-                        <h2><span class="material-icons">list_alt</span> Alışkanlıklarım</h2>
+                    <div class="card-header"><h2><span class="material-icons">list_alt</span> Alışkanlıklarım</h2></div>
+                    <div id="habit-list" class="habit-list-container"><p class="empty-message">Yükleniyor...</p></div>
+                </div>
+            </section>
+
+            <!-- İSTEKLER -->
+            <section id="page-requests" class="hidden">
+                <div class="friends-grid-layout">
+                    <div class="glass-panel">
+                        <div class="card-header"><h2><span class="material-icons" style="color: #10B981;">move_to_inbox</span> Gelen İstekler</h2></div>
+                        <div id="received-requests-list" style="margin-top: 15px;"><p class="empty-message">Yükleniyor...</p></div>
                     </div>
-                    <div id="habit-list" class="habit-list-container">
-                        <p class="empty-message">Yükleniyor...</p>
+                    <div class="glass-panel">
+                        <div class="card-header"><h2><span class="material-icons" style="color: #4F46E5;">outbox</span> Gönderilen İstekler</h2></div>
+                        <div id="sent-requests-list" style="margin-top: 15px;"><p class="empty-message">Yükleniyor...</p></div>
                     </div>
                 </div>
             </section>
 
-            <section id="page-levels" class="hidden">
+            <!-- ARKADAŞLAR -->
+            <section id="page-friends" class="hidden">
                 <div class="glass-panel">
-                    <div class="card-header">
-                        <h2><span class="material-icons">trending_up</span> Seviye Yolculuğu</h2>
-                    </div>
-                    <p style="margin-bottom: 20px; color: #666;">Her 10 puanda bir seviye atlarsınız. Yolculuğun neresindesin?</p>
-                    <div id="levels-container" class="level-tabs-container">
+                    <div class="card-header"><h2><span class="material-icons" style="color: #F59E0B;">groups</span> Arkadaşlarım</h2></div>
+                    <div id="active-friends-list" class="habit-list-container">
+                        <p class="empty-message">Henüz arkadaşınız yok. "İstekler" menüsünden veya "Arkadaş Ekle" butonundan yeni arkadaşlar edinebilirsiniz.</p>
                     </div>
                 </div>
             </section>
 
-            <section id="page-badges" class="hidden">
-                <div class="glass-panel">
-                    <div class="card-header">
-                        <h2><span class="material-icons">emoji_events</span> Rozet Koleksiyonu</h2>
-                    </div>
-                    <p style="margin-bottom: 20px; color: #666;">Başarılarınla kazandığın madalyalar burada sergilenir.</p>
-                    <div id="badges-content-area-main" class="badge-grid-tabs">
-                    </div>
-                </div>
-            </section>
-
-            <section id="page-stats" class="hidden">
-                <div class="glass-panel">
-                    <div class="card-header">
-                        <h2><span class="material-icons">bar_chart</span> İstatistikler</h2>
-                    </div>
-                    <div id="stats-container" class="chart-section">
-                        <p class="empty-message">Grafikler yükleniyor...</p>
-                    </div>
-                </div>
-            </section>
+            <!-- DİĞERLERİ -->
+            <section id="page-badges" class="hidden"><div class="glass-panel"><h2>Rozet Koleksiyonu</h2><div id="badges-content-area-main" class="badge-grid-tabs"></div></div></section>
 
             <section id="page-calendar" class="hidden">
                 <div class="glass-panel">
                     <div class="card-header">
-                        <h2><span class="material-icons">calendar_today</span> Takvim Görünümü</h2>
+                        <h2><span class="material-icons" style="color: #EC4899;">calendar_month</span> Alışkanlık Takvimi</h2>
                     </div>
-                    <div id="calendar-cards-container" class="level-tabs-container" style="margin-top: 20px;">
-                    </div>
+                    <div id="calendar" style="background: white; padding: 15px; border-radius: 10px; min-height: 500px;"></div>
                 </div>
             </section>
 
-            <section id="page-settings" class="hidden">
 
-                <div class="header-section" style="text-align: center; margin-bottom: 30px; color: white;">
-                    <h1 style="font-size: 2.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">Ayarlar</h1>
-                    <p style="opacity: 0.9;">Hesap tercihlerinizi kişiselleştirin</p>
-                </div>
-
-                <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px;">
-
-                    <div class="card" style="background-color: #fff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                            <span class="material-icons" style="color: var(--primary-color);">email</span>
-                            <h3>E-posta Güncelle</h3>
-                        </div>
-
-                        <form id="settings-email-form">
-                            <div class="input-group">
-                                <label style="font-weight: 500;">Yeni E-posta</label>
-                                <input type="email" id="settings-email-input" placeholder="yeni e-mail adresinizi giriniz" required
-                                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
-                            </div>
-                            <button type="submit" id="settings-email-btn" class="btn-primary"
-                                    style="width: 100%; margin-top: 15px; padding: 12px;">
-                                Güncelle
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="card" style="background-color: #fff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                            <span class="material-icons" style="color: var(--primary-color);">lock</span>
-                            <h3>Parola Değiştir</h3>
-                        </div>
-
-                        <form id="settings-password-form">
-                            <div class="input-group">
-                                <label style="font-weight: 500;">Mevcut Parola</label>
-                                <input type="password" id="current-password" placeholder="eski parolanızı giriniz" required
-                                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
-                            </div>
-                            <div class="input-group" style="margin-top: 10px;">
-                                <label style="font-weight: 500;">Yeni Parola</label>
-                                <input type="password" id="new-password" placeholder="yeni parolanızı giriniz" required
-                                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; margin-top: 5px;">
-                            </div>
-                            <button type="submit" id="settings-password-btn" class="btn-primary"
-                                    style="width: 100%; margin-top: 15px; padding: 12px;">
-                                Şifreyi Değiştir
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="card" style="background-color: #fff; border: 1px solid #ffcccc; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <span class="material-icons" style="color: #dc3545;">warning</span>
-                            <h3 style="color: #dc3545;">Tehlikeli Bölge</h3>
-                        </div>
-                        <p style="font-size: 13px; margin-bottom: 15px; color: #555;">Hesabınızı ve tüm verilerinizi kalıcı olarak silmek istiyor musunuz?</p>
-
-                        <button type="button" id="delete-account-btn"
-                                style="background-color: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; transition: background 0.3s;">
-                            Hesabımı Kalıcı Olarak Sil
-                        </button>
-                    </div>
-
-                </div>
-            </section>
-
+            <section id="page-settings" class="hidden"><div class="glass-panel"><h2>Ayarlar</h2><p>Ayarlar paneli yapım aşamasında...</p></div></section>
         </main>
     </div>
 
+    <!-- MODAL: ALIŞKANLIK DÜZENLEME -->
     <div class="modal-overlay" id="edit-modal">
         <div class="modal-content glass-panel">
             <span class="material-icons close-modal" onclick="closeEditModal()">close</span>
-            <h2>Alışkanlığı Düzenle</h2>
-            <form id="edit-habit-form" style="margin-top: 20px;">
+            <h2 style="text-align:center; margin-bottom:20px; color:#4F46E5;">Düzenle</h2>
+            <form id="edit-habit-form">
                 <input type="hidden" id="edit-habit-id">
                 <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Alışkanlık Adı</label>
-                    <input type="text" id="edit-habit-name" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                    <label style="font-size:12px; color:#666;">Alışkanlık Adı</label>
+                    <input type="text" id="edit-habit-name" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top:5px;">
                 </div>
                 <div class="input-group" style="margin-bottom: 15px;">
-                    <label>Kategori</label>
-                    <select id="edit-habit-category" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
+                    <label style="font-size:12px; color:#666;">Kategori</label>
+                    <select id="edit-habit-category" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top:5px;">
                         <option value="Kişisel Gelişim">Kişisel Gelişim</option>
                         <option value="Spor">Spor</option>
                         <option value="Sağlık">Sağlık</option>
@@ -331,22 +174,92 @@
                         <option value="Diğer">Diğer</option>
                     </select>
                 </div>
-                <div class="radio-group" style="margin-bottom: 20px;">
-                    <label class="radio-label">
-                        <input type="radio" name="edit-frequency" value="0">
-                        <span>Günlük</span>
-                    </label>
-                    <label class="radio-label">
-                        <input type="radio" name="edit-frequency" value="1">
-                        <span>Haftalık</span>
-                    </label>
+                <div class="radio-group" style="margin-bottom: 25px; display:flex; gap:15px;">
+                    <label class="radio-label" style="display:flex; align-items:center; gap:5px; cursor:pointer;"><input type="radio" name="edit-frequency" value="0"><span>Günlük</span></label>
+                    <label class="radio-label" style="display:flex; align-items:center; gap:5px; cursor:pointer;"><input type="radio" name="edit-frequency" value="1"><span>Haftalık</span></label>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Güncelle</button>
+                <button type="submit" class="btn-primary" style="width: 100%; padding:12px;">Güncelle</button>
             </form>
         </div>
     </div>
 
+    <!-- MODAL: ARKADAŞ EKLE -->
+    <div class="modal-overlay" id="friend-modal">
+        <div class="modal-content glass-panel" style="text-align: center;">
+            <span class="material-icons close-modal" onclick="closeFriendModal()">close</span>
+            <div style="width: 70px; height: 70px; background-color: #e0f2f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <span class="material-icons" style="font-size: 35px; color: #10B981;">send</span>
+            </div>
+            <h2 style="margin-bottom: 10px; color: #10B981;">Arkadaş Ekle</h2>
+            <p style="font-size: 14px; color: #666; margin-bottom: 25px;">Arkadaşının e-posta adresini girerek ona bir davet gönder.</p>
+            <form id="send-friend-request-form">
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <input type="email" id="friend-email" placeholder="arkadas@ornek.com" required style="width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; text-align: center; font-size: 16px;">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; background-color: #10B981; font-size: 16px;">
+                    <span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 5px;">email</span> Davet Gönder
+                </button>
+            </form>
+        </div>
+    </div>
+    <!-- MODAL: SİLME ONAYI -->
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal-content glass-panel" style="text-align: center;">
+            <!-- Kapatma ikonu -->
+            <span class="material-icons close-modal" onclick="closeDeleteModal()">close</span>
+
+            <!-- Uyarı İkonu -->
+            <div style="width: 60px; height: 60px; background-color: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                <span class="material-icons" style="font-size: 32px; color: #ef4444;">warning</span>
+            </div>
+
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Emin misiniz?</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
+                Bu alışkanlığı silmek istediğinize emin misiniz?<br>Bu işlem geri alınamaz.
+            </p>
+
+            <!-- Silinecek ID'yi burada gizli tutacağız -->
+            <input type="hidden" id="delete-habit-id-input">
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="closeDeleteModal()" class="btn-cancel">Vazgeç</button>
+                <button onclick="confirmDelete()" class="btn-delete-confirm">Evet, Sil</button>
+            </div>
+        </div>
+
+    </div>
+    <!-- YENİ MODAL: GÜN DETAYI (Takvimde güne tıklayınca açılır) -->
+    <div class="modal-overlay" id="day-detail-modal">
+        <div class="modal-content glass-panel">
+            <span class="material-icons close-modal" onclick="closeDayModal()">close</span>
+            <h3 id="modal-date-title" style="text-align:center; color: var(--primary-color); margin-bottom: 15px;">Tarih Detayı</h3>
+
+            <div id="day-habits-list" class="habit-list-container">
+                <!-- O günün alışkanlıkları buraya JS ile dolacak -->
+                <p>Yükleniyor...</p>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL: GÜN DETAYI -->
+    <div class="modal-overlay" id="day-detail-modal">
+        <div class="modal-content glass-panel" style="max-width: 450px;">
+            <span class="material-icons close-modal" onclick="closeDayModal()">close</span>
+
+            <!-- Tarih Başlığı -->
+            <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                <h3 id="modal-date-title" style="color: #4F46E5; font-size: 20px;">Tarih</h3>
+                <span style="font-size: 12px; color: #666;">Bugün yapılması gerekenler</span>
+            </div>
+
+            <!-- Alışkanlık Listesi -->
+            <div id="day-habits-list" class="habit-list-container">
+                <p style="text-align:center; color:#999;">Yükleniyor...</p>
+            </div>
+
+            <button onclick="closeDayModal()" class="btn-primary" style="width: 100%; margin-top: 15px; background-color: #6B7280;">Kapat</button>
+        </div>
+    </div>
     <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
-    <script src="script.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

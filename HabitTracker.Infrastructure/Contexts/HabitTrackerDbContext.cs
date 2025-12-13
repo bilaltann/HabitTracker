@@ -20,6 +20,8 @@ namespace HabitTracker.Infrastructure.Contexts
         public DbSet<Badge> Badges { get; set; }
         public DbSet<UserBadge> UserBadges { get; set; }
 
+        public DbSet<Friendship> Friendships { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Many-to-Many İlişki Tanımlaması (User <-> Badge)
@@ -36,6 +38,19 @@ namespace HabitTracker.Infrastructure.Contexts
                 .HasOne(ub => ub.Badge)
                 .WithMany(b => b.UserBadges)
                 .HasForeignKey(ub => ub.BadgeId);
+
+            // Arkadaşlık İlişkisi Konfigürasyonu
+            modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Requester)
+                .WithMany(u => u.SentFriendRequests)
+                .HasForeignKey(f => f.RequesterId)
+                .OnDelete(DeleteBehavior.Restrict); // İsteği atan silinirse istek kaybolmasın (opsiyonel)
+
+            modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Addressee)
+                .WithMany(u => u.ReceivedFriendRequests)
+                .HasForeignKey(f => f.AddresseeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

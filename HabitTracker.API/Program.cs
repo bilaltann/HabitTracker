@@ -1,4 +1,7 @@
 using HabitTracker.Application;
+using HabitTracker.Application.Interfaces;
+using HabitTracker.Application.Services;
+using HabitTracker.Application.Settings;
 using HabitTracker.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -75,7 +78,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
-
+// 1. MailSettings verilerini appsettings.json'dan çekip nesneye baðlar
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddScoped<IMailService, MailService>();
+// 2. Servisi sisteme tanýtýr (Dependency Injection)
 var app = builder.Build();
 
 // --- HTTP Request Pipeline ---

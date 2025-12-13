@@ -30,5 +30,7 @@ appsettings.Local.json
 Thumbs.db
 .DS_Store
 
+# GÜVENLİK İÇİN (Şifreleri korumak için)
+appsettings.json
 # --- Log Dosyaları ---
 *.log

@@ -18,6 +18,10 @@ namespace HabitTracker.Application
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<IHabitService, HabitService>();
+            services.AddScoped<IFriendService, FriendService>();
+            services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IBadgeService, BadgeService>();
+
         }
     }
 }
