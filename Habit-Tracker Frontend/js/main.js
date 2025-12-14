@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupEventListeners();
     setupHabitListeners();
     setupFriendSystem();
+    setupSettingsListeners();
 });
 
 function setupEventListeners() {
@@ -62,6 +63,126 @@ function setupEventListeners() {
             localStorage.removeItem("jwtToken");
             localStorage.removeItem("habitQuestState"); // Varsa local state'i de temizle
             window.location.href = "login.html";
+        });
+    }
+}
+
+// Şifre ve Email işlemleri için gerekli fonksiyon
+function setupSettingsListeners() {
+
+    // --- 1. ŞİFRE DEĞİŞTİRME ---
+    const passwordForm = document.getElementById("change-password-form");
+    if (passwordForm) {
+        passwordForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById("current-password").value;
+            const newPassword = document.getElementById("new-password").value;
+            const btn = passwordForm.querySelector("button");
+
+            // Basit Validasyon
+            if (newPassword.length < 8) {
+                showToast("Yeni şifre en az 8 karakter olmalı.", "error");
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.textContent = "İşleniyor...";
+            btn.disabled = true;
+
+            try {
+                // Backend'deki ChangePasswordDto ile uyumlu veri yapısı
+                const response = await fetch(`${API_BASE_URL}/Auth/change-password`, {
+                    method: "PUT",
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        currentPassword: currentPassword,
+                        newPassword: newPassword
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast("Şifreniz başarıyla güncellendi! 🔒", "success");
+                    passwordForm.reset();
+                } else {
+                    showToast(result.message || "Şifre değiştirilemedi.", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucu hatası.", "error");
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+    }
+
+    // --- 2. E-POSTA GÜNCELLEME ---
+    const emailForm = document.getElementById("update-email-form");
+    if (emailForm) {
+        // Sayfa açıldığında "Mevcut E-posta" alanını otomatik dolduralım (Kullanıcı kolaylığı)
+        const state = JSON.parse(localStorage.getItem("habitQuestState"));
+        if (state && state.user && state.user.email) {
+            document.getElementById("current-email-input").value = state.user.email;
+        }
+
+        emailForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const currentEmailInput = document.getElementById("current-email-input").value;
+            const newEmailInput = document.getElementById("new-email-input").value;
+            const btn = emailForm.querySelector("button");
+
+            // Frontend Kontrolü: Eski e-posta doğru mu?
+            // LocalStorage'daki bilgiyle kıyaslıyoruz.
+            // (Güvenlik notu: Asıl doğrulama backend'deki token ile yapılır ama bu kullanıcıya erken uyarı verir)
+            const storedState = JSON.parse(localStorage.getItem("habitQuestState"));
+            if (storedState && storedState.user && storedState.user.email !== currentEmailInput) {
+                showToast("Girdiğiniz mevcut e-posta adresi yanlış.", "error");
+                return;
+            }
+
+            if (currentEmailInput === newEmailInput) {
+                showToast("Yeni e-posta adresi eskisiyle aynı olamaz.", "error");
+                return;
+            }
+
+            const originalText = btn.textContent;
+            btn.textContent = "Güncelleniyor...";
+            btn.disabled = true;
+
+            try {
+                // Backend'deki UserUpdateDto sadece 'Email' bekliyor
+                const response = await fetch(`${API_BASE_URL}/Auth/update-profile`, {
+                    method: "PUT",
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({ email: newEmailInput })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast("E-posta adresiniz güncellendi! 📧", "success");
+
+                    // LocalStorage'ı güncelle
+                    storedState.user.email = newEmailInput;
+                    localStorage.setItem("habitQuestState", JSON.stringify(storedState));
+
+                    emailForm.reset();
+                    // Yeni e-postayı tekrar inputa yaz
+                    document.getElementById("current-email-input").value = newEmailInput;
+                } else {
+                    showToast(result.message || "Güncelleme başarısız.", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucu hatası.", "error");
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
         });
     }
 }

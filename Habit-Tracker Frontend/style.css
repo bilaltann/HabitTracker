@@ -585,3 +585,64 @@ body {
     border: 2px solid #FFD700 !important; /* Altın rengi çerçeve */
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
+
+/* style.css EN ALTINA EKLE (Eski .filter-container kodunu silip bunu yapıştır) */
+
+.filter-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding: 18px;
+    /* YENİ TASARIM: Hafif Renkli ve Belirgin */
+    background: rgba(255, 255, 255, 0.9); /* Daha opak, net beyaz zemin */
+    /* Kenarlık: Temanın açık tonu (İndigo) */
+    border: 2px solid #e0e7ff;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    /* Gölge: Hafif renkli gölge ile havada durma hissi */
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.1);
+    transition: transform 0.2s ease;
+}
+
+    /* Alanın üzerine gelince hafifçe yükselsin (İsteğe bağlı, hoş durur) */
+    .filter-container:hover {
+        transform: translateY(-2px);
+        border-color: #c7d2fe; /* Kenarlık rengi biraz koyulaşır */
+    }
+
+    /* Filtre Alanındaki Input ve Select Stilleri */
+    .filter-container input,
+    .filter-container select {
+        width: 100%;
+        padding: 12px 15px;
+        /* Inputların kenarlığı daha sade kalsın ki kutuyla yarışmasın */
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background-color: #f9fafb; /* Çok hafif gri zemin */
+        color: #374151;
+        font-size: 14px;
+        font-weight: 500;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+        /* Tıklayınca (Focus) */
+        .filter-container input:focus,
+        .filter-container select:focus {
+            background-color: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+    /* Arama ikonu varsa onun rengini de güncelle (Opsiyonel) */
+    .filter-container .material-icons {
+        color: var(--primary-color) !important;
+    }
+
+/* MOBİL UYUM */
+@media (max-width: 768px) {
+    .filter-container {
+        grid-template-columns: 1fr !important;
+    }
+}
