@@ -1,15 +1,18 @@
-// js/habits.js
+// js/habits.js (TAM VE GÜNCEL HALİ)
 
 import { API_BASE_URL } from './config.js';
 import { getAuthHeaders, showToast } from './utils.js';
 import { updateLocalPoints } from './user.js';
 import { renderLevelsPage, renderBadgesPage, renderCalendarPage } from './ui.js';
 
-// Başka dosyalardan erişilebilsin diye export ediyoruz
+// Dışarıdan erişilebilecek değişkenler
 export let currentHabits = [];
 
+// Filtreleme için tüm veriyi hafızada tutacağımız değişken
+let allHabitsCache = [];
+
 // ==========================================
-// 1. ALIŞKANLIKLARI YÜKLEME VE LİSTELEME
+// 1. ALIŞKANLIKLARI YÜKLEME
 // ==========================================
 export async function loadHabits() {
     const listContainer = document.getElementById("habit-list");
@@ -29,11 +32,19 @@ export async function loadHabits() {
 
         if (!response.ok) throw new Error("API Hatası");
 
-        currentHabits = await response.json();
+        const data = await response.json();
 
-        renderHabits(currentHabits);
+        // 1. Veriyi kaydet (Cache)
+        currentHabits = data;
+        allHabitsCache = data;
 
-        // UI güncellemeleri
+        // 2. Sayfa ilk açıldığında filtreleri temizle
+        resetFilters();
+
+        // 3. Listeyi olduğu gibi ekrana bas
+        renderHabits(allHabitsCache);
+
+        // UI'ın diğer parçalarını güncelle
         renderLevelsPage();
         renderBadgesPage();
         renderCalendarPage();
@@ -44,13 +55,66 @@ export async function loadHabits() {
     }
 }
 
+// ==========================================
+// 2. FİLTRELEME MANTIĞI (YENİ)
+// ==========================================
+export function filterHabits() {
+    const searchInput = document.getElementById("filter-search");
+    const categorySelect = document.getElementById("filter-category");
+    const frequencySelect = document.getElementById("filter-frequency");
+
+    // Eğer bu elementler sayfada yoksa (örn: başka sayfadaysak) dur.
+    if (!searchInput || !categorySelect || !frequencySelect) return;
+
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categorySelect.value;
+    const selectedFrequency = frequencySelect.value;
+
+    // Önbellekteki (allHabitsCache) tüm verileri süzgeçten geçir
+    const filtered = allHabitsCache.filter(habit => {
+        // A. İsim Kontrolü (İçinde geçiyor mu?)
+        const nameMatch = habit.name.toLowerCase().includes(searchTerm);
+
+        // B. Kategori Kontrolü ("all" ise hepsi, değilse tam eşleşme)
+        const categoryMatch = selectedCategory === "all" || habit.category === selectedCategory;
+
+        // C. Sıklık Kontrolü (Backend 0/1 veya "Daily"/"Weekly" gönderebilir)
+        let freqString = habit.frequency.toString();
+        if (habit.frequency === 0) freqString = "Daily";
+        if (habit.frequency === 1) freqString = "Weekly";
+
+        const frequencyMatch = selectedFrequency === "all" || freqString === selectedFrequency;
+
+        // Hepsi uyuyorsa TRUE döner ve listeye eklenir
+        return nameMatch && categoryMatch && frequencyMatch;
+    });
+
+    // Filtrelenmiş listeyi ekrana çiz
+    renderHabits(filtered);
+}
+
+// Filtreleri temizleyen yardımcı fonksiyon
+function resetFilters() {
+    const searchInp = document.getElementById("filter-search");
+    const catSelect = document.getElementById("filter-category");
+    const freqSelect = document.getElementById("filter-frequency");
+
+    if (searchInp) searchInp.value = "";
+    if (catSelect) catSelect.value = "all";
+    if (freqSelect) freqSelect.value = "all";
+}
+
+// ==========================================
+// 3. HTML OLUŞTURMA (RENDER)
+// ==========================================
 function renderHabits(habits) {
     const listContainer = document.getElementById("habit-list");
     if (!listContainer) return;
+
     listContainer.innerHTML = "";
 
     if (habits.length === 0) {
-        listContainer.innerHTML = '<p class="empty-message">Henüz alışkanlığın yok.</p>';
+        listContainer.innerHTML = '<p class="empty-message">Aradığınız kriterlere uygun alışkanlık bulunamadı.</p>';
         return;
     }
 
@@ -65,17 +129,12 @@ function renderHabits(habits) {
             ? '<span class="material-icons" style="font-size:16px;">check</span> Tamamlandı'
             : 'İşaretle';
 
-        // Görünüm için metin (Backend'den İngilizce gelse bile Türkçe yapıyoruz)
-        // Eğer backend "Daily" veya "0" gönderiyorsa kontrol ediyoruz
-        const isWeekly = (habit.frequency === "Weekly" || habit.frequency === "Haftalık" || habit.frequency == 1);
+        // Görünüm için metin ayarları
+        const isWeekly = (habit.frequency === "Weekly" || habit.frequency === 1);
         const freqText = isWeekly ? "Haftalık" : "Günlük";
-
-        // --- HATA DÜZELTME KISMI ---
-        // Edit modalına gönderilecek ID'yi sayıya (0 veya 1) çeviriyoruz.
-        // Böylece ReferenceError: Daily is not defined hatası çözülür.
         const freqId = isWeekly ? 1 : 0;
 
-        // İsimlerin içinde tek tırnak varsa kodun kırılmaması için escape (kaçış) işlemi
+        // Tırnak işaretleri hatasını önlemek için kaçış karakteri (Escape)
         const safeName = habit.name ? habit.name.replace(/'/g, "\\'") : "";
         const safeCategory = habit.category ? habit.category.replace(/'/g, "\\'") : "";
 
@@ -94,7 +153,6 @@ function renderHabits(habits) {
                         ${btnText}
                     </button>
                     
-                    <!-- BURADA ARTIK freqId KULLANIYORUZ (Sayı olduğu için tırnak gerekmez) -->
                     <button onclick="openEditModal(${habit.id}, '${safeName}', '${safeCategory}', ${freqId})" 
                             style="background:#e0e7ff; color:#4F46E5; border:none; border-radius:8px; width:36px; height:36px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-left:5px;">
                         <span class="material-icons">edit</span>
@@ -109,33 +167,20 @@ function renderHabits(habits) {
         listContainer.innerHTML += itemHtml;
     });
 }
-// ==========================================
-// 2. GLOBAL FONKSİYONLAR (WINDOW)
-// ==========================================
-
-// js/habits.js içine...
 
 // ==========================================
-// 1. SİLME İŞLEMİ (GÜNCELLENMİŞ)
+// 4. GLOBAL FONKSİYONLAR (WINDOW)
+// (HTML'den onclick ile çağrılanlar)
 // ==========================================
 
-// Eskiden direkt siliyordu, şimdi sadece MODALI AÇIYOR
 window.deleteHabit = function (id) {
     const modal = document.getElementById("delete-modal");
-
-    // Silinecek ID'yi gizli input'a kaydet ki sonra silebilelim
     document.getElementById("delete-habit-id-input").value = id;
-
-    // Modalı göster
     modal.classList.add("active");
 };
 
-// Modal üzerindeki "Evet, Sil" butonuna basınca çalışan asıl fonksiyon
 window.confirmDelete = async function () {
-    // Gizli inputtan ID'yi al
     const id = document.getElementById("delete-habit-id-input").value;
-
-    // Butonu pasif yap (Çift tıklamayı önle)
     const confirmBtn = document.querySelector(".btn-delete-confirm");
     const originalText = confirmBtn.innerText;
     confirmBtn.innerText = "Siliniyor...";
@@ -148,9 +193,9 @@ window.confirmDelete = async function () {
         });
 
         if (response.ok) {
-            loadHabits(); // Listeyi yenile
+            loadHabits();
             showToast("Alışkanlık silindi.", "success");
-            window.closeDeleteModal(); // Modalı kapat
+            window.closeDeleteModal();
         } else {
             showToast("Silme işlemi başarısız.", "error");
         }
@@ -158,19 +203,19 @@ window.confirmDelete = async function () {
         console.error(e);
         showToast("Sunucu hatası.", "error");
     } finally {
-        // Butonu eski haline getir
         confirmBtn.innerText = originalText;
         confirmBtn.disabled = false;
     }
 };
 
-// Silme Modalını Kapat
 window.closeDeleteModal = function () {
     const modal = document.getElementById("delete-modal");
     if (modal) modal.classList.remove("active");
 };
+
 window.toggleHabit = async function (id, wasCompleted) {
     const today = new Date();
+    // Tarih formatı: YYYY-MM-DDT00:00:00
     const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}T00:00:00`;
 
     try {
@@ -188,7 +233,6 @@ window.toggleHabit = async function (id, wasCompleted) {
     } catch (e) { console.error(e); }
 };
 
-// Modal Açma Fonksiyonu
 window.openEditModal = function (id, name, category, freq) {
     const modal = document.getElementById("edit-modal");
 
@@ -196,8 +240,8 @@ window.openEditModal = function (id, name, category, freq) {
     document.getElementById("edit-habit-name").value = name;
     document.getElementById("edit-habit-category").value = category;
 
-    // Frequency seçimi (Gelen veri int veya string olabilir, stringe çevirip kıyaslıyoruz)
     const radios = document.getElementsByName("edit-frequency");
+    // Gelen freq verisini stringe çevirip kontrol et
     const freqVal = (freq == 1) ? "1" : "0";
 
     for (const r of radios) {
@@ -215,7 +259,7 @@ window.closeEditModal = function () {
 };
 
 // ==========================================
-// 3. FORM LISTENERLARI
+// 5. EVENT LISTENERLARI (OLAY DİNLEYİCİLERİ)
 // ==========================================
 export function setupHabitListeners() {
 
@@ -250,7 +294,6 @@ export function setupHabitListeners() {
         editForm.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            // Butonu kilitle (Çift tıklamayı önlemek için)
             const btn = editForm.querySelector("button[type='submit']");
             const originalText = btn.textContent;
             btn.textContent = "Güncelleniyor...";
@@ -286,10 +329,25 @@ export function setupHabitListeners() {
                 console.error(e);
                 showToast("Sunucu hatası.", "error");
             } finally {
-                // İşlem bitince butonu eski haline getir
                 btn.textContent = originalText;
                 btn.disabled = false;
             }
         });
+    }
+
+    // --- FİLTRE EVENTLERİ (BURASI ÇOK ÖNEMLİ) ---
+    // Arama kutusuna her harf yazıldığında veya seçimler değiştiğinde tetiklenir
+    const searchInput = document.getElementById("filter-search");
+    const categorySelect = document.getElementById("filter-category");
+    const frequencySelect = document.getElementById("filter-frequency");
+
+    if (searchInput) {
+        searchInput.addEventListener("input", filterHabits);
+    }
+    if (categorySelect) {
+        categorySelect.addEventListener("change", filterHabits);
+    }
+    if (frequencySelect) {
+        frequencySelect.addEventListener("change", filterHabits);
     }
 }

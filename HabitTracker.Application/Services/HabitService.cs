@@ -57,12 +57,12 @@ namespace HabitTracker.Application.Services
             if ((Frequency)createDto.FrequencyId == Frequency.Weekly)
             {
                 // Haftalık ise 7 gün ekle
-                expirationDate = DateTime.Now.AddDays(7);
+                expirationDate = DateTime.Now.AddDays(6);
             }
             else
             {
                 // Günlük ise (veya varsayılan) 1 gün ekle
-                expirationDate = DateTime.Now.AddDays(1);
+                expirationDate = DateTime.Now.AddDays(0);
             }
             var habit = new Habit
             {
@@ -208,13 +208,13 @@ namespace HabitTracker.Application.Services
 
                 if (habit.Frequency == Frequency.Weekly)
                 {
-                    // Haftalığa çevirdi ise 6 gün ekle
+                    // Haftalığa çevirdi , şu anki tarihe 6 gün ekledi (ExpirationDate şu anki güne 6 gün eklenmiş olarak ayarlandı)
                     habit.ExpirationDate = DateTime.Now.AddDays(6);
                 }
                 else
                 {
-                    // günlüğe çevirdi ise 6 gün çıkar
-                    habit.ExpirationDate = DateTime.Now.AddDays(-6);
+                    // günlüğe çevirdi , şu anki tarihe gün eklemedi (ExpirationDate şu anki gün sonuna kadar ayarladı)
+                    habit.ExpirationDate = DateTime.Now.AddDays(0);
                 }
             }
                 

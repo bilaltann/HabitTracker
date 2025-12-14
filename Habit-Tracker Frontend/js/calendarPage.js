@@ -4,8 +4,7 @@ import { currentHabits } from './habits.js';
 
 // Takvimi Başlatma Fonksiyonu
 export function initCalendar() {
-    // jQuery ile FullCalendar'ı başlat
-    $('#calendar').fullCalendar('destroy'); // Varsa eskisini temizle
+    $('#calendar').fullCalendar('destroy');
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -24,37 +23,50 @@ export function initCalendar() {
             openDayModal(date);
         },
 
-        // 2. VAR OLAN BİR ETKİNLİĞE (ÇUBUĞA) TIKLANINCA
+        // 2. ETKİNLİĞE TIKLANINCA
         eventClick: function (calEvent, jsEvent, view) {
-            // Etkinliğin tarihini alıp yine aynı modalı açıyoruz
             openDayModal(calEvent.start);
         }
     });
 }
 
-// Alışkanlıkları Takvim Verisine Çevirir (Renkli Çubuklar)
+// Alışkanlıkları Takvim Verisine Çevirir
 function generateEventsFromHabits() {
     const events = [];
 
     currentHabits.forEach(habit => {
-        // Alışkanlığın başlangıç tarihi (CreatedDate yoksa bugünü baz alıyoruz)
-        // Eğer backend'den 'createdDate' geliyorsa burayı değiştir: new Date(habit.createdDate)
-        let startDate = new Date();
+        // Başlangıç (createdDate yoksa Bugün)
+        let startDate = habit.createdDate ? new Date(habit.createdDate) : new Date();
 
-        // Bitiş tarihi
+        // Saati sıfırla
+        startDate.setHours(0, 0, 0, 0);
+
         let endDate = new Date(habit.expirationDate);
+        endDate.setHours(0, 0, 0, 0);
 
-        // Renk (Haftalık ise Yeşil, Günlük ise Mor)
-        let color = habit.frequency == 1 ? '#10B981' : '#4F46E5';
+        // Haftalık/Günlük Kontrolü
+        const isWeekly = (habit.frequency == 1 || habit.frequency === "Weekly");
+        const color = isWeekly ? '#10B981' : '#4F46E5'; // Yeşil / Mor
 
-        events.push({
-            id: habit.id,
-            title: habit.name,
-            start: startDate.toISOString().split('T')[0],
-            end: endDate.toISOString().split('T')[0],
-            color: color,
-            allDay: true
-        });
+        // Döngü ile gün gün ilerle
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+
+            // --- DÜZELTME BURADA ---
+            // .toISOString() yerine Yerel Tarihi (Local Date) kullanıyoruz.
+            // Böylece saat farkından dolayı bir önceki güne kayma sorunu çözülüyor.
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0'); // Ayı 2 haneli yap (01, 02...)
+            const day = String(d.getDate()).padStart(2, '0'); // Günü 2 haneli yap
+            const localDateString = `${year}-${month}-${day}`;
+
+            events.push({
+                id: habit.id,
+                title: habit.name,
+                start: localDateString, // Düzeltilmiş tarih
+                color: color,
+                allDay: true
+            });
+        }
     });
 
     return events;
@@ -67,31 +79,27 @@ function openDayModal(dateObj) {
     const title = document.getElementById('modal-date-title');
     const list = document.getElementById('day-habits-list');
 
-    // 1. Tarihi Formatla (Örn: 12 Aralık 2025 Cuma)
+    // Tarihi Formatla
     const dateStr = dateObj.format('D MMMM YYYY dddd');
     title.innerText = dateStr;
 
-    // 2. Seçilen Tarihi JS Date Objesine Çevir (Saatleri sıfırla)
+    // Seçilen Tarihi JS Objesine Çevir
     const clickedDate = dateObj.toDate();
     clickedDate.setHours(0, 0, 0, 0);
 
-    // 3. O tarihte geçerli olan alışkanlıkları bul
+    // Filtreleme: Sadece o tarihte geçerli olanları göster
     const activeHabits = currentHabits.filter(h => {
-        // Başlangıç (Burada createdDate kullanmak daha doğru olur, şimdilik bugün diyoruz)
-        const start = new Date();
+        const start = h.createdDate ? new Date(h.createdDate) : new Date();
         start.setHours(0, 0, 0, 0);
 
-        // Bitiş
         const end = new Date(h.expirationDate);
         end.setHours(0, 0, 0, 0);
 
-        // Tıklanan tarih bu aralıkta mı?
-        // (FullCalendar bitiş tarihini dahil etmez, o yüzden <= yerine < kullanmak gerekebilir duruma göre)
-        // Ancak bizim mantığımızda expirationDate dahil olsun istiyoruz.
+        // Tarih aralığını kontrol et
         return clickedDate >= start && clickedDate <= end;
     });
 
-    // 4. Listeyi HTML'e Dök
+    // Listeyi HTML'e Dök
     list.innerHTML = "";
 
     if (activeHabits.length === 0) {
@@ -102,10 +110,12 @@ function openDayModal(dateObj) {
             </div>`;
     } else {
         activeHabits.forEach(h => {
-            const freq = h.frequency == 1 ? "Haftalık" : "Günlük";
-            const icon = h.frequency == 1 ? "date_range" : "today";
-            const badgeColor = h.frequency == 1 ? "#ecfdf5" : "#eef2ff"; // Yeşilimsi / Mavimsi arka plan
-            const textColor = h.frequency == 1 ? "#047857" : "#4338ca";
+            const isWeekly = (h.frequency == 1 || h.frequency === "Weekly");
+
+            const freq = isWeekly ? "Haftalık" : "Günlük";
+            const icon = isWeekly ? "date_range" : "today";
+            const badgeColor = isWeekly ? "#ecfdf5" : "#eef2ff";
+            const textColor = isWeekly ? "#047857" : "#4338ca";
 
             list.innerHTML += `
                 <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,255,255,0.6); border: 1px solid #eee; border-radius: 10px; margin-bottom: 8px;">
@@ -126,11 +136,10 @@ function openDayModal(dateObj) {
         });
     }
 
-    // 5. Modalı Aç
     modal.classList.add('active');
 }
 
-// Modalı Kapat (HTML'den erişilsin diye window'a atıyoruz)
 window.closeDayModal = function () {
-    document.getElementById('day-detail-modal').classList.remove('active');
+    const modal = document.getElementById('day-detail-modal');
+    if (modal) modal.classList.remove('active');
 };

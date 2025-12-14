@@ -107,8 +107,36 @@
                 </div>
 
                 <div class="list-card glass-panel">
-                    <div class="card-header"><h2><span class="material-icons">list_alt</span> Alışkanlıklarım</h2></div>
-                    <div id="habit-list" class="habit-list-container"><p class="empty-message">Yükleniyor...</p></div>
+                    <div class="card-header">
+                        <h2><span class="material-icons">list_alt</span> Alışkanlıklarım</h2>
+                    </div>
+
+                    <div class="filter-container" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 10px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 12px; border: 1px solid rgba(255,255,255,0.8);">
+                        <div style="position: relative;">
+                            <span class="material-icons" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #999; font-size: 20px;">search</span>
+                            <input type="text" id="filter-search" placeholder="Alışkanlık ara..."
+                                   style="width: 90%; padding: 10px 10px 10px 35px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;">
+                        </div>
+
+                        <select id="filter-category" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; background: white; cursor: pointer; font-size: 14px;">
+                            <option value="all">Tüm Kategoriler</option>
+                            <option value="Kişisel Gelişim">Kişisel Gelişim</option>
+                            <option value="Spor">Spor</option>
+                            <option value="Sağlık">Sağlık</option>
+                            <option value="Ders">Ders</option>
+                            <option value="Diğer">Diğer</option>
+                        </select>
+
+                        <select id="filter-frequency" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px; outline: none; background: white; cursor: pointer; font-size: 14px;">
+                            <option value="all">Tüm Sıklıklar</option>
+                            <option value="Daily">Günlük</option>
+                            <option value="Weekly">Haftalık</option>
+                        </select>
+                    </div>
+
+                    <div id="habit-list" class="habit-list-container">
+                        <p class="empty-message">Yükleniyor...</p>
+                    </div>
                 </div>
             </section>
 
@@ -149,7 +177,61 @@
             </section>
 
 
-            <section id="page-settings" class="hidden"><div class="glass-panel"><h2>Ayarlar</h2><p>Ayarlar paneli yapım aşamasında...</p></div></section>
+            <section id="page-settings" class="hidden">
+
+                <div>
+
+                    <h2 style="color: var(--text-color); display:flex; align-items:center; gap:10px;">
+                        <span class="material-icons">settings</span> Hesap Ayarları
+                    </h2>
+
+                    <div class="glass-panel" style="margin-bottom: 25px;">
+                        <h3 style="color: #4F46E5; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons">lock</span> Şifre Güncelleme
+                        </h3>
+
+                        <form id="change-password-form">
+                            <div class="input-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 13px; color: #666; margin-bottom: 5px; display: block;">Mevcut Şifre</label>
+                                <input type="password" id="current-password" placeholder="••••••" required
+                                       style="width: 50%; padding: 12px; border: 1px solid #A9A9A9; border-radius: 8px; outline: none; background-color: #f9fafb; ">
+                            </div>
+
+                            <div class="input-group" style="margin-bottom: 20px;">
+                                <label style="font-size: 13px; color: #666; margin-bottom: 5px; display: block;">Yeni Şifre</label>
+                                <input type="password" id="new-password" placeholder="En az 8 karakter" required minlength="8"
+                                       style="width: 50%; border: 1px solid #A9A9A9; border-radius: 8px; outline: none; background-color: #f9fafb; ">
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="padding: 10px 20px;">Şifreyi Değiştir</button>
+                        </form>
+                    </div>
+
+                    <div class="glass-panel" >
+                        <h3 style="color: #4F46E5; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <span class="material-icons">email</span> E-posta Güncelleme
+                        </h3>
+
+                        <form id="update-email-form">
+
+                            <div class="input-group" style="margin-bottom: 15px;">
+                                <label style="font-size: 13px; color: #666; margin-bottom: 5px; display: block;">Mevcut E-posta Adresi</label>
+                                <input type="email" id="current-email-input" placeholder="eski@ornek.com" required
+                                       style="width: 50%; padding: 12px; border: 1px solid #A9A9A9; border-radius: 8px; outline: none; background-color: #f9fafb;">
+                            </div>
+
+                            <div class="input-group" style="margin-bottom: 20px;">
+                                <label style="font-size: 13px; color: #666; margin-bottom: 5px; display: block;">Yeni E-posta Adresi</label>
+                                <input type="email" id="new-email-input" placeholder="Yeni e-posta giriniz" required
+                                       style="width: 50%; padding: 12px; border: 1px solid #A9A9A9; border-radius: 8px; outline: none; background-color: #f9fafb; ">
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="padding: 10px 20px;">E-postayı Değiştir</button>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
         </main>
     </div>
 
