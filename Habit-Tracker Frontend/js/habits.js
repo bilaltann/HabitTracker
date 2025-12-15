@@ -1,5 +1,3 @@
-// js/habits.js (TAM VE GÜNCEL HALİ)
-
 import { API_BASE_URL } from './config.js';
 import { getAuthHeaders, showToast } from './utils.js';
 import { updateLocalPoints } from './user.js';
@@ -11,9 +9,9 @@ export let currentHabits = [];
 // Filtreleme için tüm veriyi hafızada tutacağımız değişken
 let allHabitsCache = [];
 
-// ==========================================
+
 // 1. ALIŞKANLIKLARI YÜKLEME
-// ==========================================
+
 export async function loadHabits() {
     const listContainer = document.getElementById("habit-list");
     if (listContainer) listContainer.innerHTML = '<p class="empty-message">Yükleniyor...</p>';
@@ -55,9 +53,9 @@ export async function loadHabits() {
     }
 }
 
-// ==========================================
+
 // 2. FİLTRELEME MANTIĞI (YENİ)
-// ==========================================
+
 export function filterHabits() {
     const searchInput = document.getElementById("filter-search");
     const categorySelect = document.getElementById("filter-category");
@@ -72,13 +70,13 @@ export function filterHabits() {
 
     // Önbellekteki (allHabitsCache) tüm verileri süzgeçten geçir
     const filtered = allHabitsCache.filter(habit => {
-        // A. İsim Kontrolü (İçinde geçiyor mu?)
+        
         const nameMatch = habit.name.toLowerCase().includes(searchTerm);
 
-        // B. Kategori Kontrolü ("all" ise hepsi, değilse tam eşleşme)
+        
         const categoryMatch = selectedCategory === "all" || habit.category === selectedCategory;
 
-        // C. Sıklık Kontrolü (Backend 0/1 veya "Daily"/"Weekly" gönderebilir)
+        
         let freqString = habit.frequency.toString();
         if (habit.frequency === 0) freqString = "Daily";
         if (habit.frequency === 1) freqString = "Weekly";
@@ -104,9 +102,9 @@ function resetFilters() {
     if (freqSelect) freqSelect.value = "all";
 }
 
-// ==========================================
+
 // 3. HTML OLUŞTURMA (RENDER)
-// ==========================================
+
 function renderHabits(habits) {
     const listContainer = document.getElementById("habit-list");
     if (!listContainer) return;
@@ -180,7 +178,7 @@ function renderHabits(habits) {
 // ==========================================
 // 4. GLOBAL FONKSİYONLAR (WINDOW)
 // (HTML'den onclick ile çağrılanlar)
-// ==========================================
+
 
 window.deleteHabit = function (id) {
     const modal = document.getElementById("delete-modal");
@@ -267,9 +265,9 @@ window.closeEditModal = function () {
     if (modal) modal.classList.remove("active");
 };
 
-// ==========================================
+
 // 5. EVENT LISTENERLARI (OLAY DİNLEYİCİLERİ)
-// ==========================================
+
 export function setupHabitListeners() {
 
     // Ekleme Formu
@@ -344,7 +342,7 @@ export function setupHabitListeners() {
         });
     }
 
-    // --- FİLTRE EVENTLERİ (BURASI ÇOK ÖNEMLİ) ---
+    // FİLTRE 
     // Arama kutusuna her harf yazıldığında veya seçimler değiştiğinde tetiklenir
     const searchInput = document.getElementById("filter-search");
     const categorySelect = document.getElementById("filter-category");

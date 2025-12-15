@@ -1,5 +1,3 @@
-// js/calendarPage.js
-
 import { currentHabits } from './habits.js';
 
 // Takvimi Başlatma Fonksiyonu
@@ -11,19 +9,19 @@ export function initCalendar() {
             center: 'title',
             right: 'month,basicWeek'
         },
-        locale: 'tr', // Türkçe
+        locale: 'tr', 
         defaultDate: new Date(),
         navLinks: false,
         editable: false,
         eventLimit: true,
-        events: generateEventsFromHabits(), // Çubukları oluştur
+        events: generateEventsFromHabits(), 
 
-        // 1. BOŞ BİR GÜNE TIKLANINCA
+        //BOŞ BİR GÜNE TIKLANINCA
         dayClick: function (date, jsEvent, view) {
             openDayModal(date);
         },
 
-        // 2. ETKİNLİĞE TIKLANINCA
+        //ETKİNLİĞE TIKLANINCA
         eventClick: function (calEvent, jsEvent, view) {
             openDayModal(calEvent.start);
         }
@@ -51,9 +49,7 @@ function generateEventsFromHabits() {
         // Döngü ile gün gün ilerle
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
 
-            // --- DÜZELTME BURADA ---
-            // .toISOString() yerine Yerel Tarihi (Local Date) kullanıyoruz.
-            // Böylece saat farkından dolayı bir önceki güne kayma sorunu çözülüyor.
+           
             const year = d.getFullYear();
             const month = String(d.getMonth() + 1).padStart(2, '0'); // Ayı 2 haneli yap (01, 02...)
             const day = String(d.getDate()).padStart(2, '0'); // Günü 2 haneli yap
@@ -62,7 +58,7 @@ function generateEventsFromHabits() {
             events.push({
                 id: habit.id,
                 title: habit.name,
-                start: localDateString, // Düzeltilmiş tarih
+                start: localDateString, 
                 color: color,
                 allDay: true
             });
@@ -72,7 +68,7 @@ function generateEventsFromHabits() {
     return events;
 }
 
-// --- MODAL İŞLEMLERİ ---
+//MODAL İŞLEMLERİ 
 
 function openDayModal(dateObj) {
     const modal = document.getElementById('day-detail-modal');
