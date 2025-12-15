@@ -1,9 +1,10 @@
-import { checkAuth } from './utils.js';
+import { API_BASE_URL } from './config.js';
+import { checkAuth, getAuthHeaders, showToast } from './utils.js';
 import { loadUserData } from './user.js';
 import { loadHabits, setupHabitListeners } from './habits.js';
 import { setupFriendSystem, loadFriendRequests, loadActiveFriends } from './friends.js';
-// UI fonksiyonlarının hepsini import ediyoruz
 import { renderCalendarPage, renderBadgesPage, renderLevelsPage } from './ui.js';
+
 
 document.addEventListener("DOMContentLoaded", () => {
     // 1. Önce yetki kontrolü
@@ -123,7 +124,7 @@ function setupSettingsListeners() {
         // Sayfa açıldığında "Mevcut E-posta" alanını otomatik dolduralım (Kullanıcı kolaylığı)
         const state = JSON.parse(localStorage.getItem("habitQuestState"));
         if (state && state.user && state.user.email) {
-            document.getElementById("current-email-input").value = state.user.email;
+            //document.getElementById("current-email-input").value = state.user.email;
         }
 
         emailForm.addEventListener("submit", async (e) => {
