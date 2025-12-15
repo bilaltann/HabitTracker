@@ -119,6 +119,7 @@ function renderHabits(habits) {
     habits.forEach(habit => {
         const isDone = habit.isCompletedToday;
 
+        // Tamamlandı/Tamamlanmadı buton stili
         const btnStyle = isDone
             ? "background-color: #10B981; color: white;"
             : "background-color: #e0e7ff; color: #4F46E5;";
@@ -127,12 +128,12 @@ function renderHabits(habits) {
             ? '<span class="material-icons" style="font-size:16px;">check</span> Tamamlandı'
             : 'İşaretle';
 
-        // Görünüm için metin ayarları
+        // Frekans ve Metin Ayarları
         const isWeekly = (habit.frequency === "Weekly" || habit.frequency === 1);
         const freqText = isWeekly ? "Haftalık" : "Günlük";
         const freqId = isWeekly ? 1 : 0;
 
-        // Tırnak işaretleri hatasını önlemek için kaçış karakteri (Escape)
+        // İsimlerin içinde tek tırnak varsa kodun kırılmaması için escape (kaçış) işlemi
         const safeName = habit.name ? habit.name.replace(/'/g, "\\'") : "";
         const safeCategory = habit.category ? habit.category.replace(/'/g, "\\'") : "";
 
@@ -146,16 +147,25 @@ function renderHabits(habits) {
                     </div>
                 </div>
                 <div class="habit-actions">
+                    <!-- 1. Tamamla Butonu -->
                     <button onclick="toggleHabit(${habit.id}, ${isDone})" 
                             style="${btnStyle} border:none; padding:8px 15px; border-radius:8px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:5px;">
                         ${btnText}
                     </button>
                     
+                    <!-- 2. Düzenle Butonu -->
                     <button onclick="openEditModal(${habit.id}, '${safeName}', '${safeCategory}', ${freqId})" 
                             style="background:#e0e7ff; color:#4F46E5; border:none; border-radius:8px; width:36px; height:36px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-left:5px;">
                         <span class="material-icons">edit</span>
                     </button>
+
+                    <!-- 3. YENİ EKLENEN: Paylaş Butonu -->
+                    <button onclick="openShareModal(${habit.id})" title="Arkadaşınla Paylaş"
+                            style="background:#e0f2fe; color:#0284c7; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-left:5px;">
+                        <span class="material-icons">share</span>
+                    </button>
                     
+                    <!-- 4. Sil Butonu -->
                     <button onclick="deleteHabit(${habit.id})" 
                             style="background:#fee2e2; color:#ef4444; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-left:5px;">
                         <span class="material-icons">delete</span>
@@ -165,8 +175,7 @@ function renderHabits(habits) {
         listContainer.innerHTML += itemHtml;
     });
 }
-
-
+// ==========================================
 // 4. GLOBAL FONKSİYONLAR (WINDOW)
 // (HTML'den onclick ile çağrılanlar)
 
