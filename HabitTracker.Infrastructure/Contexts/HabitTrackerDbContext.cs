@@ -21,6 +21,8 @@ namespace HabitTracker.Infrastructure.Contexts
         public DbSet<UserBadge> UserBadges { get; set; }
 
         public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<HabitInvitation> HabitInvitations { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,6 +53,20 @@ namespace HabitTracker.Infrastructure.Contexts
                 .WithMany(u => u.ReceivedFriendRequests)
                 .HasForeignKey(f => f.AddresseeId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Sender (Gönderen) silinirse Davet silinmesin veya hata versin (Cascade'i kapatıyoruz)
+            modelBuilder.Entity<HabitInvitation>()
+                .HasOne(i => i.Sender)
+                .WithMany()
+                .HasForeignKey(i => i.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); // veya DeleteBehavior.NoAction
+
+            // Receiver (Alıcı) silinirse Davet silinmesin veya hata versin
+            modelBuilder.Entity<HabitInvitation>()
+                .HasOne(i => i.Receiver)
+                .WithMany()
+                .HasForeignKey(i => i.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict); // veya DeleteBehavior.NoAction
 
             base.OnModelCreating(modelBuilder);
         }

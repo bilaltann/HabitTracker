@@ -19,5 +19,6 @@ namespace HabitTracker.Application.Interfaces
         Task UpdateUserAsync(int userId, UserUpdateDto updateDto);
         Task ChangePasswordAsync(int userId, ChangePasswordDto passwordDto);
 
+
     }
 }

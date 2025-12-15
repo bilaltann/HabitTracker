@@ -32,6 +32,7 @@ namespace HabitTracker.Infrastructure
             services.AddScoped<IHabitLogRepository, HabitLogRepository>();
             services.AddScoped<IBadgeRepository, BadgeRepository>();
             services.AddScoped<IRepository<UserBadge>, Repository<UserBadge>>();
+            services.AddScoped<IHabitInvitationRepository, HabitInvitationRepository>();
 
         }
     }

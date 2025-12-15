@@ -14,11 +14,13 @@ namespace HabitTracker.Application.Services
     {
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService;
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration, IMailService mailService)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _mailService = mailService;
         }
 
         // --- 1. KAYIT OLMA ---
