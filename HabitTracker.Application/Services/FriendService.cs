@@ -174,10 +174,11 @@ namespace HabitTracker.Application.Services
                 return new FriendRequestListDto
                 {
                     RequestId = f.Id,
+                    FriendId = friendUser.Id, // <--- BURAYI DOLDURUYORUZ
                     FriendName = friendUser?.Name ?? "Bilinmiyor",
                     FriendEmail = friendUser?.Email ?? "Gizli",
                     Status = "Arkadaş",
-                    RequestDate = f.RequestDate // Arkadaşlık başlangıç tarihi gibi düşünebilirsin
+                    RequestDate = f.RequestDate
                 };
             }).ToList();
         }

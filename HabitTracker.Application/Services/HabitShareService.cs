@@ -3,6 +3,7 @@ using HabitTracker.Application.Interfaces;
 using HabitTracker.Application.Interfaces.Repositories;
 using HabitTracker.Domain.Entities;
 using HabitTracker.Domain.Enums;
+using MimeKit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,38 +71,83 @@ namespace HabitTracker.Application.Services
 
         public async Task RespondToInvitationAsync(int receiverId, RespondHabitInvitationDto dto)
         {
-            var invitation = await _invitationRepo.GetByIdAsync(dto.InvitationId);
+          
+                // 1. Daveti bul
+                var invitation = await _invitationRepo.GetByIdAsync(dto.InvitationId);
 
-            if (invitation == null) throw new Exception("Davet bulunamadı.");
-            if (invitation.ReceiverId != receiverId) throw new Exception("Bu işlem için yetkiniz yok.");
+                if (invitation == null)
+                    throw new Exception("Davet bulunamadı.");
 
-            // Durumu güncelle
-            invitation.Status = dto.IsAccepted ? FriendRequestStatus.Accepted : FriendRequestStatus.Rejected;
-            await _invitationRepo.UpdateAsync(invitation);
+                if (invitation.ReceiverId != receiverId)
+                    throw new Exception("Bu işlemi yapmaya yetkiniz yok.");
 
-            // EĞER KABUL EDİLDİYSE -> Alışkanlığı Kopyala!
-            if (dto.IsAccepted)
-            {
-                // Orijinal alışkanlık detaylarını al (invitation.HabitId ile)
-                // Not: HabitRepository'de GetByIdAsync içinde Include yoksa, Habit detaylarını çekmen lazım.
+                if (invitation.Status != FriendRequestStatus.Pending)
+                    throw new Exception("Bu davet daha önce zaten cevaplanmış.");
+
+                // 2. İlgili kişileri ve alışkanlığı mail/kopyalama işlemi için çek
+                var sender = await _userRepo.GetByIdAsync(invitation.SenderId);    // Daveti gönderen (Mail alacak kişi)
+                var receiver = await _userRepo.GetByIdAsync(invitation.ReceiverId); // Cevap veren (Şu anki kullanıcı)
                 var originalHabit = await _habitRepo.GetByIdAsync(invitation.HabitId);
 
-                var newHabit = new Habit
+                if (sender == null || receiver == null || originalHabit == null)
+                    throw new Exception("İlgili kayıtlar (Kullanıcı veya Alışkanlık) bulunamadı.");
+
+                // 3. Davet Durumunu Güncelle
+                invitation.Status = dto.IsAccepted ? FriendRequestStatus.Accepted : FriendRequestStatus.Rejected;
+                await _invitationRepo.UpdateAsync(invitation);
+
+                // 4. EĞER KABUL EDİLDİYSE -> Alışkanlığı Kopyala
+                if (dto.IsAccepted)
                 {
-                    UserId = receiverId, // Artık senin alışkanlığın
-                    Name = originalHabit.Name,
-                    Category = originalHabit.Category,
-                    Frequency = originalHabit.Frequency,
-                    IsActive = true,
-                    CreatedDate = DateTime.Now,
-                    // Bitiş süresini yeniden hesapla
-                    ExpirationDate = DateTime.Now.AddDays(originalHabit.Frequency == Frequency.Weekly ? 7 : 1)
-                };
+                    var newHabit = new Habit
+                    {
+                        UserId = receiverId,
+                        Name = originalHabit.Name,
+                        Category = originalHabit.Category,
+                        Frequency = originalHabit.Frequency,
+                        IsActive = true,
+                        CreatedDate = DateTime.Now,
+                        ExpirationDate = DateTime.Now.AddDays(originalHabit.Frequency == Frequency.Weekly ? 7 : 1)
+                    };
+                    await _habitRepo.CreateAsync(newHabit);
+                }
 
-                await _habitRepo.CreateAsync(newHabit);
+                // 5. MAİL GÖNDERME İŞLEMİ (Geri Bildirim)
+                try
+                {
+                    string subject = "";
+                    string body = "";
 
-            }
-        }
+                    if (dto.IsAccepted)
+                    {
+                        // --- KABUL EDİLDİ MAİLİ ---
+                        subject = "Alışkanlık Davetin Kabul Edildi! 🎯";
+                        body = $@"
+                <h3>Harika Haber {sender.Name},</h3>
+                <p><strong>{receiver.Name}</strong>, gönderdiğin <strong>'{originalHabit.Name}'</strong> alışkanlığı davetini kabul etti.</p>
+                <p>Alışkanlık artık onun listesine de eklendi. Birlikte zinciri kırmadan devam edin!</p>";
+                    }
+                    else
+                    {
+                        // --- REDDEDİLDİ MAİLİ ---
+                        subject = "Alışkanlık Daveti Hakkında 📩";
+                        body = $@"
+                <h3>Merhaba {sender.Name},</h3>
+                <p><strong>{receiver.Name}</strong>, gönderdiğin <strong>'{originalHabit.Name}'</strong> alışkanlığı davetini maalesef şu an için reddetti.</p>
+                <p>Başka arkadaşlarınla yeni alışkanlıklar paylaşmaya devam edebilirsin!</p>";
+                    }
+
+                    body += "<br/><p>Keyifli takipleri dileriz!<br/><em>HabitQuest Ekibi</em></p>";
+
+                    // Daveti gönderen kişiye (sender.Email) durumu bildir
+                    await _mailService.SendEmailAsync(sender.Email, subject, body);
+                }
+                catch
+                {
+                    // Mail gitmezse bile veritabanı işlemleri (kopyalama vs.) yapıldığı için hata fırlatmıyoruz.
+                }
+            
+      }
 
 
 

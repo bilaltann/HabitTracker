@@ -260,11 +260,11 @@ window.openShareModal = async function (habitId) {
         friends.forEach(f => {
             // Not: FriendId veya RequestId, DTO'ya göre değişebilir. Genelde FriendId (User ID) olması gerekir.
             // Eğer çalışmazsa backend'den dönen property adını kontrol et.
-            const friendId = f.friendId || f.requestId;
+            const targetId = f.friendId; 
 
             list.innerHTML += `
                 <label style="display:flex; align-items:center; gap:10px; padding:10px; border-bottom:1px solid #eee; cursor:pointer;">
-                    <input type="radio" name="share_friend" value="${friendId}"> 
+                    <input type="radio" name="share_friend" value="${targetId}"> 
                     <div>
                         <div style="font-weight:bold;">${f.friendName}</div>
                         <div style="font-size:11px; color:#666;">${f.friendEmail}</div>
