@@ -21,6 +21,8 @@ namespace HabitTracker.Application
             services.AddScoped<IFriendService, FriendService>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IBadgeService, BadgeService>();
+            services.AddScoped<IHabitShareService, HabitShareService>();
+
 
         }
     }

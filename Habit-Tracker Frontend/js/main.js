@@ -1,8 +1,11 @@
-import { checkAuth } from './utils.js';
+// js/main.js
+
+// 1. EKSİK OLAN IMPORTLAR EKLENDİ (API_BASE_URL, getAuthHeaders, showToast)
+import { API_BASE_URL } from './config.js';
+import { checkAuth, getAuthHeaders, showToast } from './utils.js';
 import { loadUserData } from './user.js';
 import { loadHabits, setupHabitListeners } from './habits.js';
 import { setupFriendSystem, loadFriendRequests, loadActiveFriends } from './friends.js';
-// UI fonksiyonlarının hepsini import ediyoruz
 import { renderCalendarPage, renderBadgesPage, renderLevelsPage } from './ui.js';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setupEventListeners();
     setupHabitListeners();
     setupFriendSystem();
-    setupSettingsListeners();
+    setupSettingsListeners(); // Ayarlar dinleyicisi başlatılıyor
 });
 
 function setupEventListeners() {
@@ -46,7 +49,7 @@ function setupEventListeners() {
                 renderCalendarPage();
             }
             if (pageId === "badges") {
-                renderBadgesPage(); // Rozetler sekmesine basınca çalışır
+                renderBadgesPage();
             }
             if (pageId === "levels") {
                 renderLevelsPage();
@@ -59,7 +62,7 @@ function setupEventListeners() {
     if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
             localStorage.removeItem("jwtToken");
-            localStorage.removeItem("habitQuestState"); // Varsa local state'i de temizle
+            localStorage.removeItem("habitQuestState");
             window.location.href = "login.html";
         });
     }
@@ -68,7 +71,7 @@ function setupEventListeners() {
 // Şifre ve Email işlemleri için gerekli fonksiyon
 function setupSettingsListeners() {
 
-    //ŞİFRE DEĞİŞTİRME
+    // --- ŞİFRE DEĞİŞTİRME ---
     const passwordForm = document.getElementById("change-password-form");
     if (passwordForm) {
         passwordForm.addEventListener("submit", async (e) => {
@@ -89,7 +92,6 @@ function setupSettingsListeners() {
             btn.disabled = true;
 
             try {
-                // Backend'deki ChangePasswordDto ile uyumlu veri yapısı
                 const response = await fetch(`${API_BASE_URL}/Auth/change-password`, {
                     method: "PUT",
                     headers: getAuthHeaders(),
@@ -117,13 +119,14 @@ function setupSettingsListeners() {
         });
     }
 
-    // E-POSTA GÜNCELLEME 
+    // --- E-POSTA GÜNCELLEME ---
     const emailForm = document.getElementById("update-email-form");
     if (emailForm) {
-        // Sayfa açıldığında "Mevcut E-posta" alanını otomatik dolduralım (Kullanıcı kolaylığı)
+        // Sayfa açıldığında "Mevcut E-posta" alanını otomatik doldur
         const state = JSON.parse(localStorage.getItem("habitQuestState"));
         if (state && state.user && state.user.email) {
-            document.getElementById("current-email-input").value = state.user.email;
+            const currentEmailEl = document.getElementById("current-email-input");
+            if (currentEmailEl) currentEmailEl.value = state.user.email;
         }
 
         emailForm.addEventListener("submit", async (e) => {
@@ -133,10 +136,11 @@ function setupSettingsListeners() {
             const newEmailInput = document.getElementById("new-email-input").value;
             const btn = emailForm.querySelector("button");
 
-            
             const storedState = JSON.parse(localStorage.getItem("habitQuestState"));
+
+            // Güvenlik kontrolü: Kullanıcının bildiği mail ile localdeki uyuşuyor mu?
             if (storedState && storedState.user && storedState.user.email !== currentEmailInput) {
-                showToast("Girdiğiniz mevcut e-posta adresi yanlış.", "error");
+                showToast("Girdiğiniz mevcut e-posta adresi sistemdekiyle eşleşmiyor.", "error");
                 return;
             }
 
@@ -150,7 +154,6 @@ function setupSettingsListeners() {
             btn.disabled = true;
 
             try {
-                // Backend'deki UserUpdateDto sadece 'Email' bekliyor
                 const response = await fetch(`${API_BASE_URL}/Auth/update-profile`, {
                     method: "PUT",
                     headers: getAuthHeaders(),
@@ -163,11 +166,13 @@ function setupSettingsListeners() {
                     showToast("E-posta adresiniz güncellendi! 📧", "success");
 
                     // LocalStorage'ı güncelle
-                    storedState.user.email = newEmailInput;
-                    localStorage.setItem("habitQuestState", JSON.stringify(storedState));
+                    if (storedState && storedState.user) {
+                        storedState.user.email = newEmailInput;
+                        localStorage.setItem("habitQuestState", JSON.stringify(storedState));
+                    }
 
                     emailForm.reset();
-                    // Yeni e-postayı tekrar inputa yaz
+                    // Yeni e-postayı tekrar inputa yaz ki kullanıcı görsün
                     document.getElementById("current-email-input").value = newEmailInput;
                 } else {
                     showToast(result.message || "Güncelleme başarısız.", "error");

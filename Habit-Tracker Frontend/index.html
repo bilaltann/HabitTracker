@@ -51,7 +51,7 @@
                     <li class="nav-item" data-page="friends">
                         <span class="material-icons">people</span> Arkadaşlar
                     </li>
-                   
+
                     <li class="nav-item" data-page="badges">
                         <span class="material-icons">emoji_events</span> Rozetler
                     </li>
@@ -207,7 +207,7 @@
                         </form>
                     </div>
 
-                    <div class="glass-panel" >
+                    <div class="glass-panel">
                         <h3 style="color: #4F46E5; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
                             <span class="material-icons">email</span> E-posta Güncelleme
                         </h3>
@@ -339,6 +339,22 @@
             </div>
 
             <button onclick="closeDayModal()" class="btn-primary" style="width: 100%; margin-top: 15px; background-color: #6B7280;">Kapat</button>
+        </div>
+    </div>
+    <!-- MODAL: ALIŞKANLIK PAYLAŞ -->
+    <div class="modal-overlay" id="share-modal">
+        <div class="modal-content glass-panel">
+            <span class="material-icons close-modal" onclick="closeShareModal()">close</span>
+            <h3 style="text-align:center; color:#4F46E5; margin-bottom:10px;">Arkadaşlarınla Paylaş</h3>
+
+            <input type="hidden" id="share-habit-id">
+
+            <!-- Arkadaş Listesi Buraya Dolacak -->
+            <div id="share-friend-list" style="max-height: 250px; overflow-y: auto; border:1px solid #eee; border-radius:8px; padding:10px;">
+                <p style="text-align:center;">Arkadaş listesi yükleniyor...</p>
+            </div>
+
+            <button onclick="submitShare()" class="btn-primary" style="width:100%; margin-top:15px;">Davet Gönder</button>
         </div>
     </div>
     <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
