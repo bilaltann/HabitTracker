@@ -1,11 +1,11 @@
 :root {
-    --primary-color: #1976D2;     /* Mavi */
-    --secondary-color: #4CAF50;   /* Yeşil (Success) */
+    --primary-color: #1976D2;     
+    --secondary-color: #4CAF50;   
     --text-color: #333;
     --white-color: #FFFFFF;
-    --background-auth: #F4F6F9;  /* GÖRSELİN DIŞ ARKA PLAN RENGİ */
-    --visual-bg: var(--white-color); /* GÖRSELİN İÇ ARKA PLANI BEYAZ */
-    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08); /* Yumuşak gölge */
+    --background-auth: #F4F6F9;  
+    --visual-bg: var(--white-color); 
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08); 
 }
 
 /* Genel Stil */
@@ -118,7 +118,7 @@
     outline: none;
 }
 
-/* YENİ: Şifre Giriş Alanı ve İkonu (Göz İkonu için) */
+/* Şifre Giriş Alanı ve İkonu  */
 .password-input-container {
     position: relative;
     margin-bottom: 15px;
@@ -135,7 +135,7 @@
     font-size: 20px;
 }
 
-/* YENİ: Şifre Gereksinimi İpucu */
+/* Şifre Gereksinimi İpucu */
 .password-hint {
     font-size: 11px;
     color: #888;
@@ -144,7 +144,7 @@
     padding-left: 2px;
 }
 
-/* YENİ: Şartlar Kabulü Alanı */
+/* Şartlar Kabulü Alanı */
 .terms-checkbox {
     display: flex;
     align-items: center;

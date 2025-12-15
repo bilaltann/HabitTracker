@@ -85,5 +85,48 @@ namespace HabitTracker.API.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> SendCode([FromBody] ForgotPasswordDto request)
+        {
+            try
+            {
+                await _authService.SendVerificationCodeAsync(request.Email);
+                return Ok(new { message = "Doğrulama kodu e-postanıza gönderildi." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
+        // KOD DOĞRULAMA KAPISI
+        [HttpPost("verify-code")]
+        public async Task<IActionResult> VerifyCode([FromBody] VerifyCodeDto request)
+        {
+            bool isValid = await _authService.VerifyCodeOnlyAsync(request.Email, request.Code);
+            if (isValid)
+                return Ok(new { message = "Kod doğru." });
+            else
+                return BadRequest(new { message = "Kod hatalı veya süresi dolmuş." });
+        }
+
+        // ŞİFRE DEĞİŞTİRME KAPISI
+        [HttpPost("reset-password-confirm")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+        {
+            try
+            {
+                await _authService.ResetPasswordWithCodeAsync(request);
+                return Ok(new { message = "Şifreniz başarıyla değiştirildi." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

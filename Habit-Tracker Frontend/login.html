@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
-        /* --- MODERN CSS TASARIMI --- */
+        
         :root {
             --primary-color: #4F46E5;
             --primary-hover: #4338ca;
@@ -35,7 +35,7 @@
             padding: 20px;
         }
 
-        /* --- TOAST BİLDİRİM CSS --- */
+        /*TOAST BİLDİRİM CSS*/
         #toast-container {
             position: fixed;
             top: 20px;
@@ -121,7 +121,7 @@
             }
         }
 
-        /* --- KART TASARIMI --- */
+        /*KART TASARIMI*/
         .background-shape {
             position: absolute;
             border-radius: 50%;
@@ -445,7 +445,7 @@
 </html>
 
 <script>
-    // --- TOAST BİLDİRİM FONKSİYONU (Aynı Kalıyor) ---
+    
     function showToast(message, type = 'success') {
         let container = document.getElementById('toast-container');
         if (!container) {
@@ -506,7 +506,7 @@
             });
 
             if (response.ok) {
-                // BAŞARILI DURUM
+                
                 const data = await response.json();
                 localStorage.setItem('jwtToken', data.token);
 
@@ -523,26 +523,24 @@
                 }, 1500);
 
             } else {
-                // HATA DURUMU (GÜVENLİ MESAJLAR)
-                // Backend'den gelen "response.text()" mesajını OKUMUYORUZ.
-                // Onun yerine Status Code'a göre biz mesaj uyduruyoruz.
+                
 
                 let safeErrorMessage = "Giriş işlemi başarısız.";
 
                 if (response.status === 400) {
-                    // Bad Request: Genellikle eksik veri veya validasyon hatası
+                    
                     safeErrorMessage = "Lütfen bilgilerinizi kontrol ediniz.";
                 }
                 else if (response.status === 401) {
-                    // Unauthorized: Şifre veya e-posta yanlış
+                    
                     safeErrorMessage = "E-posta adresi veya şifre hatalı.";
                 }
                 else if (response.status === 404) {
-                    // Not Found: Kullanıcı yok
+                    
                     safeErrorMessage = "Böyle bir hesap bulunamadı.";
                 }
                 else if (response.status >= 500) {
-                    // Server Error: Veritabanı hatası vs. (Asla detayı gösterme)
+                    
                     safeErrorMessage = "Giriş Başarısız";
                 }
 
@@ -550,8 +548,8 @@
             }
 
         } catch (error) {
-            // Ağ Hatası (Sunucu kapalıysa vs.)
-            console.error("Hata:", error); // Console'a yazabiliriz (developer görsün)
+            
+            console.error("Hata:", error); 
             showToast("Sunucuya erişilemiyor. İnternet bağlantınızı kontrol edin.", "error");
         } finally {
             if (!window.location.href.includes('index.html')) {

@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kodu Doğrula</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Toast.css">
+    
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f3f4f6;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+            button:disabled {
+                background: #a5a6f6;
+            }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Doğrulama</h2>
+        <p style="color:#666; font-size:14px;">Mailinize gelen kodu giriniz.</p>
+        <form id="verify-form">
+            <input type="text" id="verify-code" placeholder="******" maxlength="6" required>
+            <button type="submit">Doğrula</button>
+        </form>
+    </div>
+
+    
+
+    <script type="module">
+        import { showToast } from './js/utils.js';
+
+        document.getElementById('verify-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const code = document.getElementById('verify-code').value;
+            const email = localStorage.getItem("resetEmail"); // Maili hafızadan al
+            const btn = document.querySelector('button');
+
+            if (!email) { showToast("Hata: E-posta bulunamadı. Başa dönün."); window.location.href = 'forgot_password.html'; return; }
+
+            btn.textContent = "Kontrol Ediliyor...";
+            btn.disabled = true;
+
+            try {
+                
+                const response = await fetch("https://localhost:7223/api/Auth/verify-code", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, code: code })
+                });
+
+                if (response.ok) {
+                    
+                    showToast("✅ Kod doğrulandı! Yönlendiriliyorsunuz...", "success");
+                    
+                    localStorage.setItem("verifiedCode", code);
+                    
+                    setTimeout(() => { window.location.href = 'new_password.html'; }, 2000);
+                } else {
+                    showToast("❌ Kod hatalı!");
+                    btn.textContent = "Doğrula";
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Sunucu hatası.");
+            }
+        });
+    </script>
+
+</body>
+</html>
