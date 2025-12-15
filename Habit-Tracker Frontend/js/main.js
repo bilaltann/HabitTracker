@@ -1,5 +1,3 @@
-// js/main.js
-
 import { checkAuth } from './utils.js';
 import { loadUserData } from './user.js';
 import { loadHabits, setupHabitListeners } from './habits.js';
@@ -70,7 +68,7 @@ function setupEventListeners() {
 // Şifre ve Email işlemleri için gerekli fonksiyon
 function setupSettingsListeners() {
 
-    // --- 1. ŞİFRE DEĞİŞTİRME ---
+    //ŞİFRE DEĞİŞTİRME
     const passwordForm = document.getElementById("change-password-form");
     if (passwordForm) {
         passwordForm.addEventListener("submit", async (e) => {
@@ -119,7 +117,7 @@ function setupSettingsListeners() {
         });
     }
 
-    // --- 2. E-POSTA GÜNCELLEME ---
+    // E-POSTA GÜNCELLEME 
     const emailForm = document.getElementById("update-email-form");
     if (emailForm) {
         // Sayfa açıldığında "Mevcut E-posta" alanını otomatik dolduralım (Kullanıcı kolaylığı)
@@ -135,9 +133,7 @@ function setupSettingsListeners() {
             const newEmailInput = document.getElementById("new-email-input").value;
             const btn = emailForm.querySelector("button");
 
-            // Frontend Kontrolü: Eski e-posta doğru mu?
-            // LocalStorage'daki bilgiyle kıyaslıyoruz.
-            // (Güvenlik notu: Asıl doğrulama backend'deki token ile yapılır ama bu kullanıcıya erken uyarı verir)
+            
             const storedState = JSON.parse(localStorage.getItem("habitQuestState"));
             if (storedState && storedState.user && storedState.user.email !== currentEmailInput) {
                 showToast("Girdiğiniz mevcut e-posta adresi yanlış.", "error");

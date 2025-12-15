@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetici Girişi - HabitQuest</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="toast.css">
+
+    <style>
+        
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-badge {
+            background: #ef4444;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+            .input-wrapper label {
+                font-size: 13px;
+                font-weight: 600;
+                color: #555;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .input-wrapper input {
+                width: 100%;
+                padding: 12px 12px 12px 40px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                box-sizing: border-box;
+                font-size: 14px;
+                transition: 0.2s;
+            }
+
+                .input-wrapper input:focus {
+                    border-color: #4F46E5;
+                    outline: none;
+                    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+                }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            color: #999;
+            font-size: 20px;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #4F46E5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+            .btn-login:hover {
+                background: #4338ca;
+            }
+
+            .btn-login:disabled {
+                background: #a5b4fc;
+                cursor: not-allowed;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="background-shape shape-1"></div>
+    <div class="background-shape shape-2"></div>
+
+    <div class="login-card">
+        <span class="admin-badge">Yönetim Paneli</span>
+        <h2 style="margin-bottom: 10px; color: #1f2937;">Admin Girişi</h2>
+        <p style="color: #6b7280; margin-bottom: 30px; font-size: 14px;">Panele erişmek için kimliğinizi doğrulayın.</p>
+
+        <form id="admin-login-form">
+
+            <div class="input-wrapper">
+                <label>E-posta Adresi</label>
+                <span class="material-icons input-icon">mail_outline</span>
+                <input type="email" id="admin-email" placeholder="Yetkili E-postanızı giriniz" required>
+            </div>
+
+            <div class="input-wrapper">
+                <label>Güvenlik Parolası</label>
+                <span class="material-icons input-icon">vpn_key</span>
+                <input type="password" id="admin-password" placeholder="Güvenlik parolanızı giriniz" required>
+            </div>
+
+            <button type="submit" class="btn-login">Sisteme Giriş</button>
+        </form>
+
+        <div style="margin-top: 25px; font-size: 13px;">
+            <a href="login.html" style="color: #6b7280; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                <span class="material-icons" style="font-size: 16px;">arrow_back</span> Siteye Geri Dön
+            </a>
+        </div>
+    </div>
+
+    <script>
+
+        import { showToast } from './utils.js';
+
+        // Port numaranı kontrol et
+        const API_BASE_URL = "https://localhost:7223/api";
+
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const emailInput = document.getElementById('admin-email');
+            const passwordInput = document.getElementById('admin-password');
+            const btn = document.querySelector('button[type="submit"]');
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // 1. Basit Doğrulama
+            if (!email || !password) {
+                showToast("Lütfen tüm alanları doldurun.", "error");
+                return;
+            }
+
+            // Yükleniyor...
+            const originalText = btn.textContent;
+            btn.textContent = "Giriş Yapılıyor...";
+            btn.disabled = true;
+
+            try {
+                // 3. Backend'e İstek At (Login Endpoint)
+                // Backend'inde AuthController altında /login metodun olduğunu varsayıyorum
+                const response = await fetch(`${API_BASE_URL}/Auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    
+
+                    
+
+                    // Token'ı kaydet
+                    localStorage.setItem("jwtToken", data.token || data.accessToken);
+                    // Varsa kullanıcı bilgisini de kaydet
+                    localStorage.setItem("userEmail", email);
+
+                    showToast("Giriş Başarılı! Yönlendiriliyorsunuz...", "success");
+
+                    // Panele yönlendir
+                    setTimeout(() => {
+                        window.location.href = 'admin_dashboard.html';
+                    }, 1500);
+
+                } else {
+                    
+                    showToast(data.message || "Giriş başarısız. Bilgileri kontrol edin.", "error");
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                }
+
+            } catch (error) {
+                
+                console.error("Login Hatası:", error);
+                showToast("Sunucuya bağlanılamadı.", "error");
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+
+</body>
+</html>

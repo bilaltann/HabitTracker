@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
-        /* --- MODERN CSS TASARIMI --- */
+        
         :root {
             --primary-color: #4F46E5;
             --primary-hover: #4338ca;
@@ -35,7 +35,7 @@
             padding: 20px;
         }
 
-        /* --- TOAST BİLDİRİM CSS --- */
+        /*  TOAST  */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -121,7 +121,7 @@
             }
         }
 
-        /* --- SAYFA YAPISI --- */
+        /*SAYFA YAPISI*/
         .background-shape {
             position: absolute;
             border-radius: 50%;
@@ -411,7 +411,7 @@
 
             <form id="register-auth-form">
 
-                <!-- YENİ EKLENEN KISIM: İSİM ALANI -->
+                <!--İSİM ALANI -->
                 <div class="input-group">
                     <span class="material-icons">person_outline</span>
                     <input type="text" id="auth-name" placeholder="Ad Soyad" required>
@@ -448,7 +448,7 @@
     </div>
 
     <script>
-        // --- TOAST BİLDİRİM FONKSİYONU ---
+        // TOAST 
         function showToast(message, type = 'success') {
             let container = document.getElementById('toast-container');
             if (!container) {
@@ -488,7 +488,7 @@
             });
         });
 
-        // --- REGISTER API ENTEGRASYONU ---
+        // REGISTER API ENTEGRASYONU
         document.getElementById('register-auth-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -498,7 +498,7 @@
             btn.disabled = true;
             btn.style.opacity = "0.7";
 
-            // YENİ: İsim alanını alıyoruz
+            //İsim alanını alıyoruz
             const name = document.getElementById('auth-name').value;
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
@@ -515,7 +515,7 @@
             }
 
             const apiUrl = "https://localhost:7223/api/Auth/register";
-            let response; // Response değişkenini dışarıda tanımladık
+            let response; 
 
             try {
                 response = await fetch(apiUrl, {

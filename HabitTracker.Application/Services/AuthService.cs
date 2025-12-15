@@ -1,6 +1,7 @@
 ﻿using HabitTracker.Application.DTOs.UserDTOs;
 using HabitTracker.Application.Interfaces;
 using HabitTracker.Domain.Entities;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,11 +15,15 @@ namespace HabitTracker.Application.Services
     {
         private readonly IRepository<User> _userRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMailService _mailService; // Mail servisi
+        private readonly IMemoryCache _memoryCache;  // hafıza için
 
-        public AuthService(IRepository<User> userRepository, IConfiguration configuration)
+        public AuthService(IRepository<User> userRepository, IConfiguration configuration, IMailService mailService, IMemoryCache memoryCache)
         {
             _userRepository = userRepository;
             _configuration = configuration;
+            _mailService = mailService;
+            _memoryCache = memoryCache;
         }
 
         // --- 1. KAYIT OLMA ---
@@ -106,9 +111,79 @@ namespace HabitTracker.Application.Services
         }
 
 
-    
+
+        public async Task SendVerificationCodeAsync(string email)
+        {
+            var users = await _userRepository.GetAllAsync();
+            var user = users.FirstOrDefault(u => u.Email == email);
+
+            if (user == null) throw new Exception("Kullanıcı bulunamadı.");
+
+            // 6 Haneli Kod Üret
+            string code = new Random().Next(100000, 999999).ToString();
+
+            // Kodu RAM'e Kaydet (15 Dakika Ömürlü)
+            // Anahtar: Email, Değer: Kod
+            _memoryCache.Set(email, code, TimeSpan.FromMinutes(15));
+
+            // Mail Gönder
+            string subject = "Doğrulama Kodunuz 🔐";
+            string body = $"<h3>HabitQuest Doğrulama Kodu</h3><p>Şifrenizi sıfırlamak için kodunuz: <b style='font-size:20px'>{code}</b></p><p>Bu kod 15 dakika geçerlidir.</p>";
+
+            await _mailService.SendEmailAsync(email, subject, body);
+        }
 
 
+        // KODU DOĞRULAYAN METOT (verify_code.html için)
+        public async Task<bool> VerifyCodeOnlyAsync(string email, string code)
+        {
+            // RAM'den kodu kontrol et
+            if (!_memoryCache.TryGetValue(email, out string cachedCode))
+            {
+                return false; // Kod süresi dolmuş veya hiç yok
+            }
+
+            if (cachedCode != code)
+            {
+                return false; // Kod yanlış
+            }
+
+            return true; // Kod doğru
+        }
+
+        // ŞİFREYİ DEĞİŞTİREN METOT (new_password.html için)
+        public async Task ResetPasswordWithCodeAsync(ResetPasswordDto resetDto)
+        {
+            // Güvenlik Önlemi: Kodu tekrar kontrol et (Araya giren olmasın diye)
+            if (!_memoryCache.TryGetValue(resetDto.Email, out string cachedCode))
+            {
+                throw new Exception("Kodun süresi dolmuş. Lütfen tekrar kod isteyin.");
+            }
+
+            if (cachedCode != resetDto.Code)
+            {
+                throw new Exception("Kod hatalı.");
+            }
+
+            // Kullanıcıyı bul
+            var users = await _userRepository.GetAllAsync();
+            var user = users.FirstOrDefault(u => u.Email == resetDto.Email);
+
+
+            if (user == null) throw new Exception("Kullanıcı bulunamadı.");
+
+            // Yeni şifreyi Hashle
+            CreatePasswordHash(resetDto.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            // Veritabanını güncelle
+            await _userRepository.UpdateAsync(user);
+
+            // İşlem bitince kodu sil (Tek kullanımlık olsun)
+            _memoryCache.Remove(resetDto.Email);
+        }
 
 
 
@@ -165,5 +240,7 @@ namespace HabitTracker.Application.Services
 
             return tokenHandler.WriteToken(token);
         }
+
+   
     }
 }

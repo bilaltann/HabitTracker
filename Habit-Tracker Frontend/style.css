@@ -122,7 +122,7 @@ body {
 
 /* Layout */
 .container {
-    max-width: 95%; /* Eskiden 1200px idi. Şimdi ekranın %95'ini kaplar */
+    max-width: 95%; 
     margin: 20px auto;
     display: flex;
     gap: 20px;
@@ -164,8 +164,8 @@ body {
     }
 
 .content-area {
-    flex: 1; /* Sidebar'dan arta kalan TÜM alanı kapla */
-    width: 100%; /* Genişliği zorla */
+    flex: 1; 
+    width: 100%; 
 }
 /* Stats Grid */
 .stats-grid {
@@ -391,7 +391,6 @@ body {
         background: #DC2626;
     }
 
-/* MODAL STİLLERİ (GÜNCELLENMİŞ) */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -413,7 +412,7 @@ body {
         pointer-events: all;
     }
 
-/* style.css içindeki mevcut .modal-content kısmını bununla değiştir */
+
 
 .modal-content {
     background: rgba(255, 255, 255, 0.95);
@@ -423,15 +422,12 @@ body {
     padding: 30px;
     border-radius: 16px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    position: relative; /* Önemli */
-    /* Animasyon */
+    position: relative;   
     transform: translateY(-20px);
-    transition: transform 0.3s ease;
-    /* --- Scroll (Kaydırma) Ayarları --- */
-    margin: 0 !important; /* glass-panel'den gelen margin'i ezer */
-    max-height: 85vh; /* Ekranın %85'inden büyük olamaz */
-    overflow-y: auto; /* İçerik sığmazsa kaydırma çubuğu çıkar */
-    /* Scroll çubuğunun düzgün çalışması için */
+    transition: transform 0.3s ease;    
+    margin: 0 !important; 
+    max-height: 85vh; 
+    overflow-y: auto;     
     display: flex;
     flex-direction: column;
 }
@@ -505,7 +501,7 @@ body {
         opacity: 1;
     }
 }
-/* style.css içine ekle */
+
 
 .btn-cancel {
     background-color: #e5e7eb;
@@ -523,7 +519,7 @@ body {
     }
 
 .btn-delete-confirm {
-    background-color: #ef4444; /* Kırmızı */
+    background-color: #ef4444;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -538,7 +534,7 @@ body {
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-/* Modal içi Scroll Çubuğu Tasarımı */
+
 .modal-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -549,7 +545,7 @@ body {
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-    background: #cbd5e1; /* Kaydırma çubuğu rengi */
+    background: #cbd5e1; 
     border-radius: 10px;
 }
 
@@ -559,12 +555,12 @@ body {
 
 
 
-/* style.css içine ekle */
+
 
 /* Kilitli Rozet Stili */
 .badge-locked {
-    filter: grayscale(100%); /* Siyah beyaz yap */
-    opacity: 0.6; /* Şeffaflaştır */
+    filter: grayscale(100%); 
+    opacity: 0.6; 
     position: relative;
 }
 
@@ -582,11 +578,11 @@ body {
 
 /* Kazanılmış Rozet Efekti */
 .badge-unlocked {
-    border: 2px solid #FFD700 !important; /* Altın rengi çerçeve */
+    border: 2px solid #FFD700 !important; 
     box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
-/* style.css EN ALTINA EKLE (Eski .filter-container kodunu silip bunu yapıştır) */
+
 
 .filter-container {
     display: grid;
@@ -594,13 +590,10 @@ body {
     gap: 12px;
     margin-bottom: 25px;
     padding: 18px;
-    /* YENİ TASARIM: Hafif Renkli ve Belirgin */
-    background: rgba(255, 255, 255, 0.9); /* Daha opak, net beyaz zemin */
-    /* Kenarlık: Temanın açık tonu (İndigo) */
+    background: rgba(255, 255, 255, 0.9); 
     border: 2px solid #e0e7ff;
     border-radius: 16px;
     backdrop-filter: blur(10px);
-    /* Gölge: Hafif renkli gölge ile havada durma hissi */
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.1);
     transition: transform 0.2s ease;
 }

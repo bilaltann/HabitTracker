@@ -16,8 +16,14 @@ namespace HabitTracker.Application.Interfaces
         // Giriş işlemi: Başarılı olursa JWT Token (string) döner.
         Task<string> LoginAsync(UserLoginDto loginDto);
 
+        Task SendVerificationCodeAsync(string email);
+
         Task UpdateUserAsync(int userId, UserUpdateDto updateDto);
         Task ChangePasswordAsync(int userId, ChangePasswordDto passwordDto);
+
+        
+        Task<bool> VerifyCodeOnlyAsync(string email, string code);
+        Task ResetPasswordWithCodeAsync(ResetPasswordDto resetDto);
 
     }
 }

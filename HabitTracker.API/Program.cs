@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1. Controller'larý Ekle (MVC'deki WithViews yerine sadece Controllers)
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache(); // Hafýza servisini aktif eder bu kodu geçici hafýzada tutmak için
 
 // 2. Swagger / OpenAPI Ayarlarý (JWT Desteði ile)
 builder.Services.AddEndpointsApiExplorer();

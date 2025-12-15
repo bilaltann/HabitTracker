@@ -1,6 +1,6 @@
-import { API_BASE_URL, LEVELS } from './config.js'; // Config'den aldık
+import { API_BASE_URL, LEVELS } from './config.js'; 
 import { getAuthHeaders } from './utils.js';
-import { currentHabits } from './habits.js'; // Eğer kullanıyorsan
+import { currentHabits } from './habits.js'; 
 import { initCalendar } from './calendarPage.js';
 
 
@@ -28,12 +28,12 @@ export async function renderBadgesPage() {
     container.innerHTML = '<p class="empty-message">Rozetler yükleniyor...</p>';
 
     try {
-        // 1. Tüm rozetleri çek
+        // Tüm rozetleri çek
         const allBadgesResponse = await fetch(`${API_BASE_URL}/Badge`, {
             method: "GET", headers: getAuthHeaders()
         });
 
-        // 2. Kullanıcının kazandığı rozet ID'lerini çek
+        // Kullanıcının kazandığı rozet ID'lerini çek
         const earnedResponse = await fetch(`${API_BASE_URL}/Badge/earned`, {
             method: "GET", headers: getAuthHeaders()
         });
@@ -41,7 +41,7 @@ export async function renderBadgesPage() {
         if (!allBadgesResponse.ok || !earnedResponse.ok) throw new Error("Veri hatası");
 
         const allBadges = await allBadgesResponse.json();
-        const earnedIds = await earnedResponse.json(); // Örn: [1, 2]
+        const earnedIds = await earnedResponse.json(); 
 
         if (allBadges.length === 0) {
             container.innerHTML = '<p class="empty-message">Henüz tanımlı rozet yok.</p>';
@@ -50,7 +50,7 @@ export async function renderBadgesPage() {
 
         container.innerHTML = "";
 
-        // 3. Listeleme ve Kontrol
+        // Listeleme ve Kontrol
         allBadges.forEach(badge => {
             // Bu rozetin ID'si kazanılanlar listesinde var mı?
             const isEarned = earnedIds.includes(badge.id);
@@ -89,7 +89,7 @@ export async function renderBadgesPage() {
 }
 
 export function renderCalendarPage() {
-    // FullCalendar'ı başlat (Biraz gecikmeli başlatmak DOM'un oturmasını sağlar)
+    // FullCalendar'ı başlat 
     setTimeout(() => {
         initCalendar();
     }, 100);
