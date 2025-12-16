@@ -10,7 +10,7 @@ export let currentHabits = [];
 let allHabitsCache = [];
 
 
-// 1. ALIŞKANLIKLARI YÜKLEME
+//ALIŞKANLIKLARI YÜKLEME
 
 export async function loadHabits() {
     const listContainer = document.getElementById("habit-list");
@@ -32,14 +32,14 @@ export async function loadHabits() {
 
         const data = await response.json();
 
-        // 1. Veriyi kaydet (Cache)
+        // Veriyi kaydet
         currentHabits = data;
         allHabitsCache = data;
 
-        // 2. Sayfa ilk açıldığında filtreleri temizle
+        //Sayfa ilk açıldığında filtreleri temizle
         resetFilters();
 
-        // 3. Listeyi olduğu gibi ekrana bas
+        //Listeyi olduğu gibi ekrana bas
         renderHabits(allHabitsCache);
 
         // UI'ın diğer parçalarını güncelle
@@ -54,7 +54,7 @@ export async function loadHabits() {
 }
 
 
-// 2. FİLTRELEME MANTIĞI (YENİ)
+// 2. FİLTRELEME
 
 export function filterHabits() {
     const searchInput = document.getElementById("filter-search");
@@ -103,7 +103,7 @@ function resetFilters() {
 }
 
 
-// 3. HTML OLUŞTURMA (RENDER)
+
 
 function renderHabits(habits) {
     const listContainer = document.getElementById("habit-list");
@@ -175,7 +175,7 @@ function renderHabits(habits) {
         listContainer.innerHTML += itemHtml;
     });
 }
-// ==========================================
+
 // 4. GLOBAL FONKSİYONLAR (WINDOW)
 // (HTML'den onclick ile çağrılanlar)
 
@@ -219,6 +219,51 @@ window.closeDeleteModal = function () {
     const modal = document.getElementById("delete-modal");
     if (modal) modal.classList.remove("active");
 };
+
+// --- TÜMÜNÜ SİLME İŞLEMLERİ ---
+
+// 1. Kullanıcıdan onay isteyen fonksiyon
+function confirmDeleteAll() {
+    // Tarayıcının varsayılan onay kutusunu kullanıyoruz
+    const answer = confirm("DİKKAT! Tüm alışkanlıklarınız kalıcı olarak silinecek.\n\nBu işlem geri alınamaz. Emin misiniz?");
+
+    if (answer) {
+        deleteAllHabits();
+    }
+}
+
+// 2. API'ye istek atan fonksiyon
+async function deleteAllHabits() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/Habit/delete-all`, {
+            method: "DELETE",
+            headers: {
+                // Token'ı header'a ekliyoruz ki backend hangi kullanıcı olduğunu bilsin
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            // Başarılı olursa:
+            showToast("Tüm alışkanlıklar başarıyla silindi.", "success");
+
+            // 1. Listeyi yenile (Boş gelecek)
+            renderHabits([]);
+
+            // 2. İstatistikleri güncelle (Puan, seviye vs. düşebilir veya sıfırlanabilir)
+            updateDashboard();
+        } else {
+            showToast("Silme işlemi sırasında bir hata oluştu.", "error");
+        }
+
+    }
+    catch (error) {
+    }
+}
+
+// Fonksiyonu dışarıya (window nesnesine) açıyoruz ki HTML erişebilsin
+window.confirmDeleteAll = confirmDeleteAll;
 
 window.toggleHabit = async function (id, wasCompleted) {
     const today = new Date();
@@ -266,7 +311,7 @@ window.closeEditModal = function () {
 };
 
 
-// 5. EVENT LISTENERLARI (OLAY DİNLEYİCİLERİ)
+
 
 export function setupHabitListeners() {
 
