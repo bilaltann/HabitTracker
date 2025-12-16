@@ -25,5 +25,8 @@ namespace HabitTracker.Application.Interfaces
 
         // Silme
         Task DeleteAsync(int id); // Veya direk entity alabilir
+
+        // Şarta (predicate) uyan tüm kayıtları siler
+        Task DeleteAllAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

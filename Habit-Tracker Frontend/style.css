@@ -640,5 +640,132 @@ body {
     }
 }
 
+/* ROZETLER  */
 
 
+#badges-content-area-main {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+    margin-top: 20px;
+}
+
+
+.badge-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 15px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 180px; 
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .badge-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+    }
+
+    
+    .badge-card img,
+    .badge-card .badge-icon {
+        width: 50px !important; 
+        height: 50px !important;
+        margin-bottom: 10px;
+        object-fit: contain;
+    }
+
+    
+    .badge-card h4,
+    .badge-card h3 {
+        font-size: 15px !important; 
+        margin: 5px 0 !important;
+        color: #333;
+    }
+
+    .badge-card p {
+        font-size: 11px !important; 
+        color: #666;
+        line-height: 1.3;
+        margin-bottom: 10px;
+        
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    
+    .badge-card .material-icons.lock-icon {
+        font-size: 18px !important; 
+        top: 8px !important;
+        right: 8px !important;
+        padding: 4px !important;
+    }
+
+
+@media (max-width: 900px) {
+    #badges-content-area-main {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 600px) {
+    #badges-content-area-main {
+        grid-template-columns: 1fr; 
+    }
+}
+
+
+.habit-actions {
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    flex-wrap: wrap; 
+    justify-content: flex-end; 
+}
+
+
+@media (max-width: 600px) {
+    .habit-item {
+        flex-direction: column; 
+        align-items: flex-start;
+    }
+
+    .habit-actions {
+        width: 100%;
+        justify-content: space-between; 
+        margin-top: 10px;
+    }
+}
+
+
+
+/*Tüm alışkanlıkları sil butonu*/
+.btn-delete-all {
+    background-color: #fee2e2; 
+    color: #b91c1c; 
+    border: 1px solid #fecaca;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+    transition: all 0.2s ease;
+}
+
+    .btn-delete-all:hover {
+        background-color: #ef4444; 
+        color: white;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-delete-all .material-icons {
+        font-size: 18px; 
+    }

@@ -59,6 +59,21 @@ namespace HabitTracker.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        
+
+        public async Task DeleteAllAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            //Şarta uyanları bul (Örn: UserId'si 5 olanlar)
+            var userEntities = await _dbSet.Where(predicate).ToListAsync();
+
+            if (userEntities.Any())
+            {
+                //Toplu silme işaretle
+                _dbSet.RemoveRange(userEntities);
+                //Veritabanına uygula
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
     }
 }

@@ -223,6 +223,13 @@ namespace HabitTracker.Application.Services
         }
 
 
-         
+
+        public async Task DeleteAllHabitsByUserIdAsync(int userId)
+        {
+            // Generic Repository'deki DeleteAllAsync metodunu çağırıyoruz.
+            // Şartımız: Alışkanlığın sahibi (UserId) bu kullanıcı olmalı.
+            await _habitRepository.DeleteAllAsync(x => x.UserId == userId);
+        }
+
     }
 }

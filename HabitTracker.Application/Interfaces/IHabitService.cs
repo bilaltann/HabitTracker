@@ -27,6 +27,8 @@ namespace HabitTracker.Application.Interfaces
             // --- KRİTİK METOT ---
             // "Bugün yapıldı" işaretleme veya geri alma
             Task ToggleHabitCompletionAsync(int habitId, DateTime date);
-     
+
+            Task DeleteAllHabitsByUserIdAsync(int userId);
+
     }
 }
