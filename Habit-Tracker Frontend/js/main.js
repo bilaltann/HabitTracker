@@ -128,7 +128,7 @@ function setupSettingsListeners() {
         if (state && state.user && state.user.email) {
             //document.getElementById("current-email-input").value = state.user.email;
             const currentEmailEl = document.getElementById("current-email-input");
-            if (currentEmailEl) currentEmailEl.value = state.user.email;
+            //if (currentEmailEl) currentEmailEl.value = state.user.email;
         }
 
         emailForm.addEventListener("submit", async (e) => {
@@ -189,3 +189,10 @@ function setupSettingsListeners() {
         });
     }
 }
+
+
+
+
+
+
+
