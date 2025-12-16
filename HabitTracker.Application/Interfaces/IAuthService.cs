@@ -25,5 +25,7 @@ namespace HabitTracker.Application.Interfaces
         Task<bool> VerifyCodeOnlyAsync(string email, string code);
         Task ResetPasswordWithCodeAsync(ResetPasswordDto resetDto);
 
+        Task<string> LoginWithGoogleAsync(string credential);
+
     }
 }

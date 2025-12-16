@@ -1,6 +1,7 @@
 ﻿using HabitTracker.Application.DTOs.UserDTOs;
 using HabitTracker.Application.Interfaces;
 using HabitTracker.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Google.Apis.Auth; // Bunu en üste ekle
 
 namespace HabitTracker.Application.Services
 {
@@ -186,6 +188,63 @@ namespace HabitTracker.Application.Services
         }
 
 
+        public async Task<string> LoginWithGoogleAsync(string credential)
+        {
+            
+                // 1. Google Token'ını Doğrula
+                GoogleJsonWebSignature.Payload payload;
+                try
+                {
+                    var settings = new GoogleJsonWebSignature.ValidationSettings()
+                    {
+                        // appsettings.json'dan ClientId'yi alıyoruz
+                        Audience = new List<string>() { _configuration["GoogleAuthSettings:ClientId"] }
+                    };
+
+                    payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
+                }
+                catch (InvalidJwtException)
+                {
+                    throw new Exception("Google token doğrulaması başarısız.");
+                }
+
+                // 2. Kullanıcı Veritabanında Var mı Kontrol Et (Repository ile)
+                var users = await _userRepository.GetAllAsync();
+                var user = users.FirstOrDefault(u => u.Email == payload.Email);
+
+                if (user == null)
+                {
+                    // KULLANICI YOKSA -> OTOMATİK KAYIT ET
+                    // Google kullanıcıları için şifre olmadığı için rastgele Hash/Salt atıyoruz
+                    // ki veritabanı hatası almayalım.
+                    CreatePasswordHash(Guid.NewGuid().ToString(), out byte[] dummyHash, out byte[] dummySalt);
+
+                    user = new User
+                    {
+                        Email = payload.Email,
+                        Name = payload.Name, // Google'dan gelen isim
+                        PasswordHash = dummyHash, // Rastgele şifre (Google ile girdiği için kullanmayacak)
+                        PasswordSalt = dummySalt,
+                        CurrentPoints = 0,
+                        Level = 1
+                    };
+
+                    // Kullanıcıyı oluştur
+                    await _userRepository.CreateAsync(user);
+                }
+
+                // 3. Kullanıcı artık var, Kendi JWT Token'ını Üret
+                // Mevcut 'CreateToken' metodunu kullanıyoruz
+                var token = CreateToken(user);
+
+                return token;
+            
+        }
+
+
+
+
+
 
 
         // --- YARDIMCI METOTLAR ---
@@ -241,6 +300,6 @@ namespace HabitTracker.Application.Services
             return tokenHandler.WriteToken(token);
         }
 
-   
+      
     }
 }

@@ -7,8 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <!-- Google Sign-In Kütüphanesi -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
-        
+
         :root {
             --primary-color: #4F46E5;
             --primary-hover: #4338ca;
@@ -49,18 +52,15 @@
         .toast {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-left: 6px solid;
             border-radius: 8px;
             padding: 16px 20px;
             min-width: 300px;
-            max-width: 400px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            transition: all 0.3s ease;
+            animation: slideInRight 0.4s forwards;
             cursor: pointer;
         }
 
@@ -92,16 +92,6 @@
             color: #333;
         }
 
-        .toast-close {
-            font-size: 18px;
-            color: #aaa;
-            transition: 0.2s;
-        }
-
-        .toast:hover .toast-close {
-            color: #333;
-        }
-
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
@@ -114,20 +104,12 @@
             }
         }
 
-        @keyframes fadeOutRight {
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
         /*SAYFA YAPISI*/
         .background-shape {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
             z-index: 0;
-            animation: float 10s infinite ease-in-out;
         }
 
         .shape-1 {
@@ -146,16 +128,6 @@
             bottom: -100px;
             right: -50px;
             opacity: 0.4;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
         }
 
         .register-card {
@@ -193,13 +165,7 @@
             width: 90%;
             max-width: 350px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
-            transition: transform 0.3s;
         }
-
-            .visual-side img:hover {
-                transform: scale(1.05);
-            }
 
         .visual-side h3 {
             color: var(--primary-color);
@@ -210,7 +176,6 @@
         .visual-side p {
             color: var(--text-light);
             font-size: 14px;
-            line-height: 1.6;
         }
 
         .form-side {
@@ -220,25 +185,6 @@
             flex-direction: column;
             justify-content: center;
         }
-
-        .back-link {
-            text-decoration: none;
-            color: var(--text-light);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            transition: color 0.2s;
-        }
-
-            .back-link:hover {
-                color: var(--primary-color);
-            }
-
-            .back-link span {
-                font-size: 18px;
-                margin-right: 5px;
-            }
 
         .header h2 {
             font-size: 32px;
@@ -261,15 +207,12 @@
                 padding: 15px 15px 15px 45px;
                 border: 2px solid #e0e0e0;
                 border-radius: 12px;
-                font-size: 15px;
                 outline: none;
-                transition: all 0.3s;
-                background: #fff;
+                transition: 0.3s;
             }
 
                 .input-group input:focus {
                     border-color: var(--primary-color);
-                    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
                 }
 
             .input-group .material-icons {
@@ -278,7 +221,6 @@
                 top: 50%;
                 transform: translateY(-50%);
                 color: #999;
-                pointer-events: none;
             }
 
         .toggle-password {
@@ -297,38 +239,14 @@
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            transition: 0.3s;
         }
 
             .btn-primary:hover {
                 background: var(--primary-hover);
                 transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-            }
-
-        .btn-google {
-            width: 100%;
-            padding: 12px;
-            background: white;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 500;
-            color: #555;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: background 0.2s;
-        }
-
-            .btn-google:hover {
-                background: #f9f9f9;
             }
 
         .separator {
@@ -367,19 +285,12 @@
                 font-weight: 600;
             }
 
-                .footer-text a:hover {
-                    text-decoration: underline;
-                }
-
-        @media (max-width: 480px) {
-            .register-card {
-                border-radius: 0;
-                min-height: 100vh;
-            }
-
-            .form-side {
-                padding: 30px 20px;
-            }
+        /* Google Buton Alanı */
+        #google_btn_container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            height: 44px;
         }
     </style>
 </head>
@@ -390,7 +301,7 @@
 
     <div class="register-card">
         <div class="visual-side">
-            <img src="image/habit-tracker-kayıtol.png" alt="Habit Quest">
+            <img src="image/habit-tracker-kayıtol.png" alt="Habit Quest" onerror="this.style.display='none'">
             <h3>Macerana Başla!</h3>
             <p>Küçük adımlarla büyük değişimler yarat.<br>Rozetlerini topla, seviyeni yükselt ve en iyi versiyonuna ulaş.</p>
         </div>
@@ -402,10 +313,8 @@
                 <p>Ücretsiz katıl ve alışkanlıklarını yönetmeye başla.</p>
             </div>
 
-            <button class="btn-google">
-                <img src="image/google-icon.svg" alt="G" style="width: 20px;">
-                Google ile Devam Et
-            </button>
+            <!-- GOOGLE BUTONU BURAYA GELECEK -->
+            <div id="google_btn_container"></div>
 
             <div class="separator">veya e-posta ile kayıt ol</div>
 
@@ -447,35 +356,22 @@
         </div>
     </div>
 
+    <div id="toast-container"></div>
+
     <script>
-        // TOAST 
+        // TOAST
         function showToast(message, type = 'success') {
             let container = document.getElementById('toast-container');
             if (!container) {
-                container = document.createElement('div');
-                container.id = 'toast-container';
-                document.body.appendChild(container);
+                container = document.createElement('div'); container.id = 'toast-container'; document.body.appendChild(container);
             }
-
             const iconName = type === 'success' ? 'check_circle' : 'error';
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                        <div class="toast-content">
-                            <span class="material-icons toast-icon">${iconName}</span>
-                            <span class="toast-message">${message}</span>
-                        </div>
-                        <span class="material-icons toast-close" onclick="this.parentElement.remove()">close</span>
-                    `;
-
-            toast.onclick = function () { removeToast(toast); };
+            toast.innerHTML = `<div class="toast-content"><span class="material-icons toast-icon">${iconName}</span><span class="toast-message">${message}</span></div>`;
+            toast.onclick = function () { this.remove(); };
             container.appendChild(toast);
-            setTimeout(() => { removeToast(toast); }, 4000);
-        }
-
-        function removeToast(toast) {
-            toast.style.animation = 'fadeOutRight 0.4s forwards';
-            toast.addEventListener('animationend', () => { toast.remove(); });
+            setTimeout(() => { toast.remove(); }, 4000);
         }
 
         // Şifre Göster/Gizle
@@ -488,7 +384,57 @@
             });
         });
 
-        // REGISTER API ENTEGRASYONU
+        // ==========================================
+        // 1. GOOGLE ILE KAYIT (GİRİŞ İLE AYNI MANTIK)
+        // ==========================================
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "639416586068-gj7rcbg7dd2fc9h0652bijgocuviuseh.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("google_btn_container"),
+                { theme: "outline", size: "large", width: "100%", text: "signup_with" } // Metin: Kayıt Ol
+            );
+        };
+
+        async function handleCredentialResponse(response) {
+            console.log("Google Token:", response.credential);
+            const apiUrl = "https://localhost:7223/api/Auth/google-signin";
+
+            try {
+                const res = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ credential: response.credential })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+
+                    // Token'ı Kaydet
+                    localStorage.setItem('jwtToken', data.token);
+
+                    // Local State Güncelle
+                    const habitQuestState = { user: { isLoggedIn: true, username: "Google Kullanıcısı" } };
+                    localStorage.setItem('habitQuestState', JSON.stringify(habitQuestState));
+
+                    showToast("🎉 Google ile Kayıt Başarılı!", "success");
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                } else {
+                    const err = await res.json();
+                    showToast(err.message || "Google kaydı başarısız.", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucu hatası.", "error");
+            }
+        }
+
+        // ==========================================
+        // 2. NORMAL KAYIT
+        // ==========================================
         document.getElementById('register-auth-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -498,13 +444,11 @@
             btn.disabled = true;
             btn.style.opacity = "0.7";
 
-            //İsim alanını alıyoruz
             const name = document.getElementById('auth-name').value;
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
             const repeatPassword = document.getElementById('auth-repeat-password').value;
 
-            // Validasyonlar
             if (password !== repeatPassword) {
                 showToast("Hata: Şifreler eşleşmiyor.", "error");
                 resetBtn(); return;
@@ -515,24 +459,17 @@
             }
 
             const apiUrl = "https://localhost:7223/api/Auth/register";
-            let response; 
 
             try {
-                response = await fetch(apiUrl, {
+                const response = await fetch(apiUrl, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                        name: name // ARTIK GİRİLEN İSMİ GÖNDERİYORUZ
-                    })
+                    body: JSON.stringify({ email: email, password: password, name: name })
                 });
 
                 if (response.ok) {
                     showToast("🎉 Kayıt Başarılı! Giriş sayfasına yönlendiriliyorsunuz.", "success");
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
+                    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
                 } else {
                     const errorData = await response.json();
                     showToast("Kayıt Başarısız: " + (errorData.message || "Bilinmeyen hata"), "error");
@@ -540,10 +477,9 @@
 
             } catch (error) {
                 console.error(error);
-                showToast("Sunucuya bağlanılamadı. API'nin açık olduğundan emin ol.", "error");
+                showToast("Sunucuya bağlanılamadı.", "error");
             } finally {
-                // Sadece hata durumunda butonu resetle
-                if (!response || !response.ok) resetBtn();
+                if (!response?.ok) resetBtn();
             }
 
             function resetBtn() {

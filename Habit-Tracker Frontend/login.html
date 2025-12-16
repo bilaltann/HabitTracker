@@ -7,8 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <!-- Google Sign-In Kütüphanesi -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <style>
-        
+        /* --- MODERN CSS TASARIMI --- */
         :root {
             --primary-color: #4F46E5;
             --primary-hover: #4338ca;
@@ -35,7 +38,7 @@
             padding: 20px;
         }
 
-        /*TOAST BİLDİRİM CSS*/
+        /* --- TOAST BİLDİRİM --- */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -49,18 +52,15 @@
         .toast {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-left: 6px solid;
             border-radius: 8px;
             padding: 16px 20px;
             min-width: 300px;
-            max-width: 400px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            transition: all 0.3s ease;
+            animation: slideInRight 0.4s forwards;
             cursor: pointer;
         }
 
@@ -86,22 +86,6 @@
             gap: 12px;
         }
 
-        .toast-message {
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        .toast-close {
-            font-size: 18px;
-            color: #aaa;
-            transition: 0.2s;
-        }
-
-        .toast:hover .toast-close {
-            color: #333;
-        }
-
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
@@ -114,50 +98,7 @@
             }
         }
 
-        @keyframes fadeOutRight {
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
-        /*KART TASARIMI*/
-        .background-shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: 0;
-            animation: float 10s infinite ease-in-out;
-        }
-
-        .shape-1 {
-            width: 300px;
-            height: 300px;
-            background: #ff00cc;
-            top: -50px;
-            left: -50px;
-            opacity: 0.4;
-        }
-
-        .shape-2 {
-            width: 400px;
-            height: 400px;
-            background: #33ccff;
-            bottom: -100px;
-            right: -50px;
-            opacity: 0.4;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
+        /* --- KART TASARIMI --- */
         .login-card {
             display: flex;
             background: var(--glass-bg);
@@ -193,23 +134,6 @@
             width: 80%;
             max-width: 300px;
             margin-bottom: 20px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
-            transition: transform 0.3s;
-        }
-
-            .visual-side img:hover {
-                transform: scale(1.05);
-            }
-
-        .visual-side h3 {
-            color: var(--primary-color);
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-
-        .visual-side p {
-            color: var(--text-light);
-            font-size: 14px;
         }
 
         .form-side {
@@ -218,31 +142,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }
-
-        .back-link {
-            text-decoration: none;
-            color: var(--text-light);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            transition: color 0.2s;
-        }
-
-            .back-link:hover {
-                color: var(--primary-color);
-            }
-
-        .header h2 {
-            font-size: 30px;
-            color: var(--text-color);
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            color: var(--text-light);
-            margin-bottom: 30px;
         }
 
         .input-group {
@@ -255,15 +154,12 @@
                 padding: 15px 15px 15px 45px;
                 border: 2px solid #e0e0e0;
                 border-radius: 12px;
-                font-size: 15px;
                 outline: none;
-                transition: all 0.3s;
-                background: #fff;
+                transition: 0.3s;
             }
 
                 .input-group input:focus {
                     border-color: var(--primary-color);
-                    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
                 }
 
             .input-group .material-icons {
@@ -272,7 +168,6 @@
                 top: 50%;
                 transform: translateY(-50%);
                 color: #999;
-                pointer-events: none;
             }
 
         .toggle-password {
@@ -284,21 +179,6 @@
             color: #999;
         }
 
-        .forgot-password {
-            display: block;
-            text-align: right;
-            color: var(--primary-color);
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-
-            .forgot-password:hover {
-                text-decoration: underline;
-            }
-
         .btn-primary {
             width: 100%;
             padding: 15px;
@@ -306,38 +186,14 @@
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            transition: 0.3s;
         }
 
             .btn-primary:hover {
                 background: var(--primary-hover);
                 transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-            }
-
-        .btn-google {
-            width: 100%;
-            padding: 12px;
-            background: white;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 500;
-            color: #555;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: background 0.2s;
-        }
-
-            .btn-google:hover {
-                background: #f9f9f9;
             }
 
         .separator {
@@ -363,200 +219,195 @@
                 margin-left: 10px;
             }
 
-        .footer-text {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-            .footer-text a {
-                color: var(--primary-color);
-                text-decoration: none;
-                font-weight: 600;
-            }
-
-                .footer-text a:hover {
-                    text-decoration: underline;
-                }
-
-        @media (max-width: 480px) {
-            .login-card {
-                border-radius: 0;
-                min-height: 100vh;
-            }
-
-            .form-side {
-                padding: 30px 20px;
-            }
+        /* Google Buton Alanı */
+        #google_btn_container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            height: 44px;
         }
     </style>
 </head>
 <body>
 
-    <div class="background-shape shape-1"></div>
-    <div class="background-shape shape-2"></div>
+    <!-- Arka Plan Şekilleri -->
+    <div style="position:absolute; width:300px; height:300px; background:#ff00cc; top:-50px; left:-50px; border-radius:50%; filter:blur(80px); opacity:0.4; z-index:0;"></div>
+    <div style="position:absolute; width:400px; height:400px; background:#33ccff; bottom:-100px; right:-50px; border-radius:50%; filter:blur(80px); opacity:0.4; z-index:0;"></div>
 
     <div class="login-card">
         <div class="visual-side">
-            <img src="image/habit-tracker.png" alt="Habit Quest Login">
-            <h3>Tekrar Hoş Geldin!</h3>
-            <p>Kaldığın yerden devam et ve<br>hedeflerine bir adım daha yaklaş.</p>
+            <img src="image/habit-tracker.png" alt="Habit Quest Login" onerror="this.style.display='none'">
+            <h3 style="color:var(--primary-color);">Tekrar Hoş Geldin!</h3>
+            <p style="color:#666; font-size:14px;">Kaldığın yerden devam et ve<br>hedeflerine bir adım daha yaklaş.</p>
         </div>
 
         <div class="form-side">
-            
-            <div class="header">
-                <h2>Giriş Yap</h2>
-                <p>Hesabınıza erişmek için bilgilerinizi girin.</p>
+            <div style="margin-bottom:30px;">
+                <h2 style="font-size:30px; color:#333;">Giriş Yap</h2>
+                <p style="color:#666;">Hesabınıza erişmek için bilgilerinizi girin.</p>
             </div>
 
-            <button class="btn-google">
-                <img src="image/google-icon.svg" alt="G" style="width: 20px;">
-                Google ile Devam Et
-            </button>
+            <!-- GOOGLE BUTONU BURAYA GELECEK -->
+            <div id="google_btn_container"></div>
 
             <div class="separator">veya e-posta ile giriş</div>
 
             <form id="login-auth-form">
                 <div class="input-group">
                     <span class="material-icons">mail_outline</span>
-                    <input type="email" id="auth-email" placeholder="E-posta Adresi" required value="">
+                    <input type="email" id="auth-email" placeholder="E-posta Adresi" required>
                 </div>
 
                 <div class="input-group">
                     <span class="material-icons">lock_outline</span>
-                    <input type="password" id="auth-password" placeholder="Şifreniz" required value="">
+                    <input type="password" id="auth-password" placeholder="Şifreniz" required>
                     <span class="material-icons toggle-password">visibility_off</span>
                 </div>
 
-                <a href="forgot_password.html" class="forgot-password">Şifremi Unuttum</a>
+                <div style="text-align:right; margin-bottom:20px;">
+                    <a href="forgot_password.html" style="font-size:13px; color:var(--primary-color); text-decoration:none;">Şifremi Unuttum</a>
+                </div>
 
-                <button type="submit" class="primary-btn btn-primary">Oturum Aç</button>
+                <button type="submit" class="btn-primary">Oturum Aç</button>
             </form>
 
-            <div class="footer-text">
-                Hesabın yok mu? <a href="register.html">Hemen Kayıt Ol</a>
+            <div style="text-align:center; margin-top:25px; font-size:14px; color:#666;">
+                Hesabın yok mu? <a href="register.html" style="color:var(--primary-color); text-decoration:none; font-weight:600;">Hemen Kayıt Ol</a>
             </div>
         </div>
     </div>
 
-</body>
-</html>
+    <!-- TOAST Container -->
+    <div id="toast-container"></div>
 
-<script>
-    
-    function showToast(message, type = 'success') {
-        let container = document.getElementById('toast-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'toast-container';
-            document.body.appendChild(container);
+    <script>
+        // --- TOAST BİLDİRİM FONKSİYONU ---
+        function showToast(message, type = 'success') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div'); container.id = 'toast-container'; document.body.appendChild(container);
+            }
+            const iconName = type === 'success' ? 'check_circle' : 'error';
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<div class="toast-content"><span class="material-icons toast-icon">${iconName}</span><span class="toast-message">${message}</span></div>`;
+            toast.onclick = function () { this.remove(); };
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 4000);
         }
 
-        const iconName = type === 'success' ? 'check_circle' : 'error';
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `
-                <div class="toast-content">
-                    <span class="material-icons toast-icon">${iconName}</span>
-                    <span class="toast-message">${message}</span>
-                </div>
-                <span class="material-icons toast-close" onclick="this.parentElement.remove()">close</span>
-            `;
+        // Şifre Göster/Gizle
+        document.querySelector('.toggle-password').addEventListener('click', function () {
+            const input = this.previousElementSibling;
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.textContent = type === 'password' ? 'visibility_off' : 'visibility';
+        });
 
-        toast.onclick = function () { removeToast(toast); };
-        container.appendChild(toast);
-        setTimeout(() => { removeToast(toast); }, 4000);
-    }
-
-    function removeToast(toast) {
-        toast.style.animation = 'fadeOutRight 0.4s forwards';
-        toast.addEventListener('animationend', () => { toast.remove(); });
-    }
-
-    // Şifre Göster/Gizle
-    document.querySelector('.toggle-password').addEventListener('click', function () {
-        const input = this.previousElementSibling;
-        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-        input.setAttribute('type', type);
-        this.textContent = type === 'password' ? 'visibility_off' : 'visibility';
-    });
-
-    // --- LOGIN API ENTEGRASYONU (GÜVENLİK GÜNCELLEMESİ) ---
-    document.getElementById('login-auth-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const btn = document.querySelector('.btn-primary');
-        const originalText = btn.textContent;
-        btn.textContent = "Kontrol Ediliyor...";
-        btn.disabled = true;
-        btn.style.opacity = "0.7";
-
-        const email = document.getElementById('auth-email').value;
-        const password = document.getElementById('auth-password').value;
-
-        const apiUrl = "https://localhost:7223/api/Auth/login";
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: email, password: password })
+        // ==========================================
+        // 1. GOOGLE ILE GİRİŞ İŞLEMLERİ
+        // ==========================================
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "639416586068-gj7rcbg7dd2fc9h0652bijgocuviuseh.apps.googleusercontent.com",
+                callback: handleCredentialResponse
             });
 
-            if (response.ok) {
-                
-                const data = await response.json();
-                localStorage.setItem('jwtToken', data.token);
+            google.accounts.id.renderButton(
+                document.getElementById("google_btn_container"),
+                { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+            );
+        };
 
-                const habitQuestState = JSON.parse(localStorage.getItem('habitQuestState')) || { user: {} };
-                habitQuestState.user.isLoggedIn = true;
-                habitQuestState.user.email = email;
-                habitQuestState.user.username = email.split('@')[0];
-                localStorage.setItem('habitQuestState', JSON.stringify(habitQuestState));
+        async function handleCredentialResponse(response) {
+            console.log("Google Token:", response.credential);
+            const apiUrl = "https://localhost:7223/api/Auth/google-signin";
 
-                showToast("🎉 Giriş Başarılı! Yönlendiriliyorsunuz...", "success");
+            try {
+                const res = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ credential: response.credential })
+                });
 
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1500);
+                if (res.ok) {
+                    const data = await res.json();
 
-            } else {
-                
+                    // Token'ı Kaydet
+                    localStorage.setItem('jwtToken', data.token);
 
-                let safeErrorMessage = "Giriş işlemi başarısız.";
+                    // Local State Güncelle
+                    const habitQuestState = { user: { isLoggedIn: true, username: "Google Kullanıcısı" } };
+                    localStorage.setItem('habitQuestState', JSON.stringify(habitQuestState));
 
-                if (response.status === 400) {
-                    
-                    safeErrorMessage = "Lütfen bilgilerinizi kontrol ediniz.";
+                    showToast("🎉 Google ile Giriş Başarılı!", "success");
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                } else {
+                    const err = await res.json();
+                    showToast(err.message || "Google girişi başarısız.", "error");
                 }
-                else if (response.status === 401) {
-                    
-                    safeErrorMessage = "E-posta adresi veya şifre hatalı.";
-                }
-                else if (response.status === 404) {
-                    
-                    safeErrorMessage = "Böyle bir hesap bulunamadı.";
-                }
-                else if (response.status >= 500) {
-                    
-                    safeErrorMessage = "Giriş Başarısız";
-                }
-
-                showToast(safeErrorMessage, "error");
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucu hatası.", "error");
             }
+        }
 
-        } catch (error) {
-            
-            console.error("Hata:", error); 
-            showToast("Sunucuya erişilemiyor. İnternet bağlantınızı kontrol edin.", "error");
-        } finally {
-            if (!window.location.href.includes('index.html')) {
+        // ==========================================
+        // 2. NORMAL (E-POSTA) GİRİŞ İŞLEMLERİ
+        // ==========================================
+        document.getElementById('login-auth-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.textContent;
+            btn.textContent = "Kontrol Ediliyor...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            const apiUrl = "https://localhost:7223/api/Auth/login";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, password: password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('jwtToken', data.token);
+
+                    const habitQuestState = {
+                        user: {
+                            isLoggedIn: true,
+                            email: email,
+                            username: email.split('@')[0]
+                        }
+                    };
+                    localStorage.setItem('habitQuestState', JSON.stringify(habitQuestState));
+
+                    showToast("🎉 Giriş Başarılı! Yönlendiriliyorsunuz...", "success");
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+
+                } else {
+                    let message = "Giriş başarısız.";
+                    if (response.status === 400) message = "Bilgileri kontrol ediniz.";
+                    else if (response.status === 401) message = "E-posta veya şifre hatalı.";
+                    else if (response.status === 404) message = "Hesap bulunamadı.";
+
+                    showToast(message, "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucuya erişilemiyor.", "error");
+            } finally {
                 btn.textContent = originalText;
                 btn.disabled = false;
                 btn.style.opacity = "1";
             }
-        }
-    });
-</script>
+        });
+    </script>
+</body>
+</html>

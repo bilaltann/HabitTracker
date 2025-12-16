@@ -128,5 +128,22 @@ namespace HabitTracker.API.Controllers
             }
         }
 
+
+        // GOOGLE İLE GİRİŞ KAPISI
+        [HttpPost("google-signin")]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginDto request)
+        {
+            try
+            {
+                // Service katmanına token'ı gönderiyoruz, o bize JWT (kendi sistemimizin tokenı) dönüyor
+                var token = await _authService.LoginWithGoogleAsync(request.Credential);
+                return Ok(new { token = token });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }
