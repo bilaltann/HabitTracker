@@ -351,8 +351,8 @@
 
             <h4 style="margin:25px 0 15px 10px; color:#999; font-size:11px; text-transform:uppercase; letter-spacing:1px;">Sistem</h4>
 
-            <div class="nav-item" onclick="switchTab('settings', this)">
-                <span class="material-icons">settings</span> <span>Ayarlar</span>
+            <div class="nav-item" onclick="switchTab('logs', this)">
+                <span class="material-icons">bug_report</span> <span>Sistem Logları</span>
             </div>
         </aside>
 
@@ -379,7 +379,7 @@
                         <div class="stat-icon purple" style="background: linear-gradient(135deg, #10B981, #059669);"><span class="material-icons">check_circle</span></div>
                         <div>
                             <h2 style="margin:0;" id="stat-total-habits">-</h2>
-                            <span style="color:#666; font-size:13px;">Alışkanlıklar</span>
+                            <span style="color:#666; font-size:13px;">Toplam Alışkanlıklar</span>
                         </div>
                     </div>
                 </div>
@@ -433,9 +433,18 @@
 
             <section id="tab-users" class="tab-content">
                 <div class="glass-panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h3>Kullanıcılar</h3>
-                        <button class="btn-primary" onclick="loadUsers()">
+                    <!-- Başlık ve Arama Alanı -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; gap: 15px;">
+                        <h3 style="margin:0; white-space:nowrap;">Kullanıcılar</h3>
+
+                        <!-- ARAMA KUTUSU -->
+                        <div style="position: relative; width: 100%; max-width: 300px;">
+                            <span class="material-icons" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #999; font-size: 18px;">search</span>
+                            <input type="text" id="user-search-input" placeholder="İsim veya E-posta ara..."
+                                   style="width: 100%; padding: 8px 10px 8px 35px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 13px;">
+                        </div>
+
+                        <button class="btn-primary" onclick="loadUsers()" title="Listeyi Yenile">
                             <span class="material-icons" style="font-size:16px; vertical-align:middle;">refresh</span>
                         </button>
                     </div>
@@ -446,12 +455,11 @@
                                 <th>Kullanıcı</th>
                                 <th>E-posta</th>
                                 <th>Rol</th>
-                                <th>Durum</th>
                                 <th style="text-align:right;">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody id="user-list-container">
-                            <tr><td colspan="5" style="text-align:center; padding:20px;">Veriler bekleniyor...</td></tr>
+                            <tr><td colspan="4" style="text-align:center; padding:20px;">Veriler bekleniyor...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -472,25 +480,109 @@
                 </div>
             </section>
 
-            <section id="tab-settings" class="tab-content">
-                <div class="glass-panel" style="max-width:500px;">
-                    <h3>Sistem Ayarları</h3>
-                    <form id="admin-settings-form" style="margin-top:20px;">
-                        <label style="display:block; font-weight:600; font-size:13px; margin-bottom:5px;">Site Başlığı</label>
-                        <input type="text" id="site-title" class="form-control" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:15px;">
+            <section id="tab-logs" class="tab-content">
+                <div class="glass-panel">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                        <h3>Sistem Hata Kayıtları</h3>
+                        <button class="btn-primary" onclick="loadSystemLogs()">
+                            <span class="material-icons" style="font-size:16px; vertical-align:middle;">refresh</span> Yenile
+                        </button>
+                    </div>
 
-                        <label style="display:block; font-weight:600; font-size:13px; margin-bottom:5px;">Bakım Modu</label>
-                        <select id="maintenance-mode" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:15px;">
-                            <option value="false">Kapalı (Site Aktif)</option>
-                            <option value="true">Açık (Bakım)</option>
-                        </select>
-                        <button type="submit" class="btn-primary" style="width:100%;">Kaydet</button>
-                    </form>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 150px;">Tarih</th>
+                                <th style="width: 100px;">Seviye</th>
+                                <th>Mesaj</th>
+                                <th style="width: 80px;">Detay</th>
+                            </tr>
+                        </thead>
+                        <tbody id="log-list-container">
+                            <tr><td colspan="4" style="text-align:center; padding:20px;">Loglar yükleniyor...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
         </main>
     </div>
+    <!-- MODAL: KULLANICI DÜZENLEME -->
+    <div class="modal-overlay" id="edit-user-modal">
+        <div class="modal-content glass-panel">
+            <span class="material-icons close-modal" onclick="closeEditUserModal()">close</span>
+            <h2 style="text-align:center; margin-bottom:20px; color:#4F46E5;">Kullanıcı Düzenle</h2>
 
+            <form id="edit-user-form">
+                <input type="hidden" id="edit-user-id">
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="font-size:12px; color:#666;">Ad Soyad</label>
+                    <input type="text" id="edit-user-name" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top:5px;">
+                </div>
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="font-size:12px; color:#666;">E-posta</label>
+                    <input type="email" id="edit-user-email" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top:5px;">
+                </div>
+
+                <div class="input-group" style="margin-bottom: 25px;">
+                    <label style="font-size:12px; color:#666;">Rol</label>
+                    <select id="edit-user-role" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; margin-top:5px;">
+                        <option value="User">User (Standart)</option>
+                        <option value="Admin">Admin (Yönetici)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; padding:12px;">Güncelle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: KULLANICI SİLME ONAYI -->
+    <div class="modal-overlay" id="delete-user-modal">
+        <div class="modal-content glass-panel" style="text-align: center;">
+            <span class="material-icons close-modal" onclick="closeDeleteUserModal()">close</span>
+
+            <div style="width: 60px; height: 60px; background-color: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                <span class="material-icons" style="font-size: 32px; color: #ef4444;">warning</span>
+            </div>
+
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Emin misiniz?</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
+                Bu kullanıcıyı silmek istediğinize emin misiniz?<br>Bu işlem geri alınamaz.
+            </p>
+
+            <input type="hidden" id="delete-user-id-input">
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="closeDeleteUserModal()" class="btn-cancel">Vazgeç</button>
+                <button onclick="confirmDeleteUser()" class="btn-delete-confirm">Evet, Sil</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ARKADAŞLIK BİTİRME ONAYI -->
+    <div class="modal-overlay" id="delete-friendship-modal">
+        <div class="modal-content glass-panel" style="text-align: center;">
+            <span class="material-icons close-modal" onclick="closeDeleteFriendshipModal()">close</span>
+
+            <div style="width: 60px; height: 60px; background-color: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                <span class="material-icons" style="font-size: 32px; color: #ef4444;">warning</span>
+            </div>
+
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Emin misiniz?</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
+                Bu arkadaşlığı bitirmek istediğinize emin misiniz?<br>Bu işlem geri alınamaz.
+            </p>
+
+            <input type="hidden" id="delete-friendship-id-input">
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="closeDeleteFriendshipModal()" class="btn-cancel">Vazgeç</button>
+                <button onclick="confirmDeleteFriendship()" class="btn-delete-confirm">Evet, Sil</button>
+            </div>
+        </div>
+    </div>
     <script type="module" src="js/adminpage.js"></script>
 
 </body>

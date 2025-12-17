@@ -113,8 +113,7 @@ namespace HabitTracker.Application.Services
                 }
 
                 // 5. MAİL GÖNDERME İŞLEMİ (Geri Bildirim)
-                try
-                {
+               
                     string subject = "";
                     string body = "";
 
@@ -141,11 +140,8 @@ namespace HabitTracker.Application.Services
 
                     // Daveti gönderen kişiye (sender.Email) durumu bildir
                     await _mailService.SendEmailAsync(sender.Email, subject, body);
-                }
-                catch
-                {
-                    // Mail gitmezse bile veritabanı işlemleri (kopyalama vs.) yapıldığı için hata fırlatmıyoruz.
-                }
+                
+              
             
       }
 

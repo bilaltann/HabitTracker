@@ -59,45 +59,33 @@ namespace HabitTracker.API.Controllers
                 return BadRequest("URL'deki ID ile gönderilen verideki ID uyuşmuyor.");
             }
 
-            try
-            {
+            
                 await _habitService.UpdateHabitAsync(request);
                 return Ok(new { message = "Alışkanlık güncellendi." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            
+            
         }
 
         // 4. SİLME
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
+           
                 await _habitService.DeleteHabitAsync(id);
                 return Ok(new { message = "Alışkanlık silindi." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            
+          
         }
 
         // 5. İŞARETLEME (Tamamlandı / Geri Al)
         [HttpPost("toggle")]
         public async Task<IActionResult> ToggleCompletion([FromBody] ToggleHabitRequestDTO request)
         {
-            try
-            {
+           
                 await _habitService.ToggleHabitCompletionAsync(request.HabitId, request.Date);
                 return Ok(new { message = "İşlem başarılı." });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            
+            
         }
 
 

@@ -14,5 +14,8 @@ namespace HabitTracker.Application.Interfaces.Repositories
 
         // kullanıcının o gün yaptığı tüm işlemleri getirir(listeleme ekranı için)
         Task<IEnumerable<HabitLog>> GetLogsByUserIdAndDateAsync(int userId, DateTime date);
+
+        // --- YENİ EKLENEN: Son aktiviteleri getir ---
+        Task<IEnumerable<HabitLog>> GetRecentLogsWithDetailsAsync(int count);
     }
 }

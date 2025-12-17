@@ -22,18 +22,11 @@ namespace HabitTracker.API.Controllers
         [HttpPost("send-request")]
         public async Task<IActionResult> SendRequest([FromBody] SendFriendRequestDto dto)
         {
-            try
-            {
+           
                 await _friendService.SendRequestAsync(GetUserId(), dto.TargetEmail);
                 return Ok(new { message = "İstek gönderildi ve kullanıcıya mail atıldı." });
-            }
-            catch (Exception ex)
-            {
-                // ESKİSİ: return BadRequest(ex.Message); -> Bu düz yazı döner, frontend'i bozar.
-
-                // YENİSİ: JSON Objesi döner -> Frontend bunu sever.
-                return BadRequest(new { message = ex.Message });
-            }
+            
+          
         }
 
         [HttpPost("respond")]

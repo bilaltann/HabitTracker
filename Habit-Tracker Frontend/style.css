@@ -769,3 +769,16 @@ body {
     .btn-delete-all .material-icons {
         font-size: 18px; 
     }
+/* Kırmızı Badge (Admin için) */
+.badge-danger {
+    background-color: #fee2e2; /* Açık kırmızı arka plan */
+    color: #991b1b; /* Koyu kırmızı yazı */
+    border: 1px solid #fecaca;
+}
+
+/* Yeşil Badge (User için) */
+.badge-success {
+    background-color: #dcfce7; /* Açık yeşil arka plan */
+    color: #166534; /* Koyu yeşil yazı */
+    border: 1px solid #bbf7d0;
+}

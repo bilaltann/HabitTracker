@@ -22,6 +22,7 @@ namespace HabitTracker.Infrastructure.Contexts
 
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<HabitInvitation> HabitInvitations { get; set; }
+        public DbSet<SystemLog> SystemLogs { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

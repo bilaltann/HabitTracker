@@ -9,6 +9,7 @@ namespace HabitTracker.Domain.Entities
 {
     public class User : BaseEntity
     {
+        public string Role { get; set; } = "User";
         public string Email { get; set; }
         public string Name { get; set; }
         public byte[] PasswordHash { get; set; } // Şifreyi asla plain-text (string) tutmayın!

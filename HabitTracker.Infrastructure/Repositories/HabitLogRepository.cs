@@ -31,5 +31,16 @@ namespace HabitTracker.Infrastructure.Repositories
                  .Where(l => l.Habit.UserId == userId && l.CompletedDate.Date == date.Date)
                  .ToListAsync();
         }
+
+        public async Task<IEnumerable<HabitLog>> GetRecentLogsWithDetailsAsync(int count)
+        {
+            // HabitLogs -> Habit -> User tablosuna erişiyoruz (Include zinciri)
+            return await _context.HabitLogs
+                .Include(l => l.Habit)
+                    .ThenInclude(h => h.User) // Alışkanlığın sahibi olan kullanıcıyı al
+                .OrderByDescending(l => l.CreatedDate) // En son eklenen en başta
+                .Take(count) // Sadece son X adedi getir (Örn: 10)
+                .ToListAsync();
+        }
     }
 }

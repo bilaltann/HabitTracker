@@ -2,6 +2,8 @@ import { showToast } from './utils.js';
 
 const API_BASE_URL = "https://localhost:7223/api";
 
+// TÃ¼m kullanÄ±cÄ±larÄ± hafÄ±zada tutmak iÃ§in global deÄŸiÅŸken
+let allUsersData = [];
 
 function getHeaders() {
     const token = localStorage.getItem("jwtToken");
@@ -11,123 +13,193 @@ function getHeaders() {
     };
 }
 
-
+// ==========================================
+// 1. SAYFA GEÃ‡Ä°ÅžLERÄ° VE BAÅžLANGIÃ‡
+// ==========================================
 window.switchTab = function (tabName, element) {
-    // Menüdeki aktifliði deðiþtir
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
 
-    // Ýçerik alanýný deðiþtir
     document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + tabName).classList.add('active');
+    const targetTab = document.getElementById('tab-' + tabName);
+    if (targetTab) targetTab.classList.add('active');
 
-    // Verileri sadece ihtiyaç olunca yükle
-    if (tabName === 'dashboard') loadStats();
-    if (tabName === 'users') loadUsers();
-    if (tabName === 'friendships') loadFriendships();
-}
-
-// DASHBOARD ÝSTATÝSTÝKLERÝ 
-window.loadStats = async function () {
-    // Mevcut switchTab fonksiyonunu güncelle:
     if (tabName === 'dashboard') {
         loadStats();
-        loadActivities();     // <-- EKLE
-        loadSystemHealth();   // <-- EKLE
+        loadActivities();
+        loadSystemHealth();
+    }
+    if (tabName === 'users') loadUsers();
+    if (tabName === 'friendships') loadFriendships();
+    if (tabName === 'logs') loadSystemLogs(); // <-- EKLENDÄ°
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadStats();
+    loadActivities();
+    loadSystemHealth();
+
+    // Ã‡Ä±kÄ±ÅŸ Butonu
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('jwtToken');
+            window.location.href = 'admin_login.html';
+        });
     }
 
-    // Mevcut DOMContentLoaded kýsmýný güncelle:
-    document.addEventListener('DOMContentLoaded', () => {
-        loadStats();
-        loadActivities();     // <-- EKLE
-        loadSystemHealth();   // <-- EKLE
-    });
-    try {
-        const response = await fetch(`${API_BASE_URL}/Admin/stats`, { headers: getHeaders() });
-        if (!response.ok) throw new Error("Veri alýnamadý");
+    // DÃ¼zenleme Formu
+    const editForm = document.getElementById('edit-user-form');
+    if (editForm) {
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-user-id').value;
+            const name = document.getElementById('edit-user-name').value;
+            const email = document.getElementById('edit-user-email').value;
+            const role = document.getElementById('edit-user-role').value;
+            const btn = editForm.querySelector('button[type="submit"]');
+            const originalText = btn.textContent;
 
-        const data = await response.json();
+            btn.textContent = "GÃ¼ncelleniyor...";
+            btn.disabled = true;
 
-        // Verileri ekrana bas
-        document.getElementById('stat-total-users').textContent = data.totalUsers || 0;
-        document.getElementById('stat-total-friendships').textContent = data.totalFriendships || 0;
-        document.getElementById('stat-total-habits').textContent = data.totalHabits || 0;
+            try {
+                const response = await fetch(`${API_BASE_URL}/Admin/users/${id}`, {
+                    method: 'PUT',
+                    headers: getHeaders(),
+                    body: JSON.stringify({ id: parseInt(id), name, email, role })
+                });
 
-    } catch (error) {
-        console.warn("Ýstatistikler yüklenemedi: Backend kapalý olabilir.");
+                if (response.ok) {
+                    showToast("KullanÄ±cÄ± gÃ¼ncellendi", "success");
+                    closeEditUserModal();
+                    loadUsers();
+                } else {
+                    const err = await response.json();
+                    showToast(err.message || "GÃ¼ncelleme baÅŸarÄ±sÄ±z", "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucu hatasÄ±", "error");
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        });
     }
-}
 
-//KULLANICI LÝSTESÝ
+    // --- ARAMA KUTUSU DÄ°NLEYÄ°CÄ°SÄ° (YENÄ° EKLENDÄ°) ---
+    const searchInput = document.getElementById('user-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+
+            // Global veriden filtrele
+            const filteredUsers = allUsersData.filter(user => {
+                const name = (user.name || "").toLowerCase();
+                const email = (user.email || "").toLowerCase();
+                return name.includes(searchTerm) || email.includes(searchTerm);
+            });
+
+            // FiltrelenmiÅŸ veriyi Ã§iz
+            renderUsersTable(filteredUsers);
+        });
+    }
+});
+
+// ==========================================
+// 2. KULLANICI LÄ°STESÄ° VE FÄ°LTRELEME
+// ==========================================
+
+// Backend'den veriyi Ã§eken fonksiyon
 window.loadUsers = async function () {
     const container = document.getElementById('user-list-container');
-    container.innerHTML = '<tr><td colspan="5" style="text-align:center;">Yükleniyor...</td></tr>';
+    if (!container) return;
+
+    container.innerHTML = '<tr><td colspan="4" style="text-align:center;">YÃ¼kleniyor...</td></tr>';
 
     try {
         const response = await fetch(`${API_BASE_URL}/Admin/users`, { headers: getHeaders() });
-        if (!response.ok) throw new Error("Hata oluþtu");
+        if (!response.ok) throw new Error("Hata oluÅŸtu");
 
-        const users = await response.json();
-        container.innerHTML = "";
+        // Veriyi global deÄŸiÅŸkene at
+        allUsersData = await response.json();
 
-        if (users.length === 0) {
-            container.innerHTML = '<tr><td colspan="5" style="text-align:center;">Kayýt bulunamadý.</td></tr>';
-            return;
-        }
-
-        users.forEach(user => {
-            const badgeClass = user.isActive ? 'badge-success' : 'badge-danger';
-            const statusText = user.isActive ? 'Aktif' : 'Pasif';
-            const userRole = user.role || 'User';
-            const userName = user.name || 'Ýsimsiz';
-
-            const row = `
-                <tr>
-                    <td>
-                        <div style="display:flex; align-items:center;">
-                            <div class="avatar-circle">${userName.charAt(0).toUpperCase()}</div>
-                            <strong>${userName}</strong>
-                        </div>
-                    </td>
-                    <td>${user.email}</td>
-                    <td>${userRole}</td>
-                    <td><span class="badge ${badgeClass}">${statusText}</span></td>
-                    <td style="text-align:right;">
-                        <button class="btn-icon btn-edit" onclick="editUser(${user.id})"><span class="material-icons" style="font-size:18px;">edit</span></button>
-                        <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})"><span class="material-icons" style="font-size:18px;">delete</span></button>
-                    </td>
-                </tr>
-            `;
-            container.innerHTML += row;
-        });
+        // Tabloyu Ã§iz
+        renderUsersTable(allUsersData);
 
     } catch (error) {
-        container.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Baðlantý Hatasý: ${error.message}</td></tr>`;
-        showToast("Kullanýcý listesi alýnamadý", "error");
+        container.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">BaÄŸlantÄ± HatasÄ±: ${error.message}</td></tr>`;
+        showToast("KullanÄ±cÄ± listesi alÄ±namadÄ±", "error");
     }
+};
+
+// Tabloyu HTML'e basan fonksiyon (Arama yapÄ±nca burasÄ± Ã§aÄŸrÄ±lÄ±r)
+function renderUsersTable(users) {
+    const container = document.getElementById('user-list-container');
+    container.innerHTML = "";
+
+    if (users.length === 0) {
+        container.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">KayÄ±t bulunamadÄ±.</td></tr>';
+        return;
+    }
+
+    users.forEach(user => {
+        const userRole = user.role ? user.role.toString() : 'User';
+        const userName = user.name || 'Ä°simsiz';
+
+        let badgeClass = 'badge-success';
+        if (userRole.toLowerCase() === 'admin') {
+            badgeClass = 'badge-danger';
+        }
+
+        const row = `
+            <tr>
+                <td>
+                    <div style="display:flex; align-items:center;">
+                        <div class="avatar-circle">${userName.charAt(0).toUpperCase()}</div>
+                        <strong>${userName}</strong>
+                    </div>
+                </td>
+                <td>${user.email}</td>
+                <td><span class="badge ${badgeClass}">${userRole}</span></td>
+                <td style="text-align:right;">
+                    <button class="btn-icon btn-edit" onclick="openEditUserModal(${user.id}, '${userName}', '${user.email}', '${userRole}')">
+                        <span class="material-icons" style="font-size:18px;">edit</span>
+                    </button>
+                    <button class="btn-icon btn-delete" onclick="openDeleteUserModal(${user.id})">
+                        <span class="material-icons" style="font-size:18px;">delete</span>
+                    </button>
+                </td>
+            </tr>`;
+        container.innerHTML += row;
+    });
 }
 
-//ARKADAÞLIK LÝSTESÝ
+// ==========================================
+// 3. ARKADAÅžLIK LÄ°STESÄ°
+// ==========================================
 window.loadFriendships = async function () {
     const container = document.getElementById('friendship-list-container');
-    container.innerHTML = '<div style="text-align:center;">Yükleniyor...</div>';
+    if (!container) return;
+
+    container.innerHTML = '<div style="text-align:center;">YÃ¼kleniyor...</div>';
 
     try {
         const response = await fetch(`${API_BASE_URL}/Admin/friendships`, { headers: getHeaders() });
-        if (!response.ok) throw new Error("Hata oluþtu");
+        if (!response.ok) throw new Error("Hata oluÅŸtu");
 
         const friendships = await response.json();
         container.innerHTML = "";
 
         if (friendships.length === 0) {
-            container.innerHTML = '<div style="text-align:center; color:#666;">Kayýt yok.</div>';
+            container.innerHTML = '<div style="text-align:center; color:#666;">KayÄ±t yok.</div>';
             return;
         }
 
         friendships.forEach(f => {
             let badgeClass = 'badge-warning';
             let iconColor = '#f59e0b';
-
             if (f.status === 'Accepted') { badgeClass = 'badge-success'; iconColor = '#10b981'; }
             if (f.status === 'Rejected') { badgeClass = 'badge-danger'; iconColor = '#ef4444'; }
 
@@ -135,31 +207,158 @@ window.loadFriendships = async function () {
                 <div class="friendship-card">
                     <div>
                         <div style="display:flex; align-items:center; gap:10px; font-weight:600; color:#333;">
-                            <span>${f.user1Name}</span>
+                            <span>${f.requesterName}</span>
                             <span class="material-icons" style="color:${iconColor}; font-size:18px;">arrow_forward</span>
-                            <span>${f.user2Name}</span>
+                            <span>${f.addresseeName}</span>
                         </div>
-                        <div style="font-size:12px; color:#999; margin-top:5px;">ID: ${f.id} • ${new Date(f.createdAt).toLocaleDateString()}</div>
+                        <div style="font-size:12px; color:#999; margin-top:5px;">ID: ${f.id} â€¢ ${new Date(f.createdDate).toLocaleDateString()}</div>
                     </div>
                     <div style="text-align:right; display:flex; flex-direction:column; gap:5px; align-items:flex-end;">
                         <span class="badge ${badgeClass}">${f.status}</span>
-                        <button class="btn-icon btn-delete" onclick="deleteFriendship(${f.id})" style="width:28px; height:28px;">
+                        <button class="btn-icon btn-delete" onclick="openDeleteFriendshipModal(${f.id})" style="width:28px; height:28px;">
                             <span class="material-icons" style="font-size:16px;">close</span>
                         </button>
                     </div>
-                </div>
-            `;
+                </div>`;
             container.innerHTML += card;
         });
 
     } catch (error) {
         container.innerHTML = `<div style="text-align:center; color:red;">Hata: ${error.message}</div>`;
     }
-}
+};
 
-//SÝLME / DÜZENLEME
-window.deleteUser = async function (id) {
-    if (!confirm("Bu kullanýcý silinecek. Emin misiniz?")) return;
+// ==========================================
+// 4. DASHBOARD Ä°STATÄ°STÄ°KLERÄ°
+// ==========================================
+window.loadStats = async function () {
+    try {
+        // 1. Sadece KullanÄ±cÄ± Listesi Endpoint'ine gidiyoruz
+        const response = await fetch(`${API_BASE_URL}/Admin/users`, { headers: getHeaders() });
+        const response2 = await fetch(`${API_BASE_URL}/Admin/habits`, { headers: getHeaders() });
+
+        if (!response.ok || !response2.ok) throw new Error("Veri alÄ±namadÄ±");
+
+        // 2. Backend bir LÄ°STE ([...]) dÃ¶nÃ¼yor
+        const usersList = await response.json();
+        const habitsList = await response2.json();
+        // 3. HTML elemanÄ±nÄ± seÃ§
+        const elUser = document.getElementById('stat-total-users');
+        const elHabit = document.getElementById('stat-total-habits');
+
+
+        // 4. Listenin uzunluÄŸunu (.length) yazdÄ±r
+        if (elUser) {
+            elUser.textContent = usersList.length; // Toplam kullanÄ±cÄ± sayÄ±sÄ±
+        }
+
+        if (elHabit) {
+            elHabit.textContent = habitsList.length; // Toplam akÄ±ÅŸkanlÄ±k sayÄ±sÄ±
+        }
+
+
+    } catch (error) {
+        console.warn("Ä°statistikler yÃ¼klenemedi:", error);
+    }
+};
+window.loadActivities = async function () {
+    const container = document.getElementById('activity-list');
+    if (!container) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/Admin/activities`, { headers: getHeaders() });
+        if (!response.ok) throw new Error("Veri Ã§ekilemedi");
+        const activities = await response.json();
+
+        container.innerHTML = "";
+        if (activities.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>HenÃ¼z aktivite kaydÄ± yok.</p></div>';
+            return;
+        }
+
+        activities.forEach(act => {
+            let colorClass = 'bg-blue';
+            let iconName = 'info';
+            if (act.type === 'success') { colorClass = 'bg-green'; iconName = 'check_circle'; }
+            if (act.type === 'warning') { colorClass = 'bg-orange'; iconName = 'warning'; }
+
+            container.innerHTML += `
+                <div class="activity-item">
+                    <div class="act-icon ${colorClass}"><span class="material-icons">${iconName}</span></div>
+                    <div class="act-details"><h4>${act.title}</h4><p>${act.description}</p></div>
+                    <span class="act-time">${new Date(act.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>`;
+        });
+    } catch (error) {
+        container.innerHTML = `<div class="empty-state"><p>Verilere ulaÅŸÄ±lamadÄ±.</p></div>`;
+    }
+};
+
+window.loadSystemHealth = async function () {
+    try {
+        const response = await fetch(`${API_BASE_URL}/Admin/system-health`, { headers: getHeaders() });
+        if (response.ok) {
+            const data = await response.json();
+
+            const cpuEl = document.getElementById('cpu-val');
+            const ramEl = document.getElementById('ram-val');
+            const cpuBar = document.getElementById('cpu-bar');
+            const ramBar = document.getElementById('ram-bar');
+            const dbLabel = document.getElementById('db-status');
+
+            if (cpuEl) cpuEl.textContent = data.cpu + '%';
+            if (cpuBar) cpuBar.style.width = data.cpu + '%';
+            if (ramEl) ramEl.textContent = data.ram + '%';
+            if (ramBar) ramBar.style.width = data.ram + '%';
+
+            if (dbLabel) {
+                if (data.dbStatus) {
+                    dbLabel.textContent = "BaÄŸlÄ± (Online)";
+                    dbLabel.className = "status-badge status-ok";
+                } else {
+                    dbLabel.textContent = "BaÄŸlantÄ± HatasÄ±";
+                    dbLabel.className = "status-badge status-err";
+                }
+            }
+        }
+    } catch (e) { console.warn("Sistem durumu Ã§ekilemedi."); }
+};
+
+
+// ==========================================
+// 5. MODAL VE FORM Ä°ÅžLEMLERÄ°
+// ==========================================
+
+// -- KULLANICI DÃœZENLEME --
+window.openEditUserModal = function (id, name, email, role) {
+    document.getElementById('edit-user-id').value = id;
+    document.getElementById('edit-user-name').value = name;
+    document.getElementById('edit-user-email').value = email;
+    document.getElementById('edit-user-role').value = role;
+    document.getElementById('edit-user-modal').classList.add('active');
+};
+
+window.closeEditUserModal = function () {
+    document.getElementById('edit-user-modal').classList.remove('active');
+};
+
+// -- KULLANICI SÄ°LME --
+window.openDeleteUserModal = function (id) {
+    document.getElementById('delete-user-id-input').value = id;
+    document.getElementById('delete-user-modal').classList.add('active');
+};
+
+window.closeDeleteUserModal = function () {
+    document.getElementById('delete-user-modal').classList.remove('active');
+};
+
+window.confirmDeleteUser = async function () {
+    const id = document.getElementById('delete-user-id-input').value;
+    const btn = document.querySelector('#delete-user-modal .btn-delete-confirm');
+    const originalText = btn.innerText;
+
+    btn.innerText = "Siliniyor...";
+    btn.disabled = true;
 
     try {
         const res = await fetch(`${API_BASE_URL}/Admin/users/${id}`, {
@@ -167,16 +366,37 @@ window.deleteUser = async function (id) {
         });
 
         if (res.ok) {
-            showToast("Kullanýcý silindi", "success");
+            showToast("KullanÄ±cÄ± silindi", "success");
+            closeDeleteUserModal();
             loadUsers();
         } else {
-            showToast("Silinemedi", "error");
+            const err = await res.json();
+            showToast(err.message || "Silinemedi", "error");
         }
-    } catch (e) { showToast("Sunucu hatasý", "error"); }
+    } catch (e) { showToast("Sunucu hatasÄ±", "error"); }
+    finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+};
+
+// -- ARKADAÅžLIK SÄ°LME --
+window.openDeleteFriendshipModal = function (id) {
+    document.getElementById('delete-friendship-id-input').value = id;
+    document.getElementById('delete-friendship-modal').classList.add('active');
 }
 
-window.deleteFriendship = async function (id) {
-    if (!confirm("Arkadaþlýk silinecek. Onaylýyor musunuz?")) return;
+window.closeDeleteFriendshipModal = function () {
+    document.getElementById('delete-friendship-modal').classList.remove('active');
+}
+
+window.confirmDeleteFriendship = async function () {
+    const id = document.getElementById('delete-friendship-id-input').value;
+    const btn = document.querySelector('#delete-friendship-modal .btn-delete-confirm');
+    const originalText = btn.innerText;
+
+    btn.innerText = "Siliniyor...";
+    btn.disabled = true;
 
     try {
         const res = await fetch(`${API_BASE_URL}/Admin/friendships/${id}`, {
@@ -184,115 +404,70 @@ window.deleteFriendship = async function (id) {
         });
 
         if (res.ok) {
-            showToast("Arkadaþlýk silindi", "success");
+            showToast("ArkadaÅŸlÄ±k silindi", "success");
+            closeDeleteFriendshipModal();
             loadFriendships();
         } else {
-            showToast("Hata oluþtu", "error");
+            const err = await res.json();
+            showToast(err.message || "Hata oluÅŸtu", "error");
         }
-    } catch (e) { showToast("Sunucu hatasý", "error"); }
-}
+    } catch (e) { showToast("Sunucu hatasÄ±", "error"); }
+    finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+};
 
-window.editUser = function (id) {
-    alert("Düzenleme modalý backend entegrasyonundan sonra eklenebilir. ID: " + id);
-}
+// ==========================================
+// 6. SÄ°STEM LOGLARI
+// ==========================================
+window.loadSystemLogs = async function () {
+    const container = document.getElementById('log-list-container');
+    if (!container) return;
 
-//BAÞLANGIÇ
-document.addEventListener('DOMContentLoaded', () => {
-    loadStats(); 
-});
-
-// Çýkýþ Butonu
-const logoutBtn = document.getElementById('logout-btn');
-if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('jwtToken');
-        window.location.href = 'admin_login.html';
-    });
-}
-
-
-
-
-window.loadActivities = async function () {
-    const container = document.getElementById('activity-list');
+    container.innerHTML = '<tr><td colspan="4" style="text-align:center;">YÃ¼kleniyor...</td></tr>';
 
     try {
-        
-        const response = await fetch(`${API_BASE_URL}/Admin/activities`, { headers: getHeaders() });
+        const response = await fetch(`${API_BASE_URL}/Admin/logs`, { headers: getHeaders() });
+        if (!response.ok) throw new Error("Hata");
 
-        if (!response.ok) throw new Error("Veri çekilemedi");
-        const activities = await response.json();
+        const logs = await response.json();
+        container.innerHTML = "";
 
-        container.innerHTML = ""; 
-
-        if (activities.length === 0) {
-            container.innerHTML = '<div class="empty-state"><p>Henüz aktivite kaydý yok.</p></div>';
+        if (logs.length === 0) {
+            container.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#999;">Sistem temiz! HiÃ§ hata kaydÄ± yok. ðŸŽ‰</td></tr>';
             return;
         }
 
-        activities.forEach(act => {
-            
-            let colorClass = 'bg-blue';
-            let iconName = 'info';
+        logs.forEach(log => {
+            const dateStr = new Date(log.createdDate).toLocaleString('tr-TR');
 
-            if (act.type === 'success') { colorClass = 'bg-green'; iconName = 'check_circle'; }
-            if (act.type === 'warning') { colorClass = 'bg-orange'; iconName = 'warning'; }
+            // Hata seviyesine gÃ¶re renk
+            let badgeClass = 'badge-success'; // Info
+            if (log.level === 'Error') badgeClass = 'badge-danger';
+            if (log.level === 'Warning') badgeClass = 'badge-warning';
 
-            const html = `
-                <div class="activity-item">
-                    <div class="act-icon ${colorClass}">
-                        <span class="material-icons">${iconName}</span>
-                    </div>
-                    <div class="act-details">
-                        <h4>${act.title}</h4>
-                        <p>${act.description}</p>
-                    </div>
-                    <span class="act-time">${new Date(act.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                </div>
-            `;
-            container.innerHTML += html;
+            const row = `
+                <tr>
+                    <td style="font-size:12px; color:#666;">${dateStr}</td>
+                    <td><span class="badge ${badgeClass}">${log.level}</span></td>
+                    <td style="font-size:13px; font-family:monospace; color:#333;">${log.message.substring(0, 80)}...</td>
+                    <td style="text-align:center;">
+                        <button class="btn-icon" onclick="showLogDetails('${encodeURIComponent(log.stackTrace || 'Detay yok')}')" style="background:#e0e7ff; color:#4F46E5;">
+                            <span class="material-icons" style="font-size:18px;">visibility</span>
+                        </button>
+                    </td>
+                </tr>`;
+            container.innerHTML += row;
         });
 
     } catch (error) {
-        
-        container.innerHTML = `
-            <div class="empty-state">
-                <span class="material-icons" style="color:#ccc;">cloud_off</span>
-                <p>Verilere ulaþýlamadý.</p>
-                <small style="color:#ccc; font-size:11px;">Backend baðlantýsýný kontrol edin.</small>
-            </div>`;
+        container.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Loglar alÄ±namadÄ±.</td></tr>`;
     }
 }
 
-
-window.loadSystemHealth = async function () {
-    try {
-        
-        const response = await fetch(`${API_BASE_URL}/Admin/system-health`, { headers: getHeaders() });
-
-        if (response.ok) {
-            const data = await response.json();
-
-            // Veri gelirse çubuklarý güncelle
-            document.getElementById('cpu-val').textContent = data.cpu + '%';
-            document.getElementById('cpu-bar').style.width = data.cpu + '%';
-
-            document.getElementById('ram-val').textContent = data.ram + '%';
-            document.getElementById('ram-bar').style.width = data.ram + '%';
-
-            const dbLabel = document.getElementById('db-status');
-            if (data.dbStatus) {
-                dbLabel.textContent = "Baðlý (Online)";
-                dbLabel.className = "status-badge status-ok";
-            } else {
-                dbLabel.textContent = "Baðlantý Hatasý";
-                dbLabel.className = "status-badge status-err";
-            }
-        }
-    } catch (e) {
-        
-        console.warn("Sistem durumu çekilemedi.");
-        document.getElementById('db-status').textContent = "Bilinmiyor";
-        document.getElementById('db-status').className = "status-badge status-err";
-    }
+// Log DetayÄ±nÄ± Alert ile GÃ¶ster (Ä°stersen Modal yapabilirsin)
+window.showLogDetails = function (encodedTrace) {
+    const trace = decodeURIComponent(encodedTrace);
+    alert("HATA DETAYI:\n\n" + trace);
 }

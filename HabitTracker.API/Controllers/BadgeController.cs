@@ -23,8 +23,8 @@ namespace HabitTracker.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateBadgeDto request)
         {
-            try
-            {
+            
+            
                 string dbPathString = "";
 
                 if (request.ImageFile != null && request.ImageFile.Length > 0)
@@ -57,11 +57,8 @@ namespace HabitTracker.API.Controllers
 
                 var result = await _badgeService.CreateBadgeAsync(request, dbPathString);
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Sunucu Hatası: {ex.Message}");
-            }
+            
+          
         }
         [HttpGet]
         public async Task<IActionResult> GetAll()

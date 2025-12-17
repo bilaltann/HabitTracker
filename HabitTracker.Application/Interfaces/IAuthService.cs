@@ -27,5 +27,9 @@ namespace HabitTracker.Application.Interfaces
 
         Task<string> LoginWithGoogleAsync(string credential);
 
+        // Bunu ekle:
+        Task DeleteAccountAsync(int userId);
+
+
     }
 }

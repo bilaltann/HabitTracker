@@ -193,8 +193,7 @@ namespace HabitTracker.Application.Services
             
                 // 1. Google Token'ını Doğrula
                 GoogleJsonWebSignature.Payload payload;
-                try
-                {
+                
                     var settings = new GoogleJsonWebSignature.ValidationSettings()
                     {
                         // appsettings.json'dan ClientId'yi alıyoruz
@@ -202,11 +201,8 @@ namespace HabitTracker.Application.Services
                     };
 
                     payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
-                }
-                catch (InvalidJwtException)
-                {
-                    throw new Exception("Google token doğrulaması başarısız.");
-                }
+                
+            
 
                 // 2. Kullanıcı Veritabanında Var mı Kontrol Et (Repository ile)
                 var users = await _userRepository.GetAllAsync();
@@ -239,6 +235,20 @@ namespace HabitTracker.Application.Services
 
                 return token;
             
+        }
+        public async Task DeleteAccountAsync(int userId)
+        {
+            // 1. Kullanıcı var mı?
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null) throw new Exception("Kullanıcı bulunamadı.");
+
+            // 2. İlişkili verilerin silinmesi (Cascade Delete)
+            // Eğer veritabanında Cascade Delete açıksa (EF Core default davranışı),
+            // kullanıcıyı sildiğinde ona ait Habit, HabitLog, Friendship vb. her şey otomatik silinir.
+            // Eğer Cascade kapalıysa (Restrict ise) önce onları manuel silmen gerekir.
+            // Biz varsayılan (Cascade) olduğunu varsayarak direkt siliyoruz:
+
+            await _userRepository.DeleteAsync(userId);
         }
 
 
@@ -273,16 +283,14 @@ namespace HabitTracker.Application.Services
         private string CreateToken(User user)
         {
             var claims = new List<Claim>
-    {
-        // 1. ID'yi ekle
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         
-        // 2. Email'i ekle (SENİN KODUNDA BU EKSİKTİ)
-        new Claim(ClaimTypes.Email, user.Email ?? ""), 
+                new Claim(ClaimTypes.Email, user.Email ?? ""), 
 
-        // 3. İsmi ekle (Burada sorun yok, doğru yapmışsın)
-        new Claim(ClaimTypes.Name, user.Name ?? "")
-    };
+                new Claim(ClaimTypes.Name, user.Name ?? ""),
+                new Claim(ClaimTypes.Role, user.Role)
+         };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -300,6 +308,6 @@ namespace HabitTracker.Application.Services
             return tokenHandler.WriteToken(token);
         }
 
-      
+       
     }
 }

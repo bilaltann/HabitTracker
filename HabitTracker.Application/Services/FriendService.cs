@@ -116,15 +116,10 @@ namespace HabitTracker.Application.Services
         ";
 
                 // Mail Gönderme (Hata olursa akış bozulmasın diye Try-Catch)
-                try
-                {
-                    await _mailService.SendEmailAsync(friendship.Requester.Email, subject, body);
-                }
-                catch (Exception)
-                {
-                    // Mail gönderilemezse sessizce devam et, veritabanı işlemi zaten yapıldı.
-                    // Buraya loglama eklenebilir.
-                }
+                
+                await _mailService.SendEmailAsync(friendship.Requester.Email, subject, body);
+                
+              
             }
         }
 
