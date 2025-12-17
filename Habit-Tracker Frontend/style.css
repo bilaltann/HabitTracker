@@ -598,21 +598,21 @@ body {
     transition: transform 0.2s ease;
 }
 
-    /* Alanın üzerine gelince hafifçe yükselsin (İsteğe bağlı, hoş durur) */
+    
     .filter-container:hover {
         transform: translateY(-2px);
-        border-color: #c7d2fe; /* Kenarlık rengi biraz koyulaşır */
+        border-color: #c7d2fe; 
     }
 
-    /* Filtre Alanındaki Input ve Select Stilleri */
+    /* Filtre  */
     .filter-container input,
     .filter-container select {
         width: 100%;
         padding: 12px 15px;
-        /* Inputların kenarlığı daha sade kalsın ki kutuyla yarışmasın */
+        
         border: 1px solid #e5e7eb;
         border-radius: 10px;
-        background-color: #f9fafb; /* Çok hafif gri zemin */
+        background-color: #f9fafb; 
         color: #374151;
         font-size: 14px;
         font-weight: 500;
@@ -620,7 +620,7 @@ body {
         transition: all 0.2s ease;
     }
 
-        /* Tıklayınca (Focus) */
+        
         .filter-container input:focus,
         .filter-container select:focus {
             background-color: #fff;
@@ -628,7 +628,7 @@ body {
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
         }
 
-    /* Arama ikonu varsa onun rengini de güncelle (Opsiyonel) */
+    
     .filter-container .material-icons {
         color: var(--primary-color) !important;
     }
