@@ -45,9 +45,13 @@
                     <li class="nav-item active" data-page="home">
                         <span class="material-icons">dashboard</span> Anasayfa
                     </li>
+
+                     
                     <li class="nav-item" data-page="requests">
                         <span class="material-icons">notifications_active</span> İstekler
                     </li>
+
+
                     <li class="nav-item" data-page="friends">
                         <span class="material-icons">people</span> Arkadaşlar
                     </li>
@@ -303,7 +307,7 @@
                 Bu alışkanlığı silmek istediğinize emin misiniz?<br>Bu işlem geri alınamaz.
             </p>
 
-            
+
             <input type="hidden" id="delete-habit-id-input">
 
             <div style="display: flex; gap: 10px; justify-content: center;">
@@ -313,6 +317,30 @@
         </div>
 
     </div>
+
+
+    <div class="modal-overlay" id="delete-all-modal">
+        <div class="modal-content glass-panel" style="text-align: center;">
+            <span class="material-icons close-modal" onclick="closeDeleteAllModal()">close</span>
+
+            <div style="width: 60px; height: 60px; background-color: #fee2e2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                <span class="material-icons" style="font-size: 32px; color: #ef4444;">delete_forever</span>
+            </div>
+
+            <h3 style="margin-bottom: 10px; color: #1f2937;">Emin misiniz?</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">
+                Tüm alışkanlıklarınız <b>kalıcı olarak</b> silinecek.<br>Bu işlem geri alınamaz!
+            </p>
+
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="closeDeleteAllModal()" class="btn-cancel">Vazgeç</button>
+                <button onclick="executeDeleteAll()" class="btn-delete-confirm">Evet, Hepsini Sil</button>
+            </div>
+        </div>
+    </div>
+
+
+
     <!--MODAL: GÜN DETAYI (Takvimde güne tıklayınca açılır) -->
     <div class="modal-overlay" id="day-detail-modal">
         <div class="modal-content glass-panel">

@@ -220,49 +220,70 @@ window.closeDeleteModal = function () {
     if (modal) modal.classList.remove("active");
 };
 
-// --- TÜMÜNÜ SİLME İŞLEMLERİ ---
+// TÜMÜNÜ SİLME
 
-// 1. Kullanıcıdan onay isteyen fonksiyon
+// Modalı Açan Fonksiyon (Butona basınca çalışır)
 function confirmDeleteAll() {
-    // Tarayıcının varsayılan onay kutusunu kullanıyoruz
-    const answer = confirm("DİKKAT! Tüm alışkanlıklarınız kalıcı olarak silinecek.\n\nBu işlem geri alınamaz. Emin misiniz?");
-
-    if (answer) {
-        deleteAllHabits();
+    const modal = document.getElementById("delete-all-modal");
+    if (modal) {
+        modal.classList.add("active"); // Modalı görünür yapar
     }
 }
 
-// 2. API'ye istek atan fonksiyon
-async function deleteAllHabits() {
+//  Modalı Kapatan Fonksiyon (Vazgeç veya X'e basınca)
+window.closeDeleteAllModal = function () {
+    const modal = document.getElementById("delete-all-modal");
+    if (modal) {
+        modal.classList.remove("active");
+    }
+}
+
+// Asıl Silme İşlemini Yapan Fonksiyon ("Evet" butonuna basınca)
+window.executeDeleteAll = async function () {
+    const confirmBtn = document.querySelector("#delete-all-modal .btn-delete-confirm");
+
+    // Butonu yükleniyor moduna al
+    if (confirmBtn) {
+        confirmBtn.innerText = "Siliniyor...";
+        confirmBtn.disabled = true;
+    }
+
     try {
         const response = await fetch(`${API_BASE_URL}/Habit/delete-all`, {
             method: "DELETE",
             headers: {
-                // Token'ı header'a ekliyoruz ki backend hangi kullanıcı olduğunu bilsin
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
                 "Content-Type": "application/json"
             }
         });
 
         if (response.ok) {
-            // Başarılı olursa:
-            showToast("Tüm alışkanlıklar başarıyla silindi.", "success");
+            showToast("Tüm alışkanlıklar temizlendi.", "success");
 
-            // 1. Listeyi yenile (Boş gelecek)
+            // Listeyi temizle
             renderHabits([]);
 
-            // 2. İstatistikleri güncelle (Puan, seviye vs. düşebilir veya sıfırlanabilir)
-            updateDashboard();
-        } else {
-            showToast("Silme işlemi sırasında bir hata oluştu.", "error");
-        }
+            // Eğer updateDashboard fonksiyonun varsa çağır (yoksa bu satırı silebilirsin)
+            if (typeof updateDashboard === "function") updateDashboard();
 
-    }
-    catch (error) {
+            // Modalı kapat
+            window.closeDeleteAllModal();
+        } else {
+            showToast("Silme işlemi başarısız oldu.", "error");
+        }
+    } catch (error) {
+        console.error("Hata:", error);
+        showToast("Sunucuya ulaşılamadı.", "error");
+    } finally {
+        // Butonu eski haline getir
+        if (confirmBtn) {
+            confirmBtn.innerText = "Evet, Hepsini Sil";
+            confirmBtn.disabled = false;
+        }
     }
 }
 
-// Fonksiyonu dışarıya (window nesnesine) açıyoruz ki HTML erişebilsin
+// HTML'den erişilebilmesi için confirmDeleteAll fonksiyonunu dışarı açıyoruz
 window.confirmDeleteAll = confirmDeleteAll;
 
 window.toggleHabit = async function (id, wasCompleted) {
