@@ -7,11 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- Google Sign-In Kütüphanesi -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <style>
-
         :root {
             --primary-color: #4F46E5;
             --primary-hover: #4338ca;
@@ -38,7 +36,7 @@
             padding: 20px;
         }
 
-        /*  TOAST  */
+        /* TOAST  */
         #toast-container {
             position: fixed;
             top: 20px;
@@ -197,32 +195,36 @@
             margin-bottom: 30px;
         }
 
+        
         .input-group {
             position: relative;
             margin-bottom: 20px;
         }
 
-            .input-group input {
-                width: 100%;
-                padding: 15px 15px 15px 45px;
-                border: 2px solid #e0e0e0;
-                border-radius: 12px;
-                outline: none;
-                transition: 0.3s;
+        /* Soldaki İkonlar */
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none; 
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 45px 15px 45px; 
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+            .input-group input:focus {
+                border-color: var(--primary-color);
             }
 
-                .input-group input:focus {
-                    border-color: var(--primary-color);
-                }
-
-            .input-group .material-icons {
-                position: absolute;
-                left: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #999;
-            }
-
+        /* Sağdaki Şifre İkonu */
         .toggle-password {
             position: absolute;
             right: 15px;
@@ -230,6 +232,8 @@
             transform: translateY(-50%);
             cursor: pointer;
             color: #999;
+            z-index: 10;
+            padding: 5px;
         }
 
         .btn-primary {
@@ -285,12 +289,11 @@
                 font-weight: 600;
             }
 
-        /* Google Buton Alanı */
+        /* Google Buton Container */
         #google_btn_container {
-            display: flex;
-            justify-content: center;
             margin-bottom: 20px;
-            height: 44px;
+            width: 100%;
+            display: block;
         }
     </style>
 </head>
@@ -307,38 +310,35 @@
         </div>
 
         <div class="form-side">
-
             <div class="header">
                 <h2>Hesap Oluştur</h2>
                 <p>Ücretsiz katıl ve alışkanlıklarını yönetmeye başla.</p>
             </div>
 
-            <!-- GOOGLE BUTONU BURAYA GELECEK -->
             <div id="google_btn_container"></div>
 
             <div class="separator">veya e-posta ile kayıt ol</div>
 
             <form id="register-auth-form">
 
-                <!--İSİM ALANI -->
                 <div class="input-group">
-                    <span class="material-icons">person_outline</span>
+                    <span class="material-icons input-icon">person_outline</span>
                     <input type="text" id="auth-name" placeholder="Ad Soyad" required>
                 </div>
 
                 <div class="input-group">
-                    <span class="material-icons">mail_outline</span>
+                    <span class="material-icons input-icon">mail_outline</span>
                     <input type="email" id="auth-email" placeholder="E-posta Adresi" required>
                 </div>
 
                 <div class="input-group">
-                    <span class="material-icons">lock_outline</span>
+                    <span class="material-icons input-icon">lock_outline</span>
                     <input type="password" id="auth-password" placeholder="Şifre Oluştur" required>
                     <span class="material-icons toggle-password">visibility_off</span>
                 </div>
 
                 <div class="input-group">
-                    <span class="material-icons">vpn_key</span>
+                    <span class="material-icons input-icon">vpn_key</span>
                     <input type="password" id="auth-repeat-password" placeholder="Şifreyi Onayla" required>
                 </div>
 
@@ -359,7 +359,6 @@
     <div id="toast-container"></div>
 
     <script>
-        // TOAST
         function showToast(message, type = 'success') {
             let container = document.getElementById('toast-container');
             if (!container) {
@@ -384,9 +383,7 @@
             });
         });
 
-        // ==========================================
-        // 1. GOOGLE ILE KAYIT (GİRİŞ İLE AYNI MANTIK)
-        // ==========================================
+        // 1. GOOGLE KAYIT
         window.onload = function () {
             google.accounts.id.initialize({
                 client_id: "639416586068-gj7rcbg7dd2fc9h0652bijgocuviuseh.apps.googleusercontent.com",
@@ -395,7 +392,13 @@
 
             google.accounts.id.renderButton(
                 document.getElementById("google_btn_container"),
-                { theme: "outline", size: "large", width: "100%", text: "signup_with" } // Metin: Kayıt Ol
+                {
+                    theme: "outline",
+                    size: "large",
+                    width: "100%",      // Tam genişlik
+                    text: "signup_with",
+                    shape: "pill"       // Tam Yuvarlak (Hap)
+                }
             );
         };
 
@@ -412,14 +415,9 @@
 
                 if (res.ok) {
                     const data = await res.json();
-
-                    // Token'ı Kaydet
                     localStorage.setItem('jwtToken', data.token);
-
-                    // Local State Güncelle
                     const habitQuestState = { user: { isLoggedIn: true, username: "Google Kullanıcısı" } };
                     localStorage.setItem('habitQuestState', JSON.stringify(habitQuestState));
-
                     showToast("🎉 Google ile Kayıt Başarılı!", "success");
                     setTimeout(() => window.location.href = 'index.html', 1500);
                 } else {
@@ -432,17 +430,13 @@
             }
         }
 
-        // ==========================================
         // 2. NORMAL KAYIT
-        // ==========================================
         document.getElementById('register-auth-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const btn = document.querySelector('.btn-primary');
             const originalText = btn.textContent;
             btn.textContent = "Kaydediliyor...";
             btn.disabled = true;
-            btn.style.opacity = "0.7";
 
             const name = document.getElementById('auth-name').value;
             const email = document.getElementById('auth-email').value;
@@ -451,11 +445,11 @@
 
             if (password !== repeatPassword) {
                 showToast("Hata: Şifreler eşleşmiyor.", "error");
-                resetBtn(); return;
+                btn.textContent = originalText; btn.disabled = false; return;
             }
             if (password.length < 8) {
                 showToast("Hata: Şifre en az 8 karakter olmalıdır.", "error");
-                resetBtn(); return;
+                btn.textContent = originalText; btn.disabled = false; return;
             }
 
             const apiUrl = "https://localhost:7223/api/Auth/register";
@@ -473,19 +467,12 @@
                 } else {
                     const errorData = await response.json();
                     showToast("Kayıt Başarısız: " + (errorData.message || "Bilinmeyen hata"), "error");
+                    btn.textContent = originalText; btn.disabled = false;
                 }
-
             } catch (error) {
                 console.error(error);
                 showToast("Sunucuya bağlanılamadı.", "error");
-            } finally {
-                if (!response?.ok) resetBtn();
-            }
-
-            function resetBtn() {
-                btn.textContent = originalText;
-                btn.disabled = false;
-                btn.style.opacity = "1";
+                btn.textContent = originalText; btn.disabled = false;
             }
         });
     </script>

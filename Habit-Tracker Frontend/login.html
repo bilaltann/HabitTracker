@@ -9,6 +9,7 @@
 
     <!-- Google Sign-In Kütüphanesi -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
 
     <style>
         /* --- MODERN CSS TASARIMI --- */
@@ -144,40 +145,60 @@
             justify-content: center;
         }
 
+        /* --- DEĞİŞTİRİLECEK CSS KISMI --- */
+
+        /* Tüm ikonlar için genel ayar yerine özelleştiriyoruz */
         .input-group {
             position: relative;
             margin-bottom: 20px;
         }
 
-            .input-group input {
-                width: 100%;
-                padding: 15px 15px 15px 45px;
-                border: 2px solid #e0e0e0;
-                border-radius: 12px;
-                outline: none;
-                transition: 0.3s;
+        /* Soldaki İkon (Kilit/Mail) */
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none; /* İkona tıklansa bile arkadaki inputa odaklansın */
+        }
+
+        /* Input Alanı - İkon boşlukları */
+        .input-group input {
+            width: 100%;
+            padding: 15px 45px 15px 45px; /* Sağdan ve soldan boşluk bıraktık */
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+            .input-group input:focus {
+                border-color: var(--primary-color);
             }
 
-                .input-group input:focus {
-                    border-color: var(--primary-color);
-                }
-
-            .input-group .material-icons {
-                position: absolute;
-                left: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #999;
-            }
-
+        /* Sağdaki Şifre Göster/Gizle İkonu */
         .toggle-password {
             position: absolute;
-            right: 15px;
+            right: 15px; /* Sağa yasla */
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
             color: #999;
+            z-index: 10; /* En üstte olsun */
+            padding: 5px; /* Tıklama alanını biraz genişlet */
         }
+
+        /* Google Buton Kapsayıcısı - Genişletme */
+        #google_btn_container {
+            margin-bottom: 20px;
+            width: 100%; /* Tam genişlik */
+            display: block; /* Flex yerine Block yapıyoruz ki içindeki %100 genişlik çalışsın */
+        }
+
+            
+
+        
 
         .btn-primary {
             width: 100%;
@@ -219,13 +240,7 @@
                 margin-left: 10px;
             }
 
-        /* Google Buton Alanı */
-        #google_btn_container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            height: 44px;
-        }
+        
     </style>
 </head>
 <body>
@@ -254,13 +269,14 @@
 
             <form id="login-auth-form">
                 <div class="input-group">
-                    <span class="material-icons">mail_outline</span>
+                    <span class="material-icons input-icon">mail_outline</span>
                     <input type="email" id="auth-email" placeholder="E-posta Adresi" required>
                 </div>
 
                 <div class="input-group">
-                    <span class="material-icons">lock_outline</span>
+                    <span class="material-icons input-icon">lock_outline</span>
                     <input type="password" id="auth-password" placeholder="Şifreniz" required>
+
                     <span class="material-icons toggle-password">visibility_off</span>
                 </div>
 
@@ -315,7 +331,7 @@
 
             google.accounts.id.renderButton(
                 document.getElementById("google_btn_container"),
-                { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+                { theme: "outline", size: "large", width: "100%", text: "continue_with", shape: "pill" }
             );
         };
 
