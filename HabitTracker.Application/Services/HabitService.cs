@@ -45,7 +45,7 @@ namespace HabitTracker.Application.Services
                 ExpirationDate = h.ExpirationDate,
                 // Bellekteki küçük listeden kontrol et
                 IsCompletedToday = todaysLogs.Any(l => l.HabitId == h.Id)
-            }).ToList();
+            }).OrderByDescending(k=>k.Id).ToList();
 
             return habitDtos;
 

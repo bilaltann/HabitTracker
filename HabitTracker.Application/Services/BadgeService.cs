@@ -177,7 +177,7 @@ namespace HabitTracker.Application.Services
                 Name = b.Name,
                 Description = b.Description,
                 ImageUrl = b.ImageUrl // Resim yolunu da ön yüze gönderiyoruz
-            }).ToList();
+            }).OrderByDescending(o=>o.Id).ToList();
         }
 
         public async Task<IEnumerable<int>> GetEarnedBadgeIdsAsync(int userId)

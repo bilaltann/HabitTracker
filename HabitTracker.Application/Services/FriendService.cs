@@ -177,5 +177,24 @@ namespace HabitTracker.Application.Services
                 };
             }).ToList();
         }
+
+        public async Task RemoveFriendshipAsync(int currentUserId, int friendshipId)
+        {
+            var friendship = await _friendshipRepo.GetByIdAsync(friendshipId);
+
+            if (friendship == null)
+                throw new Exception("Arkadaşlık kaydı bulunamadı.");
+
+            // GÜVENLİK KONTROLÜ: 
+            // Sadece arkadaşlığın tarafları (İsteği atan veya kabul eden) silebilir.
+            if (friendship.RequesterId != currentUserId && friendship.AddresseeId != currentUserId)
+            {
+                throw new Exception("Bu arkadaşlığı silme yetkiniz yok.");
+            }
+
+            // İlişkili kayıt temizliği (AdminService'de yaptığımız gibi) gerekebilir 
+            // ama normal kullanıcı sildiğinde sadece Friendship silinsin diyorsan:
+            await _friendshipRepo.DeleteAsync(friendshipId);
+        }
     }
 }

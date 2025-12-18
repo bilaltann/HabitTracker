@@ -17,5 +17,8 @@ namespace HabitTracker.Application.Interfaces
 
         Task<IEnumerable<FriendRequestListDto>> GetActiveFriendsAsync(int userId);
 
+        Task RemoveFriendshipAsync(int currentUserId, int friendshipId);
+
+
     }
 }

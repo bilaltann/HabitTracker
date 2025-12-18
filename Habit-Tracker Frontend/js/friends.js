@@ -169,7 +169,9 @@ export async function loadActiveFriends() {
         }
 
         container.innerHTML = "";
+
         friends.forEach(friend => {
+            // Not: friend.requestId aslında Friendship ID'sidir.
             const html = `
                 <div class="habit-item">
                     <div class="habit-info">
@@ -183,15 +185,22 @@ export async function loadActiveFriends() {
                             </div>
                         </div>
                     </div>
-                    <div class="habit-actions">
+                    <div class="habit-actions" style="display:flex; align-items:center; gap:10px;">
+                        <!-- Yeşil Badge -->
                         <span class="status-badge status-accepted">
                             <span class="material-icons" style="font-size:14px;">verified</span> Arkadaş
                         </span>
+
+                        <!-- YENİ: Kırmızı Silme Butonu -->
+                        <button onclick="openRemoveFriendModal(${friend.requestId})" 
+                                title="Arkadaşlıktan Çıkar"
+                                style="background-color: #fee2e2; color: #ef4444; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
+                            <span class="material-icons" style="font-size: 18px;">person_remove</span>
+                        </button>
                     </div>
                 </div>`;
             container.innerHTML += html;
         });
-
     } catch (error) {
         console.error(error);
         container.innerHTML = '<p class="empty-message" style="color:red">Bağlantı hatası.</p>';
@@ -340,3 +349,77 @@ export function setupFriendSystem() {
         });
     }
 }
+
+// GLOBAL: Arkadaş Silme
+window.removeFriend = async function (friendshipId) {
+    if (!confirm("Bu kişiyi arkadaşlıktan çıkarmak istediğinize emin misiniz?")) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/Friends/${friendshipId}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
+
+        if (response.ok) {
+            showToast("Arkadaşlıktan çıkarıldı.", "success");
+            loadActiveFriends(); // Listeyi yenile
+        } else {
+            const data = await response.json();
+            showToast(data.message || "Hata oluştu.", "error");
+        }
+    } catch (e) {
+        console.error(e);
+        showToast("Sunucu hatası.", "error");
+    }
+};
+
+// ==========================================
+// 6. ARKADAŞ SİLME MODAL İŞLEMLERİ
+// ==========================================
+
+// Modalı Aç
+window.openRemoveFriendModal = function (id) {
+    // Silinecek ID'yi gizli input'a yaz
+    document.getElementById('remove-friend-id-input').value = id;
+    // Modalı görünür yap
+    document.getElementById('remove-friend-modal').classList.add('active');
+};
+
+// Modalı Kapat
+window.closeRemoveFriendModal = function () {
+    document.getElementById('remove-friend-modal').classList.remove('active');
+};
+
+// Onaylanınca Çalışan Asıl Silme Fonksiyonu
+window.confirmRemoveFriend = async function () {
+    const id = document.getElementById('remove-friend-id-input').value;
+
+    // Butonu pasif yap
+    const btn = document.querySelector('#remove-friend-modal .btn-delete-confirm');
+    const originalText = btn.innerText;
+    btn.innerText = "İşleniyor...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/Friends/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
+
+        if (response.ok) {
+            showToast("Arkadaşlıktan çıkarıldı.", "success");
+            closeRemoveFriendModal(); // Modalı kapat
+            loadActiveFriends();      // Listeyi yenile
+        } else {
+            const data = await response.json();
+            showToast(data.message || "Hata oluştu.", "error");
+        }
+    } catch (e) {
+        console.error(e);
+        showToast("Sunucu hatası.", "error");
+    } finally {
+        // Butonu eski haline getir
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+};

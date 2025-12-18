@@ -32,6 +32,8 @@ window.switchTab = function (tabName, element) {
     if (tabName === 'users') loadUsers();
     if (tabName === 'friendships') loadFriendships();
     if (tabName === 'logs') loadSystemLogs(); // <-- EKLENDİ
+    if (tabName === 'badges') loadBadges();
+
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -380,6 +382,100 @@ window.confirmDeleteUser = async function () {
     }
 };
 
+// ==========================================
+// 6. ROZET YÖNETİMİ
+// ==========================================
+
+// Rozetleri Listele
+window.loadBadges = async function () {
+    const container = document.getElementById('badge-list-container');
+    if (!container) return;
+
+    container.innerHTML = '<tr><td colspan="4" style="text-align:center;">Yükleniyor...</td></tr>';
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/Badge`, { headers: getHeaders() });
+        if (!response.ok) throw new Error("Hata");
+
+        const badges = await response.json();
+        container.innerHTML = "";
+
+        if (badges.length === 0) {
+            container.innerHTML = '<tr><td colspan="4" style="text-align:center;">Henüz rozet yok.</td></tr>';
+            return;
+        }
+
+        badges.forEach(badge => {
+            const row = `
+                <tr>
+                    <td>
+                        <img src="${badge.imageUrl}" alt="Rozet" 
+                             style="width: 40px; height: 40px; object-fit: contain; background:#f3f4f6; border-radius:50%; padding:2px;">
+                    </td>
+                    <td style="font-weight:600; color:#333;">${badge.name}</td>
+                    <td style="font-size:13px; color:#666;">${badge.description}</td>
+                    <td style="font-size:11px; color:#999; font-family:monospace;">${badge.imageUrl}</td>
+                </tr>`;
+            container.innerHTML += row;
+        });
+
+    } catch (error) {
+        container.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Yüklenemedi.</td></tr>`;
+    }
+}
+
+// Rozet Ekleme Formu Dinleyicisi
+document.addEventListener('DOMContentLoaded', () => {
+    // ... Diğer listenerlar ...
+
+    const badgeForm = document.getElementById('add-badge-form');
+    if (badgeForm) {
+        badgeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = badgeForm.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Yükleniyor...";
+            btn.disabled = true;
+
+            // FormData Hazırla
+            const formData = new FormData();
+            formData.append("Name", document.getElementById("badge-name").value);
+            formData.append("Description", document.getElementById("badge-desc").value);
+            formData.append("ImageFile", document.getElementById("badge-file").files[0]);
+
+            try {
+                // DİKKAT: FormData gönderirken 'Content-Type' header'ı EKLEMİYORUZ.
+                // Tarayıcı boundary'i kendi ayarlar. Sadece Token ekliyoruz.
+                const token = localStorage.getItem("jwtToken");
+
+                const response = await fetch(`${API_BASE_URL}/Badge`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                        // Content-Type YOK!
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    showToast("Rozet başarıyla eklendi!", "success");
+                    badgeForm.reset();
+                    loadBadges(); // Listeyi yenile
+                } else {
+                    const errText = await response.text();
+                    showToast("Hata oluştu: " + errText, "error");
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("Sunucu hatası.", "error");
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+    }
+});
 // -- ARKADAŞLIK SİLME --
 window.openDeleteFriendshipModal = function (id) {
     document.getElementById('delete-friendship-id-input').value = id;

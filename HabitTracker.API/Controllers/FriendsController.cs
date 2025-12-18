@@ -56,5 +56,20 @@ namespace HabitTracker.API.Controllers
             var result = await _friendService.GetActiveFriendsAsync(GetUserId());
             return Ok(result);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveFriend(int id)
+        {
+            try
+            {
+                // Token'daki User ID'yi gönderiyoruz (Güvenlik için)
+                await _friendService.RemoveFriendshipAsync(GetUserId(), id);
+                return Ok(new { message = "Arkadaşlıktan çıkarıldı." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }
