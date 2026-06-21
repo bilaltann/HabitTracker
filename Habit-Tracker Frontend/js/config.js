@@ -1,4 +1,4 @@
-export const API_BASE_URL = "https://localhost:7223/api";
+export const API_BASE_URL = "http://3.88.214.139:8080/api";
 export const LEVELS = [
     { level: 1, name: "Başlangıç", points: 0 },
     { level: 2, name: "Çırak", points: 10 },

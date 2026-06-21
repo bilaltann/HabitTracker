@@ -1,6 +1,6 @@
 import { showToast } from './utils.js';
 
-const API_BASE_URL = "https://localhost:7223/api";
+const API_BASE_URL = "http://3.88.214.139:8080/api";
 
 // Tüm kullanıcıları hafızada tutmak için global değişken
 let allUsersData = [];

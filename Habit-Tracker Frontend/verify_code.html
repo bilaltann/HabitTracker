@@ -80,7 +80,7 @@
 
             try {
                 
-                const response = await fetch("https://localhost:7223/api/Auth/verify-code", {
+                const response = await fetch("http://3.88.214.139:8080/api/Auth/verify-code", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: email, code: code })

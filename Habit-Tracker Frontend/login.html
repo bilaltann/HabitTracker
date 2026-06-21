@@ -337,7 +337,7 @@
 
         async function handleCredentialResponse(response) {
             console.log("Google Token:", response.credential);
-            const apiUrl = "https://localhost:7223/api/Auth/google-signin";
+            const apiUrl = "http://3.88.214.139:8080/api/Auth/google-signin";
 
             try {
                 const res = await fetch(apiUrl, {
@@ -382,7 +382,7 @@
 
             const email = document.getElementById('auth-email').value;
             const password = document.getElementById('auth-password').value;
-            const apiUrl = "https://localhost:7223/api/Auth/login";
+            const apiUrl = "http://3.88.214.139:8080/api/Auth/login";
 
             try {
                 const response = await fetch(apiUrl, {
