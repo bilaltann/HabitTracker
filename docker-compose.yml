@@ -18,8 +18,8 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # .NET API'nin MSSQL konteynerine bağlanması için gerekli ayar
-      - ConnectionStrings__DefaultConnection=Server=db34323.public.databaseasp.net;Database=db34323;User Id=db34323;Password=HabitAdmin2026!;TrustServerCertificate=True;
+      # Bu satır, senin appsettings.json'daki yerel DESKTOP bağlantını AWS'de ezer.
+      - ConnectionStrings__DefaultConnection=Server=db;Database=HabitTrackerDb;User Id=sa;Password=HabitAdmin2026!;TrustServerCertificate=True;
     depends_on:
       - db
 
