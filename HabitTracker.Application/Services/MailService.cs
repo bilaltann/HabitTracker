@@ -32,7 +32,7 @@
                 using (var smtpClient = new SmtpClient())
                 {
 
-                    await smtpClient.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.SslOnConnect);
+                    await smtpClient.ConnectAsync(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
                     await smtpClient.AuthenticateAsync(_mailSettings.Username, _mailSettings.Password);
                     await smtpClient.SendAsync(emailMessage);
                     await smtpClient.DisconnectAsync(true);
