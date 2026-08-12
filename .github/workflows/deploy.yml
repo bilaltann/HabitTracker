@@ -1,0 +1,23 @@
+name: HabitTracker CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master 
+
+jobs:
+  deploy:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest # GitHub'ın bize geçici olarak verdiği sanal makine
+
+    steps:
+    - name: SSH into AWS and Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd ~/HabitTracker
+          git pull origin main
+          sudo docker compose up -d --build
