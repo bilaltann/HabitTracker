@@ -15,7 +15,7 @@ export function loadUserData() {
         }
     }
     const userDisplay = document.getElementById("user-display");
-    if (userDisplay) userDisplay.textContent = `Merhaba, ${username}!`;
+    if (userDisplay) userDisplay.textContent = `Merhaba, ${username}`;
     const pointsDisplay = document.getElementById("user-points");
     if (pointsDisplay) pointsDisplay.textContent = points;
 
